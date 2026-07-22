@@ -53,3 +53,11 @@ This log preserves concise architectural decisions, discoveries, and follow-up w
 **Decision:** Build the editor shell with nested CSS Grid layouts: a ribbon, toolbox, canvas panel, inspector, and status bar. Keep controls inert and limit JavaScript to accessible pointer/keyboard resizing of layout panels.
 
 **Consequences:** Future modules can populate their assigned areas without changing the workspace layout. The canvas is present as a rendering surface but has no city data, drawing, or interaction behavior.
+
+## 2026-07-22 — Isolated Canvas rendering engine
+
+**Context:** The desktop shell needs a reliable rendering foundation before plan data or editing features are introduced.
+
+**Decision:** Implement a standalone `Camera` class for world/screen coordinate conversion and a standalone `Renderer` class for Canvas context ownership, high-DPI resize handling, demand-driven drawing, and viewport pan/zoom input. The renderer currently draws only an empty background.
+
+**Consequences:** Rendering remains independent from DOM UI modules. Future plan layers can use the camera transforms and add draw methods without taking ownership of UI state.

@@ -76,10 +76,7 @@ kbd { margin-left: auto; color: #7f8995; font-family: inherit; font-size: 10px; 
 .canvas-control { width: 23px; height: 23px; border: 1px solid #3a424d; border-radius: 3px; background: #2a3039; color: #c9d1da; font-size: 16px; line-height: 1; }
 .zoom-level { min-width: 35px; color: #a7b1bd; font-size: 11px; text-align: center; }
 .canvas-frame { position: relative; min-width: 0; min-height: 0; overflow: hidden; background-color: #171b20; background-image: linear-gradient(#20262d 1px, transparent 1px), linear-gradient(90deg, #20262d 1px, transparent 1px); background-size: 24px 24px; }
-#planner-canvas { position: absolute; width: 100%; height: 100%; }
-.canvas-empty-state { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #8b96a3; font-size: 13px; pointer-events: none; }
-.canvas-empty-state small { color: #697481; font-size: 11px; }
-.empty-state-icon { display: grid; place-items: center; width: 38px; height: 38px; margin-bottom: 3px; border: 1px solid #3b454f; border-radius: 6px; color: #6c8bae; font-size: 22px; }
+#planner-canvas { position: absolute; display: block; width: 100%; height: 100%; touch-action: none; }
 
 .inspector-empty-state { display: flex; flex-direction: column; align-items: center; padding: 58px 28px; color: #9aa4b0; text-align: center; }
 .inspector-empty-state strong { margin-top: 11px; color: #c4cbd4; font-size: 12px; }

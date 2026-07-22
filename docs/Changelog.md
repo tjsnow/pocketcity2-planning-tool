@@ -10,6 +10,7 @@ All notable user-visible and developer-relevant changes are recorded here. The f
 - Project vision, roadmap, coding standards, data schema, and intended folder structure.
 - Initial static project shell with placeholder module boundaries and asset directories.
 - Desktop application shell with a dark CSS Grid workspace, inert toolbar/tool panels, canvas surface, inspector, status bar, and resizable panel dividers.
+- Canvas rendering engine with high-DPI sizing, an empty background, viewport pan/zoom navigation, resize handling, and camera coordinate conversion.
 
 ### Changed
 
