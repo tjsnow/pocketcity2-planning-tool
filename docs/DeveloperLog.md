@@ -45,3 +45,11 @@ This log preserves concise architectural decisions, discoveries, and follow-up w
 **Decision:** Add the requested top-level static asset directories, a minimal HTML entry point, one global stylesheet placeholder, and independent ES module placeholders for application composition, rendering, camera, grid, terrain, buildings, UI, and persistence.
 
 **Consequences:** The modules establish ownership boundaries only; they intentionally contain no behavior, state, data loading, or UI implementation.
+
+## 2026-07-22 — Desktop application shell
+
+**Context:** The initial project structure needs a stable visual workspace before city-planning features are introduced.
+
+**Decision:** Build the editor shell with nested CSS Grid layouts: a ribbon, toolbox, canvas panel, inspector, and status bar. Keep controls inert and limit JavaScript to accessible pointer/keyboard resizing of layout panels.
+
+**Consequences:** Future modules can populate their assigned areas without changing the workspace layout. The canvas is present as a rendering surface but has no city data, drawing, or interaction behavior.

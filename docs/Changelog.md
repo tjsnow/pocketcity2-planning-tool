@@ -9,6 +9,7 @@ All notable user-visible and developer-relevant changes are recorded here. The f
 - Initial architectural documentation for Pocket City Planner.
 - Project vision, roadmap, coding standards, data schema, and intended folder structure.
 - Initial static project shell with placeholder module boundaries and asset directories.
+- Desktop application shell with a dark CSS Grid workspace, inert toolbar/tool panels, canvas surface, inspector, status bar, and resizable panel dividers.
 
 ### Changed
 

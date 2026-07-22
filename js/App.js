@@ -1,6 +1,7 @@
+import { enablePanelResizing } from "./UI.js";
+
 /**
  * Application composition root.
- * Future responsibility: initialize and connect feature modules.
+ * At this stage it only initializes the workspace layout controls.
  */
-
-export {};
+enablePanelResizing(document.querySelector(".app-shell"));

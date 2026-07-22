@@ -11,8 +11,166 @@
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
-    <main id="app" aria-label="Pocket City Planner">
-      <!-- Application UI will be composed here by the App module. -->
+    <main
+      id="app"
+      class="app-shell"
+      aria-label="Pocket City Planner workspace"
+    >
+      <header class="ribbon panel" aria-label="Main toolbar">
+        <div class="brand" aria-label="Pocket City Planner">
+          <span class="brand-mark" aria-hidden="true">PC</span>
+          <span>Pocket City Planner</span>
+        </div>
+        <div class="ribbon-divider" aria-hidden="true"></div>
+        <div class="ribbon-group" aria-label="File tools">
+          <span class="ribbon-label">File</span>
+          <button class="tool-button" type="button" title="New plan">
+            <span aria-hidden="true">＋</span><span>New</span>
+          </button>
+          <button class="tool-button" type="button" title="Open plan">
+            <span aria-hidden="true">↗</span><span>Open</span>
+          </button>
+          <button class="tool-button" type="button" title="Save plan">
+            <span aria-hidden="true">▣</span><span>Save</span>
+          </button>
+        </div>
+        <div class="ribbon-divider" aria-hidden="true"></div>
+        <div class="ribbon-group" aria-label="Edit tools">
+          <span class="ribbon-label">Edit</span>
+          <button class="tool-button" type="button" title="Undo" disabled>
+            <span aria-hidden="true">↶</span><span>Undo</span>
+          </button>
+          <button class="tool-button" type="button" title="Redo" disabled>
+            <span aria-hidden="true">↷</span><span>Redo</span>
+          </button>
+        </div>
+        <div class="ribbon-spacer"></div>
+        <button class="workspace-button" type="button" aria-label="Workspace settings">
+          <span class="status-indicator" aria-hidden="true"></span>
+          Workspace
+        </button>
+      </header>
+
+      <div
+        class="horizontal-resizer ribbon-resizer"
+        role="separator"
+        aria-label="Resize toolbar"
+        aria-orientation="horizontal"
+        aria-valuemin="44"
+        aria-valuemax="160"
+        tabindex="0"
+        data-resize="ribbon"
+      ></div>
+
+      <section class="workspace" aria-label="Editor workspace">
+        <aside class="toolbox panel" aria-label="Toolbox">
+          <div class="panel-heading">
+            <span>Toolbox</span>
+            <span class="panel-heading-detail">TOOLS</span>
+          </div>
+          <div class="tool-list">
+            <button class="toolbox-item is-active" type="button">
+              <span class="toolbox-icon" aria-hidden="true">⌖</span>
+              Select
+              <kbd>V</kbd>
+            </button>
+            <button class="toolbox-item" type="button">
+              <span class="toolbox-icon" aria-hidden="true">✥</span>
+              Pan
+              <kbd>H</kbd>
+            </button>
+            <button class="toolbox-item" type="button">
+              <span class="toolbox-icon" aria-hidden="true">▦</span>
+              Grid
+              <kbd>G</kbd>
+            </button>
+          </div>
+          <div class="toolbox-section">
+            <span class="section-label">Layers</span>
+            <button class="layer-item is-visible" type="button">
+              <span aria-hidden="true">◉</span> Grid
+            </button>
+            <button class="layer-item is-visible" type="button">
+              <span aria-hidden="true">◉</span> Terrain
+            </button>
+            <button class="layer-item is-visible" type="button">
+              <span aria-hidden="true">◉</span> Buildings
+            </button>
+          </div>
+        </aside>
+
+        <div
+          class="vertical-resizer left-resizer"
+          role="separator"
+          aria-label="Resize toolbox"
+          aria-orientation="vertical"
+          aria-valuemin="180"
+          aria-valuemax="480"
+          tabindex="0"
+          data-resize="toolbox"
+        ></div>
+
+        <section class="canvas-panel panel" aria-label="Planning canvas">
+          <div class="canvas-toolbar">
+            <span class="document-name">Untitled Plan</span>
+            <span class="document-state">Not saved</span>
+            <div class="canvas-toolbar-spacer"></div>
+            <button class="canvas-control" type="button" title="Zoom out">−</button>
+            <span class="zoom-level">100%</span>
+            <button class="canvas-control" type="button" title="Zoom in">+</button>
+          </div>
+          <div class="canvas-frame">
+            <canvas id="planner-canvas" aria-label="Empty city planning canvas"></canvas>
+            <div class="canvas-empty-state" aria-hidden="true">
+              <span class="empty-state-icon">▦</span>
+              <span>Planning canvas</span>
+              <small>City tools will appear here.</small>
+            </div>
+          </div>
+        </section>
+
+        <div
+          class="vertical-resizer right-resizer"
+          role="separator"
+          aria-label="Resize inspector"
+          aria-orientation="vertical"
+          aria-valuemin="220"
+          aria-valuemax="520"
+          tabindex="0"
+          data-resize="inspector"
+        ></div>
+
+        <aside class="inspector panel" aria-label="Inspector">
+          <div class="panel-heading">
+            <span>Inspector</span>
+            <span class="panel-heading-detail">PROPERTIES</span>
+          </div>
+          <div class="inspector-empty-state">
+            <span class="inspector-icon" aria-hidden="true">◇</span>
+            <strong>No selection</strong>
+            <p>Select an item on the canvas to view its properties.</p>
+          </div>
+        </aside>
+      </section>
+
+      <div
+        class="horizontal-resizer status-resizer"
+        role="separator"
+        aria-label="Resize status bar"
+        aria-orientation="horizontal"
+        aria-valuemin="24"
+        aria-valuemax="96"
+        tabindex="0"
+        data-resize="status"
+      ></div>
+
+      <footer class="status-bar panel" aria-label="Status bar">
+        <div class="status-item"><span class="status-dot" aria-hidden="true"></span> Ready</div>
+        <div class="status-item">Grid: — × —</div>
+        <div class="status-spacer"></div>
+        <div class="status-item">X: — &nbsp; Y: —</div>
+        <div class="status-item">Canvas: 100%</div>
+      </footer>
     </main>
     <script type="module" src="js/App.js"></script>
   </body>
