@@ -110,6 +110,10 @@ Added a release checklist separating automated gates from browser/manual gates. 
 
 The brand lockup now uses the product name Pocket City 2 Planner and displays the package version beneath it.
 
+## 2026-07-22 — Version 1.0.0 release
+
+Promoted project metadata and the UI brand to 1.0.0. Automated release gates pass; browser-specific checklist items remain explicit manual verification requirements.
+
 ## 2026-07-22 — Plugin API foundation
 
 The initial plugin API is deliberately narrow: namespaced catalog items and tools can be registered and enumerated, while core plan mutation remains behind editor commands and callbacks.

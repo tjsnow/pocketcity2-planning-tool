@@ -4,6 +4,10 @@ All notable user-visible and developer-relevant changes are recorded here. The f
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-07-22
+
+- Released the static Pocket City 2 Planner workspace with grid editing, catalogs, roads, terrain, diagnostics, persistence, minimap, layers, accessibility, testing, and documentation.
+
 - Added an immutable rectangular district model and persisted districts through plan documents, snapshots, and grid resize validation.
 - Added a framework-free planning tools module for bounded notes and reusable grid distance measurements.
 - Restricted plans to 40x40, 64x64, and 72x72 square grids, with a lower-left `(0,0)` origin and strict render clipping.
