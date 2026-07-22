@@ -149,3 +149,19 @@ This log preserves concise architectural decisions, discoveries, and follow-up w
 **Decision:** Add an immutable sparse heatmap with finite scalar values, zero-value elision, JSON-compatible cell conversion, and range reporting.
 
 **Consequences:** Future effects and statistics can produce reusable numerical fields, while visual color mapping remains an independent overlay concern.
+
+## 2026-07-22 — Functional editor loop
+
+**Context:** The project had subsystem foundations but no practical player workflow.
+
+**Decision:** Add a finite plan controller and connect the catalog, Canvas, renderer, placement store, inspector, and status bar. Include two explicitly labeled demo-only structures solely to exercise the workflow.
+
+**Consequences:** Users can now select, place, inspect, select, and delete sample structures. Real Pocket City catalog data, persistence, undo/redo, and terrain editing remain separate future work.
+
+## 2026-07-22 — Local draft persistence and portable plans
+
+**Context:** A usable planner must retain work across refreshes and let users control a portable copy without a backend.
+
+**Decision:** Serialize the MVP plan state as schema version 1 JSON, autosave it to localStorage, and support JSON download/import through the existing ribbon controls.
+
+**Consequences:** The app remains static-host-compatible and account-free. Imports validate the supported document shape and catalog references through the plan editor before replacing the active draft.

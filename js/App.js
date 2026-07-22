@@ -3,6 +3,8 @@ import { Renderer } from "./Renderer.js";
 import { BuildingBrowser } from "./BuildingBrowser.js";
 import { loadBuildingCatalog } from "./BuildingCatalog.js";
 import { Inspector } from "./Inspector.js";
+import { PlanEditor } from "./PlanEditor.js";
+import { SaveManager } from "./SaveManager.js";
 
 /**
  * Application composition root.
@@ -11,9 +13,7 @@ import { Inspector } from "./Inspector.js";
 enablePanelResizing(document.querySelector(".app-shell"));
 
 const canvas = document.querySelector("#planner-canvas");
-if (canvas) {
-  new Renderer(canvas);
-}
+const renderer = canvas ? new Renderer(canvas) : null;
 
 const inspectorRoot = document.querySelector("#inspector-content");
 const inspector = inspectorRoot ? new Inspector(inspectorRoot) : null;
@@ -24,7 +24,90 @@ if (buildingBrowserRoot) {
 
 async function initializeBuildingBrowser(root, activeInspector) {
   try {
-    new BuildingBrowser(root, await loadBuildingCatalog(), (building) => activeInspector?.showBuilding(building));
+    const database = await loadBuildingCatalog();
+    const saveManager = new SaveManager();
+    let editor = restoreDraft(database, saveManager);
+    renderer?.camera.setViewport(renderer.cssWidth, renderer.cssHeight);
+    if (renderer) {
+      renderer.camera.positionX = editor.width * renderer.grid.cellSize / 2;
+      renderer.camera.positionY = editor.height * renderer.grid.cellSize / 2;
+      renderer.setScene(editor.scene);
+      renderer.setCanvasClickHandler((worldPoint) => {
+        try {
+          editor.clickCell(Math.floor(worldPoint.x / renderer.grid.cellSize), Math.floor(worldPoint.y / renderer.grid.cellSize));
+          syncEditor();
+          saveDraft();
+        } catch (error) {
+          setStatus(error.message);
+        }
+      });
+    }
+
+    new BuildingBrowser(root, database, (building) => {
+      editor.selectBuilding(building.id);
+      activeInspector?.showBuilding(building);
+      setStatus(`Place ${building.name} on the grid.`);
+      syncEditor();
+    });
+
+    document.querySelector("#select-tool")?.addEventListener("click", () => {
+      editor.selectTool();
+      setStatus("Select tool active.");
+    });
+
+    document.querySelector("#new-plan")?.addEventListener("click", () => {
+      editor = new PlanEditor(database);
+      syncEditor();
+      saveDraft();
+      setStatus("New plan created.");
+    });
+
+    document.querySelector("#save-plan")?.addEventListener("click", () => {
+      saveManager.download(editor.toDocument());
+      setStatus("Plan downloaded as JSON.");
+    });
+
+    const fileInput = document.querySelector("#plan-file-input");
+    document.querySelector("#open-plan")?.addEventListener("click", () => fileInput?.click());
+    fileInput?.addEventListener("change", async () => {
+      try {
+        const [file] = fileInput.files;
+        if (!file) return;
+        editor = PlanEditor.fromDocument(database, await saveManager.readFile(file));
+        syncEditor();
+        saveDraft();
+        setStatus("Plan imported.");
+      } catch (error) {
+        setStatus(error.message || "Plan import failed.");
+      } finally {
+        fileInput.value = "";
+      }
+    });
+
+    function syncEditor() {
+      renderer?.setScene(editor.scene);
+      const placement = editor.selectedPlacement;
+      if (!placement) {
+        activeInspector?.showEmpty();
+        return;
+      }
+      const building = database.getById(placement.catalogItemId);
+      activeInspector?.showPlacement(building, placement, () => {
+        editor.deleteSelected();
+        syncEditor();
+        saveDraft();
+        setStatus("Placement deleted.");
+      });
+      setStatus(`Selected ${building.name} at ${placement.x}, ${placement.y}.`);
+    }
+
+    function saveDraft() {
+      try {
+        saveManager.saveDraft(editor.toDocument());
+      } catch {
+        setStatus("Draft could not be saved in this browser.");
+      }
+    }
   } catch {
     root.querySelector("#building-results")?.replaceChildren(
       Object.assign(document.createElement("p"), {
@@ -33,4 +116,22 @@ async function initializeBuildingBrowser(root, activeInspector) {
       }),
     );
   }
+}
+
+function restoreDraft(database, saveManager) {
+  try {
+    const draft = saveManager.loadDraft();
+    return draft ? PlanEditor.fromDocument(database, draft) : new PlanEditor(database);
+  } catch {
+    return new PlanEditor(database);
+  }
+}
+
+function setStatus(message) {
+  const status = document.querySelector("#editor-status");
+  if (!status) return;
+  const indicator = document.createElement("span");
+  indicator.className = "status-dot";
+  indicator.setAttribute("aria-hidden", "true");
+  status.replaceChildren(indicator, document.createTextNode(` ${message}`));
 }

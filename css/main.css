@@ -102,6 +102,7 @@ kbd { margin-left: auto; color: #7f8995; font-family: inherit; font-size: 10px; 
 .inspector-property { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 8px 0; border-top: 1px solid #343d47; }
 .inspector-property dt { color: #83909d; font-size: 11px; }
 .inspector-property dd { margin: 0; color: #cbd3dd; font-size: 11px; text-align: right; }
+.inspector-delete { width: 100%; margin-top: 14px; padding: 7px 8px; border: 1px solid #78474a; border-radius: 3px; background: #3a2529; color: #e8b5b7; font-size: 11px; }
 
 .vertical-resizer, .horizontal-resizer { position: relative; z-index: 2; background: #1b2027; outline: none; }
 .vertical-resizer { cursor: col-resize; }

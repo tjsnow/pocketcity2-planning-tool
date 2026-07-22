@@ -24,13 +24,13 @@
         <div class="ribbon-divider" aria-hidden="true"></div>
         <div class="ribbon-group" aria-label="File tools">
           <span class="ribbon-label">File</span>
-          <button class="tool-button" type="button" title="New plan">
+          <button id="new-plan" class="tool-button" type="button" title="New plan">
             <span aria-hidden="true">＋</span><span>New</span>
           </button>
-          <button class="tool-button" type="button" title="Open plan">
+          <button id="open-plan" class="tool-button" type="button" title="Open plan">
             <span aria-hidden="true">↗</span><span>Open</span>
           </button>
-          <button class="tool-button" type="button" title="Save plan">
+          <button id="save-plan" class="tool-button" type="button" title="Save plan">
             <span aria-hidden="true">▣</span><span>Save</span>
           </button>
         </div>
@@ -69,7 +69,7 @@
             <span class="panel-heading-detail">TOOLS</span>
           </div>
           <div class="tool-list">
-            <button class="toolbox-item is-active" type="button">
+            <button id="select-tool" class="toolbox-item is-active" type="button">
               <span class="toolbox-icon" aria-hidden="true">⌖</span>
               Select
               <kbd>V</kbd>
@@ -172,13 +172,14 @@
       ></div>
 
       <footer class="status-bar panel" aria-label="Status bar">
-        <div class="status-item"><span class="status-dot" aria-hidden="true"></span> Ready</div>
+        <div id="editor-status" class="status-item"><span class="status-dot" aria-hidden="true"></span> Ready</div>
         <div class="status-item">Grid: — × —</div>
         <div class="status-spacer"></div>
         <div class="status-item">X: — &nbsp; Y: —</div>
         <div class="status-item">Canvas: 100%</div>
       </footer>
     </main>
+    <input id="plan-file-input" type="file" accept="application/json,.json" hidden />
     <script type="module" src="js/App.js"></script>
   </body>
 </html>

@@ -29,6 +29,8 @@ export class Renderer {
     this.devicePixelRatio = 1;
     this.animationFrameId = null;
     this.activePan = null;
+    this.scene = null;
+    this.onCanvasClick = null;
 
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(canvas);
@@ -72,6 +74,7 @@ export class Renderer {
     this.context.clearRect(0, 0, this.cssWidth, this.cssHeight);
     this.drawBackground();
     this.grid.draw(this.context, this.camera, this.cssWidth, this.cssHeight);
+    this.drawPlacements();
     this.overlays.draw(this.context, this.camera, this.cssWidth, this.cssHeight);
   }
 
@@ -86,9 +89,34 @@ export class Renderer {
     return removed;
   }
 
+  setScene(scene) {
+    this.scene = scene;
+    this.requestRender();
+  }
+
+  setCanvasClickHandler(handler) {
+    this.onCanvasClick = handler;
+  }
+
   drawBackground() {
     this.context.fillStyle = BACKGROUND_COLOR;
     this.context.fillRect(0, 0, this.cssWidth, this.cssHeight);
+  }
+
+  drawPlacements() {
+    if (!this.scene) return;
+    const { database, placements, selectedPlacementId } = this.scene;
+    for (const placement of placements) {
+      const building = database.getById(placement.catalogItemId);
+      if (!building) continue;
+      const topLeft = this.camera.worldToScreen({ x: placement.x * this.grid.cellSize, y: placement.y * this.grid.cellSize });
+      const width = building.size.width * this.grid.cellSize * this.camera.zoom;
+      const height = building.size.height * this.grid.cellSize * this.camera.zoom;
+      this.context.fillStyle = placement.id === selectedPlacementId ? "#4e94d9" : "#3971b3";
+      this.context.fillRect(topLeft.x + 2, topLeft.y + 2, Math.max(0, width - 4), Math.max(0, height - 4));
+      this.context.strokeStyle = "#b9d8f5";
+      this.context.strokeRect(topLeft.x + 2.5, topLeft.y + 2.5, Math.max(0, width - 5), Math.max(0, height - 5));
+    }
   }
 
   destroy() {
@@ -99,7 +127,7 @@ export class Renderer {
   bindNavigationEvents() {
     this.canvas.addEventListener("pointerdown", (event) => this.beginPan(event));
     this.canvas.addEventListener("pointermove", (event) => this.pan(event));
-    this.canvas.addEventListener("pointerup", () => this.endPan());
+    this.canvas.addEventListener("pointerup", (event) => this.handlePointerUp(event));
     this.canvas.addEventListener("pointercancel", () => this.endPan());
     this.canvas.addEventListener("wheel", (event) => this.zoom(event), { passive: false });
   }
@@ -125,6 +153,14 @@ export class Renderer {
 
   endPan() {
     this.activePan = null;
+  }
+
+  handlePointerUp(event) {
+    const wasPanning = this.activePan?.pointerId === event.pointerId;
+    this.endPan();
+    if (!wasPanning && event.button === 0 && !event.shiftKey) {
+      this.onCanvasClick?.(this.camera.screenToWorld(this.eventToCanvasPoint(event)));
+    }
   }
 
   zoom(event) {

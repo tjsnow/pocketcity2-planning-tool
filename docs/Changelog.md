@@ -22,6 +22,8 @@ All notable user-visible and developer-relevant changes are recorded here. The f
 - Overlay subsystem with ordered, visibility-aware Canvas overlay registration.
 - Radius subsystem with reusable Euclidean and Manhattan grid geometry.
 - Heatmap subsystem with immutable sparse scalar fields and value-range reporting.
+- Functional MVP editor loop: demo-only buildings can be selected, placed on the Canvas, selected, inspected, and deleted.
+- Local draft persistence and JSON plan download/import through the ribbon controls.
 
 ### Changed
 

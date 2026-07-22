@@ -1,4 +1,25 @@
 {
   "schemaVersion": 1,
-  "buildings": []
+  "buildings": [
+    {
+      "id": "demo-block",
+      "name": "Demo Block (Sample)",
+      "category": "demo",
+      "size": { "width": 2, "height": 2 },
+      "levels": [],
+      "effects": {},
+      "radius": {},
+      "unlock": {}
+    },
+    {
+      "id": "demo-tower",
+      "name": "Demo Tower (Sample)",
+      "category": "demo",
+      "size": { "width": 1, "height": 3 },
+      "levels": [],
+      "effects": {},
+      "radius": {},
+      "unlock": {}
+    }
+  ]
 }

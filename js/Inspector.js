@@ -38,6 +38,19 @@ export class Inspector {
     content.append(name, category, properties);
     this.root.replaceChildren(content);
   }
+
+  showPlacement(building, placement, onDelete) {
+    this.showBuilding(building);
+    const content = this.root.firstElementChild;
+    const properties = content.querySelector(".inspector-property-list");
+    properties.append(property("Cell", `${placement.x}, ${placement.y}`));
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "inspector-delete";
+    remove.textContent = "Delete placement";
+    remove.addEventListener("click", onDelete);
+    content.append(remove);
+  }
 }
 
 function emptyState() {
