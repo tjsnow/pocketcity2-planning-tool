@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "roads": [
+    { "id": "road", "name": "Street", "roadType": "road", "confidence": "built-in" },
+    { "id": "high-density", "name": "High Density", "roadType": "high-density", "confidence": "community-reported" },
+    { "id": "dirt", "name": "Dirt", "roadType": "dirt", "confidence": "community-reported" },
+    { "id": "pedestrian", "name": "Pedestrian", "roadType": "pedestrian", "confidence": "community-reported" },
+    { "id": "boardwalk", "name": "Boardwalk", "roadType": "boardwalk", "confidence": "community-reported" },
+    { "id": "light-rail", "name": "Light Rail", "roadType": "light-rail", "confidence": "community-reported" },
+    { "id": "train-rail", "name": "Train Rail", "roadType": "train-rail", "confidence": "community-reported" },
+    { "id": "high-rail", "name": "High Rail", "roadType": "high-rail", "confidence": "community-reported" },
+    { "id": "subway", "name": "Subway", "roadType": "subway", "confidence": "community-reported" }
+  ]
+}

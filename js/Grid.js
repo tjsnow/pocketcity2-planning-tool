@@ -17,6 +17,12 @@ export class Grid {
 
     this.cellSize = cellSize;
     this.majorLineInterval = majorLineInterval;
+    this.bounds = null;
+  }
+
+  setBounds(width, height) {
+    if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1) throw new RangeError("Grid bounds must be positive integers.");
+    this.bounds = { width, height };
   }
 
   draw(context, camera, viewportWidth, viewportHeight) {
@@ -27,15 +33,17 @@ export class Grid {
     const minimumY = Math.min(topLeft.y, bottomRight.y);
     const maximumY = Math.max(topLeft.y, bottomRight.y);
 
-    const startX = this.firstLineAtOrBefore(minimumX);
-    const startY = this.firstLineAtOrBefore(minimumY);
+    const startX = this.bounds ? 0 : this.firstLineAtOrBefore(minimumX);
+    const startY = this.bounds ? 0 : this.firstLineAtOrBefore(minimumY);
+    const maximumGridX = this.bounds ? this.bounds.width * this.cellSize : maximumX;
+    const maximumGridY = this.bounds ? this.bounds.height * this.cellSize : maximumY;
 
     context.save();
     context.lineWidth = 1;
-    this.drawLines(context, camera, startX, maximumX, "vertical", MINOR_GRID_COLOR);
-    this.drawLines(context, camera, startY, maximumY, "horizontal", MINOR_GRID_COLOR);
-    this.drawLines(context, camera, startX, maximumX, "vertical", MAJOR_GRID_COLOR, true);
-    this.drawLines(context, camera, startY, maximumY, "horizontal", MAJOR_GRID_COLOR, true);
+    this.drawLines(context, camera, startX, maximumGridX, "vertical", MINOR_GRID_COLOR);
+    this.drawLines(context, camera, startY, maximumGridY, "horizontal", MINOR_GRID_COLOR);
+    this.drawLines(context, camera, startX, maximumGridX, "vertical", MAJOR_GRID_COLOR, true);
+    this.drawLines(context, camera, startY, maximumGridY, "horizontal", MAJOR_GRID_COLOR, true);
     context.restore();
   }
 

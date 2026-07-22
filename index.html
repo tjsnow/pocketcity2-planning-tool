@@ -14,12 +14,12 @@
     <main
       id="app"
       class="app-shell"
-      aria-label="Pocket City Planner workspace"
+      aria-label="Pocket City 2 Planner workspace"
     >
       <header class="ribbon panel" aria-label="Main toolbar">
-        <div class="brand" aria-label="Pocket City Planner">
+        <div class="brand" aria-label="Pocket City 2 Planner">
           <span class="brand-mark" aria-hidden="true">PC</span>
-          <span>Pocket City Planner</span>
+          <span class="brand-copy"><span class="brand-title">Pocket City 2 Planner</span><span class="brand-version">v0.1.0</span></span>
         </div>
         <div class="ribbon-divider" aria-hidden="true"></div>
         <div class="ribbon-group" aria-label="File tools">
@@ -85,8 +85,25 @@
               <kbd>G</kbd>
             </button>
           </div>
+          <section class="quick-tools" aria-label="Quick tools">
+            <span class="section-label">Quick tools</span>
+            <div class="quick-tool-actions">
+              <button class="terrain-button" type="button" data-road-tool="true" title="Paint roads (P)">Road brush <kbd>P</kbd></button>
+              <button class="terrain-button" type="button" data-bulldozer="true" title="Bulldozer: delete buildings and roads (B)">⚒ Bulldozer <kbd>B</kbd></button>
+            </div>
+          </section>
+          <div class="building-category-icons" aria-label="Building categories">
+            <button type="button" data-building-category="recreation" title="Recreation buildings">★</button>
+            <button type="button" data-building-category="service" title="Service buildings">✚</button>
+            <button type="button" data-building-category="transport" title="Transport buildings">⇄</button>
+            <button type="button" data-building-category="terrain" title="Terrain tools">▧</button>
+            <button type="button" data-building-category="roads" title="Road types">↔</button>
+          </div>
           <section class="building-browser" aria-labelledby="building-browser-title">
-            <span id="building-browser-title" class="section-label">Building browser</span>
+            <div class="building-browser-header">
+              <span id="building-browser-title" class="section-label">Building browser</span>
+              <button type="button" class="building-browser-close" data-building-browser-close aria-label="Close building browser" title="Close">×</button>
+            </div>
             <label class="visually-hidden" for="building-search">Search buildings</label>
             <input
               id="building-search"
@@ -101,25 +118,19 @@
             </select>
             <div id="building-results" class="building-results" role="list" aria-live="polite"></div>
           </section>
-          <section class="terrain-tools" aria-labelledby="terrain-tools-title">
-            <span id="terrain-tools-title" class="section-label">Terrain</span>
-            <div class="terrain-actions">
-              <button class="terrain-button" type="button" data-terrain="grass">Grass</button>
-              <button class="terrain-button" type="button" data-terrain="water">Water</button>
-              <button class="terrain-button" type="button" data-terrain="unassigned">Erase</button>
-            </div>
-          </section>
           <div class="toolbox-section">
             <span class="section-label">Layers</span>
-            <button class="layer-item is-visible" type="button">
+            <button class="layer-item is-visible" type="button" data-layer="grid">
               <span aria-hidden="true">◉</span> Grid
             </button>
-            <button class="layer-item is-visible" type="button">
+            <button class="layer-item is-visible" type="button" data-layer="terrain">
               <span aria-hidden="true">◉</span> Terrain
             </button>
-            <button class="layer-item is-visible" type="button">
+            <button class="layer-item is-visible" type="button" data-layer="buildings">
               <span aria-hidden="true">◉</span> Buildings
             </button>
+            <button class="layer-item is-visible" type="button" data-layer="roads"><span aria-hidden="true">â—‰</span> Roads</button>
+            <button class="layer-item is-visible" type="button" data-layer="warnings"><span aria-hidden="true">â—‰</span> Warnings</button>
           </div>
         </aside>
 
@@ -136,15 +147,24 @@
 
         <section class="canvas-panel panel" aria-label="Planning canvas">
           <div class="canvas-toolbar">
-            <span class="document-name">Untitled Plan</span>
-            <span class="document-state">Not saved</span>
+            <label class="visually-hidden" for="plan-name">Plan name</label>
+            <input id="plan-name" class="document-name" value="Untitled Plan" maxlength="80" />
+            <span class="document-state">Local draft</span>
             <div class="canvas-toolbar-spacer"></div>
-            <button class="canvas-control" type="button" title="Zoom out">−</button>
-            <span class="zoom-level">100%</span>
-            <button class="canvas-control" type="button" title="Zoom in">+</button>
+            <button id="zoom-out" class="canvas-control" type="button" title="Zoom out">−</button>
+            <span id="zoom-level" class="zoom-level">100%</span>
+            <button id="zoom-in" class="canvas-control" type="button" title="Zoom in">+</button>
+            <label class="visually-hidden" for="grid-size">Grid size</label>
+            <select id="grid-size" class="grid-size-input" title="Grid size">
+              <option value="40">40 x 40</option>
+              <option value="64" selected>64 x 64</option>
+              <option value="72">72 x 72</option>
+            </select>
+            <button id="apply-grid-size" class="canvas-control grid-apply" type="button" title="Apply grid size">✓</button>
           </div>
           <div class="canvas-frame">
             <canvas id="planner-canvas" aria-label="Empty city planning canvas"></canvas>
+            <div id="canvas-building-tooltip" class="canvas-building-tooltip" role="status" aria-live="polite" hidden></div>
           </div>
         </section>
 
@@ -165,6 +185,10 @@
             <span class="panel-heading-detail">PROPERTIES</span>
           </div>
           <div id="inspector-content"></div>
+          <section class="minimap-panel" aria-label="Minimap">
+            <span class="section-label">Minimap</span>
+            <canvas id="minimap-canvas" width="180" height="140" aria-label="Plan minimap"></canvas>
+          </section>
         </aside>
       </section>
 
@@ -181,10 +205,10 @@
 
       <footer class="status-bar panel" aria-label="Status bar">
         <div id="editor-status" class="status-item"><span class="status-dot" aria-hidden="true"></span> Ready</div>
-        <div class="status-item">Grid: — × —</div>
+        <div id="grid-status" class="status-item">Grid: 64 × 64</div>
         <div class="status-spacer"></div>
-        <div class="status-item">X: — &nbsp; Y: —</div>
-        <div class="status-item">Canvas: 100%</div>
+        <div id="pointer-status" class="status-item">X: — &nbsp; Y: —</div>
+        <div id="canvas-status" class="status-item">Canvas: 100%</div>
       </footer>
     </main>
     <input id="plan-file-input" type="file" accept="application/json,.json" hidden />

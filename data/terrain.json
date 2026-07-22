@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "terrain": [
+    { "id": "planted-tree", "name": "Planted Tree", "confidence": "community-reported" },
+    { "id": "water", "name": "Water", "confidence": "community-reported" },
+    { "id": "sand", "name": "Sand", "confidence": "community-reported" },
+    { "id": "soil", "name": "Soil", "confidence": "community-reported" },
+    { "id": "grass", "name": "Grass", "confidence": "community-reported" },
+    { "id": "canal", "name": "Canal", "confidence": "community-reported" },
+    { "id": "wild-tree", "name": "Wild Tree", "confidence": "community-reported" },
+    { "id": "mountains", "name": "Mountains", "confidence": "community-reported" },
+    { "id": "palm-tree", "name": "Palm Tree", "confidence": "community-reported" }
+  ]
+}

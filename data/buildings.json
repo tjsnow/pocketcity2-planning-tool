@@ -1,25 +1,185 @@
 {
   "schemaVersion": 1,
   "buildings": [
-    {
-      "id": "demo-block",
-      "name": "Demo Block (Sample)",
-      "category": "demo",
-      "size": { "width": 2, "height": 2 },
-      "levels": [],
-      "effects": {},
-      "radius": {},
-      "unlock": {}
-    },
-    {
-      "id": "demo-tower",
-      "name": "Demo Tower (Sample)",
-      "category": "demo",
-      "size": { "width": 1, "height": 3 },
-      "levels": [],
-      "effects": {},
-      "radius": {},
-      "unlock": {}
-    }
+  {
+    "id": "planted-tree",
+    "name": "Planted Tree",
+    "category": "recreation",
+    "size": { "width": 1, "height": 1 },
+    "levels": [],
+    "effects": { "primary": "pollution-reduction" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "small-park",
+    "name": "Small Park",
+    "category": "recreation",
+    "size": { "width": 1, "height": 1 },
+    "levels": [],
+    "effects": { "primary": "recreation" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "aquarium",
+    "name": "Aquarium",
+    "category": "recreation",
+    "size": { "width": 2, "height": 1 },
+    "levels": [],
+    "effects": { "primary": "recreation" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "large-park",
+    "name": "Large Park",
+    "category": "recreation",
+    "size": { "width": 2, "height": 2 },
+    "levels": [],
+    "effects": { "primary": "recreation" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "community-center",
+    "name": "Community Center",
+    "category": "recreation",
+    "size": { "width": 2, "height": 2 },
+    "levels": [],
+    "effects": { "primary": "recreation", "secondary": "community" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "basketball-court",
+    "name": "Basketball Court",
+    "category": "recreation",
+    "size": { "width": 1, "height": 1 },
+    "levels": [],
+    "effects": { "primary": "recreation", "secondary": "community" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "community-health-center",
+    "name": "Community Health Center",
+    "category": "service",
+    "size": { "width": 1, "height": 1 },
+    "levels": [],
+    "effects": { "primary": "healthcare" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Service_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "hospital",
+    "name": "Hospital",
+    "category": "service",
+    "size": { "width": 2, "height": 2 },
+    "levels": [],
+    "effects": { "primary": "healthcare" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Service_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "fire-department",
+    "name": "Fire Department",
+    "category": "service",
+    "size": { "width": 2, "height": 2 },
+    "levels": [],
+    "effects": { "primary": "fire-response" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Service_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "police-station",
+    "name": "Police Station",
+    "category": "service",
+    "size": { "width": 2, "height": 2 },
+    "levels": [],
+    "effects": { "primary": "police-response" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Service_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "parking-garage",
+    "name": "Parking Garage",
+    "category": "transport",
+    "size": { "width": 2, "height": 2 },
+    "levels": [],
+    "effects": { "primary": "parking" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Transport_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "airport",
+    "name": "Airport",
+    "category": "transport",
+    "size": { "width": 4, "height": 4 },
+    "levels": [],
+    "effects": { "primary": "air-transport" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Transport_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "recycling-center",
+    "name": "Recycling Center",
+    "category": "service",
+    "size": { "width": 2, "height": 2 },
+    "levels": [],
+    "effects": { "primary": "waste-management" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Service_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "subway-station",
+    "name": "Subway Station",
+    "category": "transport",
+    "size": { "width": 1, "height": 1 },
+    "levels": [],
+    "effects": { "primary": "subway-transport" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Transport_Buildings", "accessedAt": "2026-07-22" }
+  },
+  {
+    "id": "concert-hall",
+    "name": "Concert Hall",
+    "category": "recreation",
+    "size": { "width": 2, "height": 2 },
+    "levels": [],
+    "effects": { "primary": "recreation" },
+    "radius": {},
+    "unlock": {},
+    "confidence": "community-reported",
+    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
+  }
   ]
 }

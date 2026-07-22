@@ -56,7 +56,11 @@ The placement domain model validates catalog references, quarter-turn rotation v
 { "x": 4, "y": 9, "direction": "horizontal", "roadType": "road" }
 ```
 
-Road segments are unit-length horizontal or vertical edges. Their coordinate and direction form a canonical identity; duplicate identities are rejected. `roadType` is a caller-supplied string until a verified road catalog exists.
+Road segments connect the centers of adjacent grid blocks horizontally or vertically. Their coordinate and direction form a canonical identity; duplicate identities are rejected. `roadType` is a caller-supplied string until a verified road catalog exists.
+
+Plans persist road segments in a top-level `roads` array. Road validation keeps segments within the plan grid and prevents building overlap; roads may cross any terrain type.
+
+The editor supports exactly three square grid sizes: 40x40, 64x64 (default), and 72x72. Coordinates use a lower-left origin: `(0,0)` is the bottom-left cell, and rendered/editable content is clipped to the selected grid bounds.
 
 ### Radius definition
 
@@ -71,6 +75,46 @@ Radius geometry requires an explicit metric: `euclidean` for circular distance o
 ```json
 { "x": 4, "y": 9, "terrainId": "water" }
 ```
+
+### District
+
+```json
+{ "id": "district-1", "name": "Downtown", "x": 4, "y": 4, "width": 12, "height": 10, "color": "#4e94d9" }
+```
+
+Districts are optional rectangular planning labels persisted in a plan's `districts` array. They are editor annotations only; no simulation or zoning behavior is inferred until Pocket City data is verified.
+
+Planning notes are persisted in the existing `notes` array as `{ "id", "x", "y", "text" }`. Notes are bounded to a grid cell and limited to 500 characters. `measureGridSegment(start, end)` provides both Manhattan and Euclidean distances without choosing a game-specific metric.
+
+Optimization reports are transient read-only results. `analyzePlan` returns issue records with `code`, `severity`, `subjectId`, and `message`; they are not persisted and never mutate the plan. Utility access is considered valid for an adjacent road, or for a one-cell gap only when the intervening cell contains another building.
+
+The local draft uses storage key `pocket-city-planner.draft.v1`, is JSON encoded, and is limited to 2 MB. Corrupt drafts are discarded safely; portable plan downloads remain the durable user-controlled copy.
+
+Portable plan import accepts JSON object documents up to 10 MB. `SaveManager.parsePlan` parses defensively and leaves schema/version validation to `PlanEditor.fromDocument`.
+
+Layer visibility is persisted as a `layers` object with `grid`, `terrain`, `roads`, `buildings`, and `warnings` booleans. It changes presentation only and does not remove plan data.
+
+The minimap is a transient read-only view of the current scene and camera; it is not persisted as plan data.
+
+The minimap coalesces scene and camera updates into one animation-frame render and only resizes its backing buffer when dimensions change.
+
+Building discovery is a presentation concern: category buttons open a temporary searchable module, and catalog cards may be dragged to a grid cell. Dragging delegates to the same validated editor command as clicking.
+
+Terrain tools are presented as built-in catalog items under the `terrain` category. They activate terrain painting and are not building placements or persisted catalog records.
+
+`IconCatalog` provides the visual skin boundary. Current entries are local fallback glyphs with `project-generated` metadata; licensed bitmap/SVG assets can replace them without changing catalog or renderer contracts.
+
+Road menu items use a `roadType` and `roadIcon` presentation value. The renderer maps each type to a distinct surface/line style; these are visual planning conventions until verified game-specific road rules are added.
+
+The Terrain category includes Planted Tree, Water, Sand, Soil, Grass, Canal, Wild Tree, Mountains, and Palm Tree, plus the built-in Erase terrain tool. Terrain remains a caller-owned string ID with no hard-coded simulation behavior.
+
+Versioned source catalogs are stored in `data/buildings.json`, `data/roads.json`, and `data/terrain.json`. Each catalog carries `schemaVersion`; records retain confidence metadata so source uncertainty remains visible.
+
+`PluginRegistry` provides explicit namespaced registration for future catalog items and tools. Registrations are validated, immutable, and isolated; plugins do not receive direct mutation access to editor state.
+
+Core regression tests live in `tests/` and run with Node's built-in test runner; browser-only rendering remains covered by manual QA.
+
+Keyboard shortcuts are UI-only: `V` select, `P` road brush, `B` bulldozer, `G` grid visibility, `W` warning visibility, `R` rotate selected placement, arrow keys move the selection, and `Escape` returns to Select.
 
 ```json
 { "id": "note-uuid", "x": 10, "y": 10, "text": "Leave room for expansion" }
@@ -102,7 +146,7 @@ Catalog item IDs are immutable once published. Names, descriptions, and presenta
 
 ## Building source catalog
 
-The static building source catalog is stored at `data/buildings.json`. It uses a versioned wrapper with a `buildings` array. Every building record follows `schemas/building.schema.json` and contains `id`, `name`, `category`, `size`, `levels`, `effects`, `radius`, and `unlock` fields. The initial catalog is deliberately empty until data can be sourced and assigned appropriate provenance.
+The static building source catalog is stored at `data/buildings.json`. It uses a versioned wrapper with a `buildings` array. Every building record follows `schemas/building.schema.json` and contains `id`, `name`, `category`, `size`, `levels`, `effects`, `radius`, and `unlock` fields. The starter catalog is assembled from community-wiki entries and is not an official game data dump. Records carry `confidence` (`community-reported` or `verified`) and a `source` object with `kind`, `reference`, and optional `accessedAt` fields. No game artwork is bundled with the catalog.
 
 The source-record `size` is normalized to the catalog item’s planning footprint when a plan-facing catalog adapter is introduced. This keeps raw source data separate from future UI and placement representations.
 

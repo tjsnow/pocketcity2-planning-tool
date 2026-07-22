@@ -23,6 +23,16 @@ npm install
 npm run check
 ```
 
+Run the automated core tests with:
+
+```powershell
+npm test
+```
+
+See [docs/UserGuide.md](docs/UserGuide.md) and [docs/KeyboardShortcuts.md](docs/KeyboardShortcuts.md) for application usage.
+
+Release readiness is tracked in [docs/ReleaseChecklist.md](docs/ReleaseChecklist.md). Run `npm run release-check` for the automated gates.
+
 The initial JavaScript modules are included in the TypeScript project without
 rewriting them. New TypeScript modules must comply with the strict settings in
 `tsconfig.json`.

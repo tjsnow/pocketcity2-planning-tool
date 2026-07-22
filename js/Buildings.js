@@ -70,6 +70,13 @@ function validateBuilding(building) {
       throw new TypeError(`Building ${property} must be an object.`);
     }
   }
+
+  if (building.confidence !== undefined && building.confidence !== "community-reported" && building.confidence !== "verified") {
+    throw new TypeError("Building confidence must be community-reported or verified.");
+  }
+  if (building.source !== undefined && (!isRecord(building.source) || typeof building.source.kind !== "string" || typeof building.source.reference !== "string")) {
+    throw new TypeError("Building source must include kind and reference strings.");
+  }
 }
 
 function freezeBuilding(building) {
@@ -80,6 +87,7 @@ function freezeBuilding(building) {
     effects: Object.freeze({ ...building.effects }),
     radius: Object.freeze({ ...building.radius }),
     unlock: Object.freeze({ ...building.unlock }),
+    source: building.source ? Object.freeze({ ...building.source }) : undefined,
   });
 }
 

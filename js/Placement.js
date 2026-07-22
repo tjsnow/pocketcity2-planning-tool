@@ -35,6 +35,11 @@ export class PlacementStore {
     return new PlacementStore(this.database, [...nextPlacements.values()]);
   }
 
+  withReplaced(id, replacement) {
+    if (!this.placements.has(id)) throw new Error(`Unknown placement ID: ${id}`);
+    return new PlacementStore(this.database, [...this.getAll().filter((placement) => placement.id !== id), replacement]);
+  }
+
   addToMap(target, placement) {
     validatePlacement(placement, this.database);
     if (target.has(placement.id)) {

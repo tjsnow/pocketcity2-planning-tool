@@ -15,6 +15,10 @@ export class RoadNetwork {
     return [...this.segmentsByKey.values()].map(({ key, ...segment }) => segment);
   }
 
+  hasSegment(segment) {
+    return this.segmentsByKey.has(normalizeSegment(segment).key);
+  }
+
   withSegment(segment) {
     const normalized = normalizeSegment(segment);
     const next = this.getAll();

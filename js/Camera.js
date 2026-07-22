@@ -20,7 +20,7 @@ export class Camera {
 
   panByScreen(deltaX, deltaY) {
     this.positionX -= deltaX / this.zoom;
-    this.positionY -= deltaY / this.zoom;
+    this.positionY += deltaY / this.zoom;
   }
 
   zoomAt(screenPoint, requestedZoom) {
@@ -35,14 +35,14 @@ export class Camera {
   worldToScreen({ x, y }) {
     return {
       x: (x - this.positionX) * this.zoom + this.viewportWidth / 2,
-      y: (y - this.positionY) * this.zoom + this.viewportHeight / 2,
+      y: (this.positionY - y) * this.zoom + this.viewportHeight / 2,
     };
   }
 
   screenToWorld({ x, y }) {
     return {
       x: (x - this.viewportWidth / 2) / this.zoom + this.positionX,
-      y: (y - this.viewportHeight / 2) / this.zoom + this.positionY,
+      y: this.positionY - (y - this.viewportHeight / 2) / this.zoom,
     };
   }
 }

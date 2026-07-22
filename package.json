@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "test": "node --test tests/core.test.mjs",
+    "release-check": "npm run check && npm test"
   },
   "devDependencies": {
     "typescript": "^5.7.2"
