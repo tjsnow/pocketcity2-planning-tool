@@ -25,6 +25,7 @@ All notable user-visible and developer-relevant changes are recorded here. The f
 - Functional MVP editor loop: demo-only buildings can be selected, placed on the Canvas, selected, inspected, and deleted.
 - Local draft persistence and JSON plan download/import through the ribbon controls.
 - Placement undo/redo history with ribbon controls and standard keyboard shortcuts.
+- Terrain painting with grass, water, erase tools, rendering, persistence, history support, and water placement blocking.
 
 ### Changed
 

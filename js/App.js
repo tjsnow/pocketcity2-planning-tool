@@ -45,6 +45,7 @@ async function initializeBuildingBrowser(root, activeInspector) {
 
     new BuildingBrowser(root, database, (building) => {
       editor.selectBuilding(building.id);
+      updateTerrainButtons();
       activeInspector?.showBuilding(building);
       setStatus(`Place ${building.name} on the grid.`);
       syncEditor();
@@ -52,7 +53,16 @@ async function initializeBuildingBrowser(root, activeInspector) {
 
     document.querySelector("#select-tool")?.addEventListener("click", () => {
       editor.selectTool();
+      updateTerrainButtons();
       setStatus("Select tool active.");
+    });
+
+    document.querySelectorAll("[data-terrain]").forEach((button) => {
+      button.addEventListener("click", () => {
+        editor.selectTerrain(button.dataset.terrain);
+        updateTerrainButtons();
+        setStatus(`${button.textContent} terrain tool active.`);
+      });
     });
 
     const undoButton = document.querySelector("#undo-action");
@@ -112,6 +122,12 @@ async function initializeBuildingBrowser(root, activeInspector) {
         setStatus("Placement deleted.");
       });
       setStatus(`Selected ${building.name} at ${placement.x}, ${placement.y}.`);
+    }
+
+    function updateTerrainButtons() {
+      document.querySelectorAll("[data-terrain]").forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.terrain === editor.activeTerrainId);
+      });
     }
 
     function saveDraft() {

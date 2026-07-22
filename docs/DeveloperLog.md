@@ -173,3 +173,11 @@ This log preserves concise architectural decisions, discoveries, and follow-up w
 **Decision:** Store immutable placement snapshots before placement and deletion commands, exposing undo/redo through the existing ribbon and standard keyboard shortcuts.
 
 **Consequences:** History is transient editor state and is intentionally not persisted in exported plans. Restored plan state is autosaved as the current draft.
+
+## 2026-07-22 — Editable terrain layer
+
+**Context:** The map needed spatial constraints and visual planning context beneath buildings.
+
+**Decision:** Connect the existing sparse terrain model to a small generic terrain palette, render terrain below the grid/buildings, persist it in plans, and prevent building placement on water cells.
+
+**Consequences:** Terrain edits share the same history and autosave behavior as placements. The terrain identifiers remain generic planning data, not assertions about Pocket City game mechanics.

@@ -1,15 +1,18 @@
 import { PlacementStore } from "./Placement.js";
+import { Terrain } from "./Terrain.js";
 
 /** Application state and commands for the first finite-grid editor workflow. */
 export class PlanEditor {
-  constructor(database, { id = "local-plan", name = "Untitled Plan", width = 64, height = 64, placements = [] } = {}) {
+  constructor(database, { id = "local-plan", name = "Untitled Plan", width = 64, height = 64, placements = [], terrain = [] } = {}) {
     this.database = database;
     this.id = id;
     this.name = name;
     this.width = width;
     this.height = height;
     this.placements = new PlacementStore(database, placements);
+    this.terrain = Terrain.fromCells(terrain);
     this.activeBuildingId = null;
+    this.activeTerrainId = null;
     this.selectedPlacementId = null;
     this.nextPlacementNumber = placements.length + 1;
     this.undoStack = [];
@@ -19,17 +22,35 @@ export class PlanEditor {
   selectBuilding(buildingId) {
     if (!this.database.getById(buildingId)) throw new Error(`Unknown building ID: ${buildingId}`);
     this.activeBuildingId = buildingId;
+    this.activeTerrainId = null;
     this.selectedPlacementId = null;
   }
 
   selectTool() {
     this.activeBuildingId = null;
+    this.activeTerrainId = null;
+  }
+
+  selectTerrain(terrainId) {
+    this.activeTerrainId = terrainId;
+    this.activeBuildingId = null;
+    this.selectedPlacementId = null;
   }
 
   clickCell(x, y) {
+    if (this.activeTerrainId) return this.paintTerrainAt(x, y);
     if (this.activeBuildingId) return this.placeAt(x, y);
     this.selectedPlacementId = this.findPlacementAt(x, y)?.id ?? null;
     return this.selectedPlacement;
+  }
+
+  paintTerrainAt(x, y) {
+    this.assertInBounds(x, y);
+    if (this.terrain.getAt(x, y) === this.activeTerrainId) return null;
+    this.recordHistory();
+    this.terrain = this.terrain.withTerrainAt(x, y, this.activeTerrainId);
+    this.selectedPlacementId = null;
+    return null;
   }
 
   placeAt(x, y) {
@@ -37,6 +58,11 @@ export class PlanEditor {
     if (!building) throw new Error("Select a building before placing it.");
     if (x < 0 || y < 0 || x + building.size.width > this.width || y + building.size.height > this.height) {
       throw new RangeError("The building must fit within the plan grid.");
+    }
+    for (let cellY = y; cellY < y + building.size.height; cellY += 1) {
+      for (let cellX = x; cellX < x + building.size.width; cellX += 1) {
+        if (this.terrain.getAt(cellX, cellY) === "water") throw new Error("Buildings cannot be placed on water.");
+      }
     }
 
     const placement = {
@@ -84,7 +110,7 @@ export class PlanEditor {
   }
 
   get scene() {
-    return { database: this.database, placements: this.placements.getAll(), selectedPlacementId: this.selectedPlacementId };
+    return { database: this.database, terrain: this.terrain, placements: this.placements.getAll(), selectedPlacementId: this.selectedPlacementId };
   }
 
   toDocument() {
@@ -94,7 +120,7 @@ export class PlanEditor {
       name: this.name,
       updatedAt: new Date().toISOString(),
       grid: { width: this.width, height: this.height, cellSize: 1 },
-      terrain: [],
+      terrain: this.terrain.toCells(),
       placements: this.placements.getAll(),
       notes: [],
     };
@@ -113,6 +139,7 @@ export class PlanEditor {
       width: document.grid.width,
       height: document.grid.height,
       placements: document.placements,
+      terrain: Array.isArray(document.terrain) ? document.terrain : [],
     });
   }
 
@@ -129,12 +156,19 @@ export class PlanEditor {
   }
 
   snapshot() {
-    return { placements: this.placements.getAll(), nextPlacementNumber: this.nextPlacementNumber };
+    return { placements: this.placements.getAll(), terrain: this.terrain.toCells(), nextPlacementNumber: this.nextPlacementNumber };
   }
 
   restore(snapshot) {
     this.placements = new PlacementStore(this.database, snapshot.placements);
+    this.terrain = Terrain.fromCells(snapshot.terrain);
     this.nextPlacementNumber = snapshot.nextPlacementNumber;
     this.selectedPlacementId = null;
+  }
+
+  assertInBounds(x, y) {
+    if (!Number.isInteger(x) || !Number.isInteger(y) || x < 0 || y < 0 || x >= this.width || y >= this.height) {
+      throw new RangeError("Terrain cell must be within the plan grid.");
+    }
   }
 }

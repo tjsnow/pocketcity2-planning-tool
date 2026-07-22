@@ -73,6 +73,7 @@ export class Renderer {
     this.context.setTransform(this.devicePixelRatio, 0, 0, this.devicePixelRatio, 0, 0);
     this.context.clearRect(0, 0, this.cssWidth, this.cssHeight);
     this.drawBackground();
+    this.drawTerrain();
     this.grid.draw(this.context, this.camera, this.cssWidth, this.cssHeight);
     this.drawPlacements();
     this.overlays.draw(this.context, this.camera, this.cssWidth, this.cssHeight);
@@ -116,6 +117,16 @@ export class Renderer {
       this.context.fillRect(topLeft.x + 2, topLeft.y + 2, Math.max(0, width - 4), Math.max(0, height - 4));
       this.context.strokeStyle = "#b9d8f5";
       this.context.strokeRect(topLeft.x + 2.5, topLeft.y + 2.5, Math.max(0, width - 5), Math.max(0, height - 5));
+    }
+  }
+
+  drawTerrain() {
+    if (!this.scene?.terrain) return;
+    for (const cell of this.scene.terrain.toCells()) {
+      const topLeft = this.camera.worldToScreen({ x: cell.x * this.grid.cellSize, y: cell.y * this.grid.cellSize });
+      const size = this.grid.cellSize * this.camera.zoom;
+      this.context.fillStyle = cell.terrainId === "water" ? "#1c557e" : "#2f6041";
+      this.context.fillRect(topLeft.x, topLeft.y, size, size);
     }
   }
 
