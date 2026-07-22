@@ -37,3 +37,11 @@ This log preserves concise architectural decisions, discoveries, and follow-up w
 **Decision:** Make versioned JSON import/export a core persistence capability. Browser storage is a local convenience layer only.
 
 **Consequences:** Schema validation and migrations are foundational work, and imports must fail without destroying the user’s original file.
+
+## 2026-07-22 — Initial static project shell
+
+**Context:** The project needs an implementation-ready layout without beginning feature work.
+
+**Decision:** Add the requested top-level static asset directories, a minimal HTML entry point, one global stylesheet placeholder, and independent ES module placeholders for application composition, rendering, camera, grid, terrain, buildings, UI, and persistence.
+
+**Consequences:** The modules establish ownership boundaries only; they intentionally contain no behavior, state, data loading, or UI implementation.
