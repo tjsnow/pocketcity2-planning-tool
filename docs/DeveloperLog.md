@@ -165,3 +165,11 @@ This log preserves concise architectural decisions, discoveries, and follow-up w
 **Decision:** Serialize the MVP plan state as schema version 1 JSON, autosave it to localStorage, and support JSON download/import through the existing ribbon controls.
 
 **Consequences:** The app remains static-host-compatible and account-free. Imports validate the supported document shape and catalog references through the plan editor before replacing the active draft.
+
+## 2026-07-22 — Reversible placement history
+
+**Context:** Players need a low-risk way to revise plans without manually deleting and rebuilding placements.
+
+**Decision:** Store immutable placement snapshots before placement and deletion commands, exposing undo/redo through the existing ribbon and standard keyboard shortcuts.
+
+**Consequences:** History is transient editor state and is intentionally not persisted in exported plans. Restored plan state is autosaved as the current draft.

@@ -55,6 +55,17 @@ async function initializeBuildingBrowser(root, activeInspector) {
       setStatus("Select tool active.");
     });
 
+    const undoButton = document.querySelector("#undo-action");
+    const redoButton = document.querySelector("#redo-action");
+    undoButton?.addEventListener("click", () => runHistoryAction(() => editor.undo(), "Undo applied."));
+    redoButton?.addEventListener("click", () => runHistoryAction(() => editor.redo(), "Redo applied."));
+    window.addEventListener("keydown", (event) => {
+      if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "z") return;
+      event.preventDefault();
+      const action = event.shiftKey ? editor.redo.bind(editor) : editor.undo.bind(editor);
+      runHistoryAction(action, event.shiftKey ? "Redo applied." : "Undo applied.");
+    });
+
     document.querySelector("#new-plan")?.addEventListener("click", () => {
       editor = new PlanEditor(database);
       syncEditor();
@@ -86,6 +97,8 @@ async function initializeBuildingBrowser(root, activeInspector) {
 
     function syncEditor() {
       renderer?.setScene(editor.scene);
+      undoButton.disabled = !editor.canUndo;
+      redoButton.disabled = !editor.canRedo;
       const placement = editor.selectedPlacement;
       if (!placement) {
         activeInspector?.showEmpty();
@@ -107,6 +120,13 @@ async function initializeBuildingBrowser(root, activeInspector) {
       } catch {
         setStatus("Draft could not be saved in this browser.");
       }
+    }
+
+    function runHistoryAction(action, message) {
+      if (!action()) return;
+      syncEditor();
+      saveDraft();
+      setStatus(message);
     }
   } catch {
     root.querySelector("#building-results")?.replaceChildren(

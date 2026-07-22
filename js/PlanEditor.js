@@ -12,6 +12,8 @@ export class PlanEditor {
     this.activeBuildingId = null;
     this.selectedPlacementId = null;
     this.nextPlacementNumber = placements.length + 1;
+    this.undoStack = [];
+    this.redoStack = [];
   }
 
   selectBuilding(buildingId) {
@@ -45,6 +47,7 @@ export class PlanEditor {
       rotation: 0,
       layer: "structures",
     };
+    this.recordHistory();
     this.placements = this.placements.withPlaced(placement);
     this.selectedPlacementId = placement.id;
     return this.selectedPlacement;
@@ -52,8 +55,27 @@ export class PlanEditor {
 
   deleteSelected() {
     if (!this.selectedPlacementId) return false;
+    this.recordHistory();
     this.placements = this.placements.without(this.selectedPlacementId);
     this.selectedPlacementId = null;
+    return true;
+  }
+
+  get canUndo() { return this.undoStack.length > 0; }
+
+  get canRedo() { return this.redoStack.length > 0; }
+
+  undo() {
+    if (!this.canUndo) return false;
+    this.redoStack.push(this.snapshot());
+    this.restore(this.undoStack.pop());
+    return true;
+  }
+
+  redo() {
+    if (!this.canRedo) return false;
+    this.undoStack.push(this.snapshot());
+    this.restore(this.redoStack.pop());
     return true;
   }
 
@@ -99,5 +121,20 @@ export class PlanEditor {
       const building = this.database.getById(placement.catalogItemId);
       return x >= placement.x && x < placement.x + building.size.width && y >= placement.y && y < placement.y + building.size.height;
     }) ?? null;
+  }
+
+  recordHistory() {
+    this.undoStack.push(this.snapshot());
+    this.redoStack = [];
+  }
+
+  snapshot() {
+    return { placements: this.placements.getAll(), nextPlacementNumber: this.nextPlacementNumber };
+  }
+
+  restore(snapshot) {
+    this.placements = new PlacementStore(this.database, snapshot.placements);
+    this.nextPlacementNumber = snapshot.nextPlacementNumber;
+    this.selectedPlacementId = null;
   }
 }
