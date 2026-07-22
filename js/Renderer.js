@@ -1,4 +1,6 @@
 import { Camera } from "./Camera.js";
+import { Grid } from "./Grid.js";
+import { OverlayRegistry } from "./Overlays.js";
 
 const BACKGROUND_COLOR = "#171b20";
 
@@ -20,6 +22,8 @@ export class Renderer {
     this.canvas = canvas;
     this.context = context;
     this.camera = new Camera();
+    this.grid = new Grid();
+    this.overlays = new OverlayRegistry();
     this.cssWidth = 0;
     this.cssHeight = 0;
     this.devicePixelRatio = 1;
@@ -67,6 +71,19 @@ export class Renderer {
     this.context.setTransform(this.devicePixelRatio, 0, 0, this.devicePixelRatio, 0, 0);
     this.context.clearRect(0, 0, this.cssWidth, this.cssHeight);
     this.drawBackground();
+    this.grid.draw(this.context, this.camera, this.cssWidth, this.cssHeight);
+    this.overlays.draw(this.context, this.camera, this.cssWidth, this.cssHeight);
+  }
+
+  addOverlay(overlay) {
+    this.overlays.add(overlay);
+    this.requestRender();
+  }
+
+  removeOverlay(id) {
+    const removed = this.overlays.remove(id);
+    if (removed) this.requestRender();
+    return removed;
   }
 
   drawBackground() {

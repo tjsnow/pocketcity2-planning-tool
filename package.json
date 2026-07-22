@@ -1,0 +1,14 @@
+{
+  "name": "pocket-city-planner",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A static, local-first planning companion for Pocket City 2.",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

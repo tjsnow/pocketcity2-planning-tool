@@ -1,0 +1,14 @@
+# Dependencies and generated output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Local plan files; retain the directory placeholder.
+/saves/*
+!/saves/.gitkeep
+
+# Logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db

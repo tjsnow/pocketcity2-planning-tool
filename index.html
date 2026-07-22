@@ -85,6 +85,22 @@
               <kbd>G</kbd>
             </button>
           </div>
+          <section class="building-browser" aria-labelledby="building-browser-title">
+            <span id="building-browser-title" class="section-label">Building browser</span>
+            <label class="visually-hidden" for="building-search">Search buildings</label>
+            <input
+              id="building-search"
+              class="building-search"
+              type="search"
+              placeholder="Search buildings"
+              autocomplete="off"
+            />
+            <label class="visually-hidden" for="building-category">Building category</label>
+            <select id="building-category" class="building-category">
+              <option value="">All categories</option>
+            </select>
+            <div id="building-results" class="building-results" role="list" aria-live="polite"></div>
+          </section>
           <div class="toolbox-section">
             <span class="section-label">Layers</span>
             <button class="layer-item is-visible" type="button">
@@ -140,11 +156,7 @@
             <span>Inspector</span>
             <span class="panel-heading-detail">PROPERTIES</span>
           </div>
-          <div class="inspector-empty-state">
-            <span class="inspector-icon" aria-hidden="true">◇</span>
-            <strong>No selection</strong>
-            <p>Select an item on the canvas to view its properties.</p>
-          </div>
+          <div id="inspector-content"></div>
         </aside>
       </section>
 
