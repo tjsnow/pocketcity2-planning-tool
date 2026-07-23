@@ -1,185 +1,3421 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "buildings": [
-  {
-    "id": "planted-tree",
-    "name": "Planted Tree",
-    "category": "recreation",
-    "size": { "width": 1, "height": 1 },
-    "levels": [],
-    "effects": { "primary": "pollution-reduction" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "small-park",
-    "name": "Small Park",
-    "category": "recreation",
-    "size": { "width": 1, "height": 1 },
-    "levels": [],
-    "effects": { "primary": "recreation" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "aquarium",
-    "name": "Aquarium",
-    "category": "recreation",
-    "size": { "width": 2, "height": 1 },
-    "levels": [],
-    "effects": { "primary": "recreation" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "large-park",
-    "name": "Large Park",
-    "category": "recreation",
-    "size": { "width": 2, "height": 2 },
-    "levels": [],
-    "effects": { "primary": "recreation" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "community-center",
-    "name": "Community Center",
-    "category": "recreation",
-    "size": { "width": 2, "height": 2 },
-    "levels": [],
-    "effects": { "primary": "recreation", "secondary": "community" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "basketball-court",
-    "name": "Basketball Court",
-    "category": "recreation",
-    "size": { "width": 1, "height": 1 },
-    "levels": [],
-    "effects": { "primary": "recreation", "secondary": "community" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "community-health-center",
-    "name": "Community Health Center",
-    "category": "service",
-    "size": { "width": 1, "height": 1 },
-    "levels": [],
-    "effects": { "primary": "healthcare" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Service_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "hospital",
-    "name": "Hospital",
-    "category": "service",
-    "size": { "width": 2, "height": 2 },
-    "levels": [],
-    "effects": { "primary": "healthcare" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Service_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "fire-department",
-    "name": "Fire Department",
-    "category": "service",
-    "size": { "width": 2, "height": 2 },
-    "levels": [],
-    "effects": { "primary": "fire-response" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Service_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "police-station",
-    "name": "Police Station",
-    "category": "service",
-    "size": { "width": 2, "height": 2 },
-    "levels": [],
-    "effects": { "primary": "police-response" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Service_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "parking-garage",
-    "name": "Parking Garage",
-    "category": "transport",
-    "size": { "width": 2, "height": 2 },
-    "levels": [],
-    "effects": { "primary": "parking" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Transport_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "airport",
-    "name": "Airport",
-    "category": "transport",
-    "size": { "width": 4, "height": 4 },
-    "levels": [],
-    "effects": { "primary": "air-transport" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Transport_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "recycling-center",
-    "name": "Recycling Center",
-    "category": "service",
-    "size": { "width": 2, "height": 2 },
-    "levels": [],
-    "effects": { "primary": "waste-management" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Service_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "subway-station",
-    "name": "Subway Station",
-    "category": "transport",
-    "size": { "width": 1, "height": 1 },
-    "levels": [],
-    "effects": { "primary": "subway-transport" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Transport_Buildings", "accessedAt": "2026-07-22" }
-  },
-  {
-    "id": "concert-hall",
-    "name": "Concert Hall",
-    "category": "recreation",
-    "size": { "width": 2, "height": 2 },
-    "levels": [],
-    "effects": { "primary": "recreation" },
-    "radius": {},
-    "unlock": {},
-    "confidence": "community-reported",
-    "source": { "kind": "community-wiki", "reference": "https://pocket-city-2.fandom.com/wiki/Recreation_Buildings", "accessedAt": "2026-07-22" }
-  }
+    {
+      "id": "residential-zone",
+      "name": "Residential Zone",
+      "category": "zone",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "zone"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "commercial-zone",
+      "name": "Commercial Zone",
+      "category": "zone",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "zone"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "industrial-zone",
+      "name": "Industrial Zone",
+      "category": "zone",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "zone"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "street",
+      "name": "Street",
+      "category": "road",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "road"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "roadType": "road"
+    },
+    {
+      "id": "high-density-road",
+      "name": "High-Density Road",
+      "category": "road",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "road"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "roadType": "high-density"
+    },
+    {
+      "id": "dirt-road",
+      "name": "Dirt Road",
+      "category": "road",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "road"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "roadType": "dirt"
+    },
+    {
+      "id": "pedestrian-path",
+      "name": "Pedestrian Path",
+      "category": "road",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "road"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "roadType": "pedestrian"
+    },
+    {
+      "id": "boardwalk",
+      "name": "Boardwalk",
+      "category": "road",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "road"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "roadType": "boardwalk"
+    },
+    {
+      "id": "light-rail",
+      "name": "Light Rail",
+      "category": "road",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "road"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "roadType": "light-rail"
+    },
+    {
+      "id": "train-rail",
+      "name": "Train Rail",
+      "category": "road",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "road"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "roadType": "train-rail"
+    },
+    {
+      "id": "high-rail",
+      "name": "High Rail",
+      "category": "road",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "road"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "roadType": "high-rail"
+    },
+    {
+      "id": "subway",
+      "name": "Subway",
+      "category": "road",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "road"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "roadType": "subway"
+    },
+    {
+      "id": "grass",
+      "name": "Grass",
+      "category": "nature",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "nature"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "terrainId": "grass"
+    },
+    {
+      "id": "soil",
+      "name": "Soil",
+      "category": "nature",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "nature"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "terrainId": "soil"
+    },
+    {
+      "id": "sand",
+      "name": "Sand",
+      "category": "nature",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "nature"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "terrainId": "sand"
+    },
+    {
+      "id": "water",
+      "name": "Water",
+      "category": "nature",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "nature"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "terrainId": "water"
+    },
+    {
+      "id": "canal",
+      "name": "Canal",
+      "category": "nature",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "nature"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "terrainId": "canal"
+    },
+    {
+      "id": "mountain",
+      "name": "Mountain",
+      "category": "nature",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "nature"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "terrainId": "mountains"
+    },
+    {
+      "id": "planted-tree",
+      "name": "Planted Tree",
+      "category": "nature",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "nature"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "terrainId": "planted-tree"
+    },
+    {
+      "id": "wild-tree",
+      "name": "Wild Tree",
+      "category": "nature",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "nature"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "terrainId": "wild-tree"
+    },
+    {
+      "id": "palm-tree",
+      "name": "Palm Tree",
+      "category": "nature",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "nature"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "terrainId": "palm-tree"
+    },
+    {
+      "id": "water-tower",
+      "name": "Water Tower",
+      "category": "water-sewage",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "water-sewage"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "large-water-tower",
+     "name": "Large Water Tower",
+     "category": "water-sewage",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "water-sewage"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "sewage-drain",
+      "name": "Sewage Drain",
+      "category": "water-sewage",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "water-sewage"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "requires adjacent water"
+    },
+    {
+      "id": "sewage-lagoon",
+     "name": "Sewage Lagoon",
+     "category": "water-sewage",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "water-sewage"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "water-treatment-plant",
+     "name": "Water Treatment Plant",
+     "category": "water-sewage",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "water-sewage"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "requires adjacent water"
+    },
+    {
+      "id": "power-plant",
+      "name": "Power Plant",
+      "category": "power",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "power"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "large-power-plant",
+     "name": "Large Power Plant",
+     "category": "power",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "power"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "hydro-power-plant",
+     "name": "Hydro Power Plant",
+     "category": "power",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "power"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "requires water between land"
+    },
+    {
+      "id": "fusion-power-plant",
+     "name": "Fusion Power Plant",
+     "category": "power",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "power"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "wind-power-plant",
+      "name": "Wind Power Plant",
+      "category": "power",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "power"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "solar-power-plant",
+     "name": "Solar Power Plant",
+     "category": "power",
+     "size": {
+        "width": 4,
+        "height": 4
+      },
+      "levels": [],
+      "effects": {
+        "primary": "power"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "waste-power-plant",
+     "name": "Waste Power Plant",
+     "category": "power",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "power"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "biomass-facility",
+      "name": "Biomass Facility",
+      "category": "power",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "power"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "provisional 2×2 footprint; verify in-game"
+    },
+    {
+      "id": "community-health-center",
+      "name": "Community Health Center",
+      "category": "service",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "hospital",
+      "name": "Hospital",
+      "category": "service",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "fire-department",
+      "name": "Fire Department",
+      "category": "service",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "police-station",
+      "name": "Police Station",
+      "category": "service",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "landfill",
+      "name": "Landfill",
+      "category": "service",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "waste-incinerator",
+      "name": "Waste Incinerator",
+      "category": "service",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "public-works",
+      "name": "Public Works",
+      "category": "service",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "parliament-building",
+      "name": "Parliament Building",
+      "category": "service",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "home-improvement-center",
+      "name": "Home Improvement Center",
+      "category": "service",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "carbon-capture-plant",
+      "name": "Carbon Capture Plant",
+      "category": "service",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "recycling-center",
+      "name": "Recycling Center",
+      "category": "service",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "service"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "traffic-light",
+      "name": "Traffic Light",
+      "category": "transportation",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "place on an existing road intersection"
+    },
+    {
+      "id": "parking-garage",
+     "name": "Parking Garage",
+     "category": "transportation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "bus-depot",
+     "name": "Bus Depot",
+     "category": "transportation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "bus-stop",
+      "name": "Bus Stop",
+      "category": "transportation",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "place on an existing road"
+    },
+    {
+      "id": "snowplow-depot",
+      "name": "Snowplow Depot",
+      "category": "transportation",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "light-rail-stop",
+      "name": "Light Rail Stop",
+      "category": "transportation",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "associate with Light Rail"
+    },
+    {
+      "id": "high-rail-station",
+      "name": "High Rail Station",
+      "category": "transportation",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "associate with High Rail"
+    },
+    {
+      "id": "commuter-train-station",
+     "name": "Commuter Train Station",
+     "category": "transportation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "connect to Train Rail extending to the map boundary"
+    },
+    {
+      "id": "bridge",
+     "name": "Bridge",
+     "category": "transportation",
+     "size": {
+        "width": 2,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "place over water"
+    },
+    {
+      "id": "airport",
+     "name": "Airport",
+     "category": "transportation",
+     "size": {
+        "width": 4,
+        "height": 4
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "ev-factory",
+     "name": "EV Factory",
+     "category": "transportation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "subway-station",
+      "name": "Subway Station",
+      "category": "transportation",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "transportation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "associate with Subway"
+    },
+    {
+      "id": "small-park",
+      "name": "Small Park",
+      "category": "recreation",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "aquarium",
+     "name": "Aquarium",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "small-movie-theatre",
+      "name": "Small Movie Theatre",
+      "category": "recreation",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "large-park",
+     "name": "Large Park",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "campground",
+     "name": "Campground",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "ferris-wheel",
+     "name": "Ferris Wheel",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "beach",
+      "name": "Beach",
+      "category": "recreation",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "terrain placement requirement"
+    },
+    {
+      "id": "large-beach",
+     "name": "Large Beach",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "terrain placement requirement"
+    },
+    {
+      "id": "petting-zoo",
+     "name": "Petting Zoo",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "zen-garden",
+     "name": "Zen Garden",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "community-center",
+     "name": "Community Center",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "basketball-court",
+      "name": "Basketball Court",
+      "category": "recreation",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "ski-resort",
+     "name": "Ski Resort",
+     "category": "recreation",
+     "size": {
+        "width": 4,
+        "height": 4
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "requires mountain terrain"
+    },
+    {
+      "id": "forest-lodge",
+     "name": "Forest Lodge",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "golf-course",
+     "name": "Golf Course",
+     "category": "recreation",
+     "size": {
+        "width": 4,
+        "height": 4
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "horse-ranch",
+     "name": "Horse Ranch",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "martial-arts-dojo",
+     "name": "Martial Arts Dojo",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "skate-park",
+     "name": "Skate Park",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "retro-arcade",
+     "name": "Retro Arcade",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "large-movie-theatre",
+     "name": "Large Movie Theatre",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "night-club",
+     "name": "Night Club",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "concert-hall",
+     "name": "Concert Hall",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "motocross-course",
+     "name": "Motocross Course",
+     "category": "recreation",
+     "size": {
+        "width": 4,
+        "height": 4
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "marina",
+     "name": "Marina",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "circus",
+     "name": "Circus",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "blimp-rides",
+     "name": "Blimp Rides",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "event-center",
+     "name": "Event Center",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "large-gazebo",
+     "name": "Large Gazebo",
+     "category": "recreation",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "recreation"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "elementary-school",
+     "name": "Elementary School",
+     "category": "education",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "education"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "high-school",
+     "name": "High School",
+     "category": "education",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "education"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "college",
+     "name": "College",
+     "category": "education",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "education"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "university",
+     "name": "University",
+     "category": "education",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "education"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "library",
+     "name": "Library",
+     "category": "education",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "education"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "museum",
+     "name": "Museum",
+     "category": "education",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "education"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "historical-center",
+     "name": "Historical Center",
+     "category": "education",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "education"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "technology-tower",
+      "name": "Technology Tower",
+      "category": "education",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "education"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "robotics-factory",
+     "name": "Robotics Factory",
+     "category": "education",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "education"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "space-center",
+     "name": "Space Center",
+     "category": "education",
+     "size": {
+        "width": 4,
+        "height": 4
+      },
+      "levels": [],
+      "effects": {
+        "primary": "education"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "lumber-mill",
+     "name": "Lumber Mill",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "shipping-dock",
+     "name": "Shipping Dock",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "requires water and map-edge access"
+    },
+    {
+      "id": "farm",
+     "name": "Farm",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "animal-pasture",
+     "name": "Animal Pasture",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "greenhouse",
+      "name": "Greenhouse",
+      "category": "resource",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "community-garden",
+     "name": "Community Garden",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "cargo-train-station",
+     "name": "Cargo Train Station",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "fishing-dock",
+     "name": "Fishing Dock",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "requires water"
+    },
+    {
+      "id": "woodworking-factory",
+     "name": "Woodworking Factory",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "clothing-factory",
+     "name": "Clothing Factory",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "ore-mine",
+     "name": "Ore Mine",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mineral-exploration-site",
+     "name": "Mineral Exploration Site",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "steel-mill",
+     "name": "Steel Mill",
+     "category": "resource",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "resource"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "billboard",
+      "name": "Billboard",
+      "category": "financial",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "financial"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "bank",
+      "name": "Bank",
+      "category": "financial",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "financial"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "investment-bank",
+      "name": "Investment Bank",
+      "category": "financial",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "financial"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "financial-tower",
+      "name": "Financial Tower",
+      "category": "financial",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "financial"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "commerce-tower",
+      "name": "Commerce Tower",
+      "category": "financial",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "financial"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "employment-center",
+     "name": "Employment Center",
+     "category": "financial",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "financial"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "regional-management-center",
+     "name": "Regional Management Center",
+     "category": "financial",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "financial"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "cheap-hotel",
+     "name": "Cheap Hotel",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "moderate-hotel",
+     "name": "Moderate Hotel",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "luxury-hotel",
+     "name": "Luxury Hotel",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "fountain",
+      "name": "Fountain",
+      "category": "landmark",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "city-tower",
+     "name": "City Tower",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "temple",
+     "name": "Temple",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "castle",
+     "name": "Castle",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "guardian-statue",
+      "name": "Guardian Statue",
+      "category": "landmark",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "wall",
+      "name": "Wall",
+      "category": "landmark",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "pyramid",
+     "name": "Pyramid",
+     "category": "landmark",
+     "size": {
+        "width": 4,
+        "height": 4
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "sphinx",
+     "name": "Sphinx",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "lion-statue",
+     "name": "Lion Statue",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "roman-temple",
+     "name": "Roman Temple",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "colosseum",
+     "name": "Colosseum",
+     "category": "landmark",
+     "size": {
+        "width": 4,
+        "height": 4
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "ancient-temple",
+     "name": "Ancient Temple",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "hyper-tower",
+      "name": "Hyper Tower",
+      "category": "landmark",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "fantasy-castle",
+     "name": "Fantasy Castle",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "pirate-ship",
+     "name": "Pirate Ship",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "steel-tower",
+     "name": "Steel Tower",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "gothic-castle",
+     "name": "Gothic Castle",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "historic-arch",
+     "name": "Historic Arch",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "decorative-whale",
+     "name": "Decorative Whale",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "lighthouse",
+      "name": "Lighthouse",
+      "category": "landmark",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "igloo",
+      "name": "Igloo",
+      "category": "landmark",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "desert-temple",
+     "name": "Desert Temple",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "pagoda",
+     "name": "Pagoda",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "medieval-castle",
+     "name": "Medieval Castle",
+     "category": "landmark",
+     "size": {
+        "width": 4,
+        "height": 4
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "giant-beaver",
+     "name": "Giant Beaver",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "giant-goose",
+     "name": "Giant Goose",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "giant-raccoon",
+     "name": "Giant Raccoon",
+     "category": "landmark",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "landmark"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "town-hall",
+     "name": "Town Hall",
+     "category": "unique",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "unique"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      },
+      "placementRule": "auto-place when a city is created"
+    },
+    {
+      "id": "animal-shelter",
+      "name": "Animal Shelter",
+      "category": "unique",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "unique"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mayors-mansion",
+     "name": "Mayor's Mansion",
+     "category": "unique",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "unique"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mayors-pool",
+     "name": "Mayor's Pool",
+     "category": "unique",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "unique"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "news-station",
+     "name": "News Station",
+     "category": "unique",
+     "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "unique"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "obelisk",
+      "name": "Obelisk",
+      "category": "unique",
+      "size": {
+        "width": 1,
+        "height": 1
+      },
+      "levels": [],
+      "effects": {
+        "primary": "unique"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "monolith",
+      "name": "Monolith",
+      "category": "unique",
+      "size": {
+        "width": 2,
+        "height": 2
+      },
+      "levels": [],
+      "effects": {
+        "primary": "unique"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mega-amusement-park",
+      "name": "Mega Amusement Park",
+      "category": "mega-project",
+      "size": {
+        "width": 5,
+        "height": 5
+      },
+      "levels": [],
+      "effects": {
+        "primary": "mega-project"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mega-airport",
+      "name": "Mega Airport",
+      "category": "mega-project",
+      "size": {
+        "width": 5,
+        "height": 5
+      },
+      "levels": [],
+      "effects": {
+        "primary": "mega-project"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mega-zoo",
+      "name": "Mega Zoo",
+      "category": "mega-project",
+      "size": {
+        "width": 5,
+        "height": 5
+      },
+      "levels": [],
+      "effects": {
+        "primary": "mega-project"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mega-stadium",
+      "name": "Mega Stadium",
+      "category": "mega-project",
+      "size": {
+        "width": 5,
+        "height": 5
+      },
+      "levels": [],
+      "effects": {
+        "primary": "mega-project"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mega-commerce-towers",
+      "name": "Mega Commerce Towers",
+      "category": "mega-project",
+      "size": {
+        "width": 5,
+        "height": 5
+      },
+      "levels": [],
+      "effects": {
+        "primary": "mega-project"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mega-eco-research-lab",
+      "name": "Mega Eco Research Lab",
+      "category": "mega-project",
+      "size": {
+        "width": 5,
+        "height": 5
+      },
+      "levels": [],
+      "effects": {
+        "primary": "mega-project"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mega-pyramid-city",
+      "name": "Mega Pyramid City",
+      "category": "mega-project",
+      "size": {
+        "width": 5,
+        "height": 5
+      },
+      "levels": [],
+      "effects": {
+        "primary": "mega-project"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mega-space-elevator",
+      "name": "Mega Space Elevator",
+      "category": "mega-project",
+      "size": {
+        "width": 5,
+        "height": 5
+      },
+      "levels": [],
+      "effects": {
+        "primary": "mega-project"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    },
+    {
+      "id": "mega-mall",
+      "name": "Mega Mall",
+      "category": "mega-project",
+      "size": {
+        "width": 5,
+        "height": 5
+      },
+      "levels": [],
+      "effects": {
+        "primary": "mega-project"
+      },
+      "radius": {},
+      "unlock": {},
+      "confidence": "community-reported",
+      "source": {
+        "kind": "community-reference",
+        "reference": "https://pocket-city-2.fandom.com/wiki/Pocket_City_2_Wiki",
+        "accessedAt": "2026-07-22"
+      }
+    }
   ]
 }

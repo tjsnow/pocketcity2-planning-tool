@@ -92,7 +92,7 @@ The local draft uses storage key `pocket-city-planner.draft.v1`, is JSON encoded
 
 Portable plan import accepts JSON object documents up to 10 MB. `SaveManager.parsePlan` parses defensively and leaves schema/version validation to `PlanEditor.fromDocument`.
 
-Layer visibility is persisted as a `layers` object with `grid`, `terrain`, `roads`, `buildings`, and `warnings` booleans. It changes presentation only and does not remove plan data.
+Layer visibility is persisted as a `layers` object with `grid`, `terrain`, `roads`, `buildings`, `warnings`, and `effects` booleans. It changes presentation only and does not remove plan data. The selected effect type is workspace state; it is not part of the plan document.
 
 The minimap is a transient read-only view of the current scene and camera; it is not persisted as plan data.
 
@@ -100,13 +100,13 @@ The minimap coalesces scene and camera updates into one animation-frame render a
 
 Building discovery is a presentation concern: category buttons open a temporary searchable module, and catalog cards may be dragged to a grid cell. Dragging delegates to the same validated editor command as clicking.
 
-Terrain tools are presented as built-in catalog items under the `terrain` category. They activate terrain painting and are not building placements or persisted catalog records.
+Nature records are first-class catalog items under the `nature` category. Records with a `terrainId` activate terrain painting instead of creating a building placement. Zone records are area tools: the user drags a rectangle and the editor creates one-cell zone records in available cells.
 
 `IconCatalog` provides the visual skin boundary. Current entries are local fallback glyphs with `project-generated` metadata; licensed bitmap/SVG assets can replace them without changing catalog or renderer contracts.
 
 Road menu items use a `roadType` and `roadIcon` presentation value. The renderer maps each type to a distinct surface/line style; these are visual planning conventions until verified game-specific road rules are added.
 
-The Terrain category includes Planted Tree, Water, Sand, Soil, Grass, Canal, Wild Tree, Mountains, and Palm Tree, plus the built-in Erase terrain tool. Terrain remains a caller-owned string ID with no hard-coded simulation behavior.
+The Nature category includes Planted Tree, Water, Sand, Soil, Grass, Canal, Wild Tree, Mountain, and Palm Tree. Terrain remains a caller-owned string ID with no hard-coded simulation behavior.
 
 Versioned source catalogs are stored in `data/buildings.json`, `data/roads.json`, and `data/terrain.json`. Each catalog carries `schemaVersion`; records retain confidence metadata so source uncertainty remains visible.
 
@@ -146,7 +146,7 @@ Catalog item IDs are immutable once published. Names, descriptions, and presenta
 
 ## Building source catalog
 
-The static building source catalog is stored at `data/buildings.json`. It uses a versioned wrapper with a `buildings` array. Every building record follows `schemas/building.schema.json` and contains `id`, `name`, `category`, `size`, `levels`, `effects`, `radius`, and `unlock` fields. The starter catalog is assembled from community-wiki entries and is not an official game data dump. Records carry `confidence` (`community-reported` or `verified`) and a `source` object with `kind`, `reference`, and optional `accessedAt` fields. No game artwork is bundled with the catalog.
+The static source catalog is stored at `data/buildings.json` with schema version 2 and contains the complete planning catalog, including the provisional Biomass Facility entry. Every record contains `id`, `name`, `category`, `size`, `levels`, `effects`, `radius`, and `unlock` fields. Road records additionally expose `roadType`; Nature records expose `terrainId`; and items with unusual placement behavior may expose a human-readable `placementRule`, `placementType`, or `footprint`. Service level definitions and effect modes are maintained in `js/ServiceEffects.js` because the public reference does not provide complete numerical radii. A placement may persist `level` and an optional user-entered `coverageRadius` planning assumption. The catalog is assembled from community references and is not an official game data dump. Records carry `confidence` and a `source` object with `kind`, `reference`, and optional `accessedAt` fields.
 
 The source-record `size` is normalized to the catalog item’s planning footprint when a plan-facing catalog adapter is introduced. This keeps raw source data separate from future UI and placement representations.
 

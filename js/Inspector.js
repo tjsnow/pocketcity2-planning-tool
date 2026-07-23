@@ -1,4 +1,6 @@
-/** Renders read-only details for the currently selected catalog item. */
+import { serviceDefinition } from "./ServiceEffects.js";
+
+/** Renders details and planning controls for the currently selected catalog item. */
 export class Inspector {
   constructor(root) {
     if (!(root instanceof HTMLElement)) {
@@ -71,10 +73,11 @@ export class Inspector {
     properties.append(
       property("Catalog ID", building.id),
       property("Footprint", `${building.size.width} × ${building.size.height}`),
-      property("Levels", String(building.levels.length)),
+      property("Levels", String(serviceDefinition(building.id)?.maxLevel ?? Math.max(1, building.levels.length))),
       property("Confidence", building.confidence ?? "unverified"),
     );
 
+    if (building.placementRule) properties.append(property("Placement note", building.placementRule));
     if (building.source?.reference) {
       properties.append(property("Source", building.source.reference));
     }
@@ -83,12 +86,69 @@ export class Inspector {
     this.root.replaceChildren(content);
   }
 
-  showPlacement(building, placement, onDelete, onRotate, onMove) {
+  showPlacement(building, placement, onDelete, onRotate, onMove, onLevelChange = () => {}, onRadiusChange = () => {}, diagnostics = []) {
     this.showBuilding(building);
     const content = this.root.firstElementChild;
     const properties = content.querySelector(".inspector-property-list");
     properties.append(property("Cell", `${placement.x}, ${placement.y}`));
     properties.append(property("Rotation", `${placement.rotation}°`));
+    if (diagnostics.length > 0) {
+      const warningSection = document.createElement("section");
+      warningSection.className = "inspector-diagnostics";
+      const warningTitle = document.createElement("h3");
+      warningTitle.textContent = "Placement warnings";
+      const warningList = document.createElement("ul");
+      for (const diagnostic of diagnostics) {
+        const item = document.createElement("li");
+        item.className = `diagnostic-${diagnostic.severity}`;
+        item.textContent = diagnostic.message;
+        warningList.append(item);
+      }
+      warningSection.append(warningTitle, warningList);
+      content.append(warningSection);
+    }
+    const definition = serviceDefinition(building.id);
+    if (definition && definition.maxLevel > 1) {
+      const levelLabel = document.createElement("label");
+      levelLabel.className = "inspector-control-label";
+      levelLabel.textContent = "Building level";
+      const level = document.createElement("select");
+      level.className = "inspector-level";
+      for (let value = 1; value <= definition.maxLevel; value += 1) {
+        const option = document.createElement("option");
+        option.value = String(value);
+        option.textContent = `Level ${value}`;
+        level.append(option);
+      }
+      level.value = String(placement.level ?? 1);
+      level.addEventListener("change", () => onLevelChange(Number(level.value)));
+      levelLabel.append(level);
+      content.append(levelLabel);
+    }
+    if (definition?.mode === "local") {
+      const radiusLabel = document.createElement("label");
+      radiusLabel.className = "inspector-control-label";
+      radiusLabel.textContent = "Planning radius (tiles)";
+      const radius = document.createElement("input");
+      radius.type = "number";
+      radius.min = "0";
+      radius.step = "0.5";
+      radius.placeholder = `Default ${definition.defaultRadius}`;
+      radius.value = Number.isFinite(placement.coverageRadius) ? String(placement.coverageRadius) : "";
+      radius.title = "Exact game radius is not publicly documented; enter a planning assumption to preview coverage.";
+      radius.addEventListener("change", () => onRadiusChange(radius.value.trim() === "" ? null : Number(radius.value)));
+      radiusLabel.append(radius);
+      content.append(radiusLabel);
+      const note = document.createElement("p");
+      note.className = "inspector-help";
+      note.textContent = `The reference does not publish an exact tile radius. The overlay uses a ${definition.defaultRadius}-tile planning estimate; enter a different radius to override it.`;
+      content.append(note);
+    } else if (definition) {
+      const note = document.createElement("p");
+      note.className = "inspector-help";
+      note.textContent = `${definition.label} is ${definition.mode === "network" ? "distributed through the connected network" : "a citywide capacity"}; it does not use a local tile radius.`;
+      content.append(note);
+    }
     const rotate = document.createElement("button");
     rotate.type = "button";
     rotate.className = "inspector-delete";

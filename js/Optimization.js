@@ -1,3 +1,5 @@
+import { coverageRadiusFor, serviceDefinition, supportsEffectType } from "./ServiceEffects.js";
+
 /** Read-only planning diagnostics. It reports geometry risks without mutating plan state or simulating the game. */
 export function analyzePlan({ width, height, placements = [], roads = [] }, database) {
   const issues = [];
@@ -29,8 +31,20 @@ export function analyzePlan({ width, height, placements = [], roads = [] }, data
       if (existing && existing !== placement.id) issues.push(issue("building-overlap", "error", placement.id, `Building overlaps placement ${existing} at ${cellKey}.`));
       if (roadCells.has(cellKey)) issues.push(issue("road-overlap", "error", placement.id, `Building shares a cell with a road at ${cellKey}.`));
     }
-    if (!hasUtilityAccess(placement, building, roadCells, occupied)) {
+    const hasRoadAccess = hasUtilityAccess(placement, building, roadCells, occupied);
+    if (!hasRoadAccess) {
       issues.push(issue("no-utility-access", "error", placement.id, `${building.name} cannot receive utilities from the road network: no adjacent road or occupied one-cell connection.`));
+    }
+    for (const utility of ["power", "water", "sewage"]) {
+      if (supportsEffectType(building.id, utility)) continue;
+      const hasCoverage = hasCoverageSource(placement, building, utility, placements, database, roadCells, occupied);
+      if (!hasRoadAccess || !hasCoverage) {
+        const label = utility === "power" ? "electricity" : utility;
+        const missing = [];
+        if (!hasRoadAccess) missing.push("road connection");
+        if (!hasCoverage) missing.push(`${label} coverage`);
+        issues.push(issue(`no-${utility}-coverage`, "error", placement.id, `${building.name} is missing ${missing.join(" and ")}.`));
+      }
     }
   }
 
@@ -68,6 +82,30 @@ function hasUtilityAccess(placement, building, roadCells, occupied) {
     }
     return false;
   });
+}
+
+function hasCoverageSource(targetPlacement, targetBuilding, effectType, placements, database, roadCells, occupied) {
+  const targetCenter = placementCenter(targetPlacement, targetBuilding);
+  return placements.some((sourcePlacement) => {
+    if (sourcePlacement.id === targetPlacement.id) return false;
+    const sourceBuilding = database.getById(sourcePlacement.catalogItemId);
+    if (!sourceBuilding || !supportsEffectType(sourceBuilding.id, effectType)) return false;
+    // A source's service area is only active when the source itself can receive
+    // utilities through the road network. An unconnected station cannot serve
+    // buildings merely because they fall inside its geometric radius.
+    if (!hasUtilityAccess(sourcePlacement, sourceBuilding, roadCells, occupied)) return false;
+    const radius = coverageRadiusFor(sourceBuilding.id, sourcePlacement);
+    if (!Number.isFinite(radius)) return false;
+    const sourceCenter = placementCenter(sourcePlacement, sourceBuilding);
+    return Math.hypot(targetCenter.x - sourceCenter.x, targetCenter.y - sourceCenter.y) <= radius;
+  });
+}
+
+function placementCenter(placement, building) {
+  const rotated = placement.rotation === 90 || placement.rotation === 270;
+  const width = rotated ? building.size.height : building.size.width;
+  const height = rotated ? building.size.width : building.size.height;
+  return { x: placement.x + (width - 1) / 2, y: placement.y + (height - 1) / 2 };
 }
 
 function hasNeighborRoad(cell, road, roads) {

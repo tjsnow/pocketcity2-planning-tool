@@ -5,6 +5,7 @@ import { analyzePlan } from "../js/Optimization.js";
 import { parsePlan } from "../js/SaveManager.js";
 import { LayerState } from "../js/Layers.js";
 import { PluginRegistry } from "../js/PluginAPI.js";
+import { coverageRadiusFor, getEffectTypes, supportsEffectType } from "../js/ServiceEffects.js";
 
 const database = { getById: (id) => id === "park" ? { id, name: "Park", category: "recreation", size: { width: 1, height: 1 } } : null };
 
@@ -34,8 +35,37 @@ test("persistence rejects malformed JSON", () => {
 });
 
 test("layers and plugins validate core extension contracts", () => {
-  assert.equal(new LayerState().withVisibility("grid", false).isVisible("grid"), false);
+  const layers = new LayerState();
+  assert.equal(layers.isVisible("effects"), false);
+  assert.equal(layers.withVisibility("grid", false).isVisible("grid"), false);
   const plugins = new PluginRegistry();
   plugins.registerCatalogItem("test", { id: "fixture", name: "Fixture" });
   assert.equal(plugins.getCatalogItems().length, 1);
+});
+
+test("service effects expose level-aware and user-overridden planning radii", () => {
+  assert.ok(getEffectTypes().some((effect) => effect.id === "power"));
+  assert.equal(supportsEffectType("biomass-facility", "sewage"), true);
+  assert.equal(coverageRadiusFor("hospital", { level: 1 }), 6);
+  assert.equal(coverageRadiusFor("hospital", { level: 3 }), 10);
+  assert.equal(coverageRadiusFor("hospital", { level: 3, coverageRadius: 14 }), 14);
+  assert.equal(coverageRadiusFor("landfill"), null);
+});
+
+test("optimization accepts utilities supplied by a connected multi-utility source", () => {
+  const buildings = new Map([
+    ["home", { id: "home", name: "Home", category: "zone", size: { width: 1, height: 1 } }],
+    ["biomass-facility", { id: "biomass-facility", name: "Biomass Facility", category: "power", size: { width: 1, height: 1 } }],
+  ]);
+  const utilityDatabase = { getById: (id) => buildings.get(id) ?? null };
+  const report = analyzePlan({
+    width: 40,
+    height: 40,
+    roads: [{ x: 1, y: 2, direction: "horizontal", roadType: "road" }, { x: 2, y: 2, direction: "horizontal", roadType: "road" }],
+    placements: [
+      { id: "source", catalogItemId: "biomass-facility", x: 1, y: 1, rotation: 0 },
+      { id: "target", catalogItemId: "home", x: 2, y: 1, rotation: 0 },
+    ],
+  }, utilityDatabase);
+  assert.equal(report.issues.some((issue) => issue.subjectId === "target" && /^no-(power|water|sewage)-coverage$/.test(issue.code)), false);
 });

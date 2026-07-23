@@ -4,6 +4,50 @@ This log preserves concise architectural decisions, discoveries, and follow-up w
 
 ## Entry template
 
+## 2026-07-22 — Road-connected service sources
+
+Coverage sources are now eligible only when their own footprint has road access. This keeps an isolated fire station, utility plant, or other service source from satisfying nearby AOE checks; source diagnostics still identify the source's missing road and utility requirements independently.
+
+## 2026-07-22 — Conjunctive utility requirements
+
+Power, water, and sewage diagnostics are now independent service requirements. A placement must have both road access and a matching source coverage estimate for each service; the analyzer emits one error per missing service and retains the generic road-access summary for compatibility with existing diagnostics.
+
+## 2026-07-22 — Selected placement dragging
+
+Canvas Select mode now starts a placement-move stroke only when the pointer begins on the already selected placement. Drag targets use `PlanEditor.moveSelectedTo`, so pointer movement and Inspector/keyboard movement share validation. A stroke records one history snapshot and a click remains a selection-only action.
+
+## 2026-07-22 — Utility coverage diagnostics
+
+Effect rendering now uses explicit planner estimates when a placement has no user override, so the layer is visible immediately. The estimates are labeled as planning assumptions because exact public tile radii are unavailable. Optimization checks each placement against power, water, and sewage sources using the same source radii and emits separate warnings when coverage is missing.
+
+## 2026-07-22 — Bulldozer brush stroke
+
+Bulldozer now begins a stroke on pointer down, removes each building or road segment encountered during drag, and closes the stroke on pointer up. History is recorded once for the entire stroke, preserving the existing single-click behavior and terrain protection.
+
+## 2026-07-22 — Footprint audit correction
+
+A catalog audit found a group of service records and Monolith still using the generator's old 1×1 defaults. Their dimensions now match the supplied reference: all eleven affected records use 2×2 footprints. Browser cards, placement validation, rotation checks, and renderer geometry all consume the same catalog `size` fields, so no duplicate dimension table was added.
+
+## 2026-07-22 — Service effects and level planning
+
+Service behavior is represented in a dedicated `ServiceEffects` module. Inspector edits persist a placement level and optional planning radius. Renderer draws local coverage cells only for the selected effect type and marks unknown-radius services with a dashed footprint; water, power, sewage, education, and other capacity systems remain explicitly network/citywide instead of receiving fabricated rings.
+
+## 2026-07-22 — Footprints and zone area placement
+
+Catalog dimensions now follow the supplied footprint reference, including 2×1, 2×2, 4×4, and provisional 2×2 Biomass Facility values. Zones remain variable rather than being treated as fixed buildings: selecting a Zone activates a rectangle fill tool, creates one-cell zone records for each available cell, and skips existing buildings and roads.
+
+## 2026-07-22 — Complete catalog foundation
+
+The source catalog now contains all 161 supplied buildable items, including the provisional Biomass Facility, with stable slugs, canonical categories, terrain and road activation metadata, and special placement-rule notes. Nature and Road records are now first-class catalog entries rather than duplicated virtual browser items. Mega Projects use a common 5×5 planning footprint; simulation and rule enforcement remain separate follow-up work.
+
+## 2026-07-22 — Quick terrain access
+
+Area Terrain now lives inside the Quick Tools action group with the other direct manipulation tools. Its existing data attribute and event wiring are unchanged, so the interaction remains independently maintained while being easier to find.
+
+## 2026-07-22 — Confirmed plan clearing
+
+The Clear command removes terrain, roads, buildings, districts, and notes while preserving document identity, grid dimensions, layers, and name. It records one history snapshot so an accidental clear can be restored with Undo, and its dialog provides explicit Clear and Cancel actions.
+
 ## 2026-07-22 — District foundation
 
 Districts are represented as immutable rectangular annotations with IDs, names, bounds, and optional colors. They are included in scene and save data, undo/redo snapshots, and resize validation. No zoning or simulation meaning is assigned yet.
@@ -97,6 +141,10 @@ Keyboard shortcuts are handled at the application boundary and ignored while typ
 Road and terrain source data now have their own versioned JSON boundaries. UI virtual entries remain intentionally lightweight adapters over these contracts until catalog loading is unified.
 
 The first icon skin uses project-generated glyphs rather than copied game artwork. This keeps the renderer ready for licensed assets while avoiding unclear redistribution rights.
+
+Generated and stored an original 4×4 isometric icon atlas containing residential, civic, recreation, industrial, utility, airport, and rail concepts. It is a project-created visual asset and does not reproduce Pocket City 2 artwork.
+
+Generated and stored a matching 3×3 terrain atlas for planted trees, water, sand, soil, grass, canals, wild trees, mountains, and palm trees. It is ready for the same sprite mapping pass.
 
 Core tests use Node's built-in runner to avoid introducing a framework. They cover editor collisions, bulldozer behavior, utility diagnostics, persistence parsing, layers, and plugin registration.
 
@@ -415,3 +463,25 @@ Replaced the two fixture records with community-reported Pocket City 2 catalog e
 **Decision:** Render each road segment between the centers of its connected blocks and place junction markers at center-based endpoints.
 
 **Consequences:** Roads visually occupy the middle of each block while retaining automatic turns and intersections. Longer road types can later use richer footprints without changing the current single-segment contract.
+
+## 2026-07-22 — Original road icon atlas
+
+Created a project-owned 3x3 road sprite atlas with one consistent isometric tile for each supported road type: Street, High Density, Dirt, Pedestrian, Boardwalk, Light Rail, Train Rail, High Rail, and Subway. The asset is intentionally kept separate from runtime rendering until sprite slicing and catalog mapping are implemented as a focused follow-up.
+
+The atlas is now loaded by the isolated `Renderer` and sliced by road type for each occupied cell. The building browser uses matching CSS sprite positions for road cards, while the existing color/line renderer remains underneath as a deterministic loading fallback.
+
+City and terrain atlas loading follows the same isolated-renderer pattern. Explicit mappings cover the catalog items represented by the original project-owned atlases; unmapped catalog items retain the previous glyph/fill behavior so adding catalog data never produces a blank cell.
+
+Navigation tools are now explicit UI state. The App composition root synchronizes Select/Pan button states, delegates pan mode to Renderer, and keeps Grid as a layer toggle. Renderer suppresses placement input while Pan is active and supports intuitive left-drag panning without removing middle-button or Shift panning.
+
+Grid is intentionally not a navigation mode. Its single source of truth is the Layers control (with `G` as a shortcut), avoiding duplicate controls in the toolbox.
+
+Area delete is a two-phase operation: pointer drag creates a transient renderer preview and the App presents a confirmation dialog; only the Delete action calls `PlanEditor.deleteArea`, which records one undo snapshot and removes intersecting building footprints and road segments. Terrain is reported but intentionally retained.
+
+The catalog now treats zones as validated, one-cell planning items so they can be searched, selected, placed, saved, and removed through the same existing placement contract while zoning simulation remains out of scope. The new 4x4 catalog atlas provides original visual coverage for common building families and a zone marker; explicit ID mappings keep Canvas and browser sprites consistent.
+
+Settings now owns layer visibility and the local keyboard-shortcut preference. The preference is stored in localStorage only and does not enter plan documents, keeping saves portable.
+
+City generation is implemented as a PlanEditor command with a seeded linear-congruential RNG. It creates a river with sand banks, grass/soil/tree/mountain variation, a regular connected road lattice, and a bounded set of catalog buildings rejected against water, roads, and existing footprints. One history snapshot makes the whole generated layout undoable.
+
+Area Terrain uses the same transient rectangle preview as Area Delete but adds a second confirmation stage with terrain choices. `PlanEditor.paintTerrainArea` rebuilds the sparse terrain map in one operation; Water and Mountains are treated as destructive terrain for overlapping building footprints, while other terrain changes leave buildings in place. Roads are intentionally unaffected.

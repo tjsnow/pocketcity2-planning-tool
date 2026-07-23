@@ -15,7 +15,7 @@ Pocket City 2 Planner 1.0.0 is a static, local-first planning workspace for desi
 
 ## Data and licensing
 
-Catalog facts are provenance-labeled and community-reported unless marked verified. The icon skin uses project-generated fallback glyphs; no unlicensed game artwork is bundled.
+Catalog facts are provenance-labeled and community-reported unless marked verified. The icon skin uses project-generated isometric atlases and colorful UI controls; no unlicensed game artwork is bundled.
 
 ## Verification
 

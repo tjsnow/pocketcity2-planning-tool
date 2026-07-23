@@ -30,6 +30,12 @@
           <button id="open-plan" class="tool-button" type="button" title="Open plan">
             <span aria-hidden="true">↗</span><span>Open</span>
           </button>
+          <button id="generate-city" class="tool-button" type="button" title="Generate a randomized city layout">
+            <span aria-hidden="true">✦</span><span>Generate</span>
+          </button>
+          <button id="clear-plan" class="tool-button" type="button" title="Clear the current plan">
+            <span aria-hidden="true">C</span><span>Clear</span>
+          </button>
           <button id="save-plan" class="tool-button" type="button" title="Save plan">
             <span aria-hidden="true">▣</span><span>Save</span>
           </button>
@@ -50,6 +56,42 @@
           Workspace
         </button>
       </header>
+
+      <section id="area-delete-dialog" class="area-delete-dialog" hidden aria-labelledby="area-delete-title">
+        <div class="area-delete-dialog-header">
+          <strong id="area-delete-title">Delete selected area?</strong>
+          <button type="button" data-area-delete-cancel aria-label="Cancel area delete">×</button>
+        </div>
+        <p id="area-delete-summary">Nothing selected.</p>
+        <div class="area-delete-dialog-actions">
+          <button type="button" class="area-delete-confirm" data-area-delete-confirm>Delete</button>
+          <button type="button" class="area-delete-cancel" data-area-delete-cancel>Cancel</button>
+        </div>
+      </section>
+
+      <section id="clear-plan-dialog" class="area-delete-dialog clear-plan-dialog" hidden aria-labelledby="clear-plan-title">
+        <div class="area-delete-dialog-header">
+          <strong id="clear-plan-title">Clear current plan?</strong>
+          <button type="button" data-clear-cancel aria-label="Cancel clear">X</button>
+        </div>
+        <p>This will remove all terrain, roads, buildings, districts, and notes.</p>
+        <div class="area-delete-dialog-actions">
+          <button type="button" class="area-delete-confirm" data-clear-confirm>Clear plan</button>
+          <button type="button" class="area-delete-cancel" data-clear-cancel>Cancel</button>
+        </div>
+      </section>
+
+      <section id="area-terrain-dialog" class="area-delete-dialog area-terrain-dialog" hidden aria-labelledby="area-terrain-title">
+        <div class="area-delete-dialog-header">
+          <strong id="area-terrain-title">Fill selected area</strong>
+          <button type="button" data-area-terrain-cancel aria-label="Cancel area terrain">×</button>
+        </div>
+        <p id="area-terrain-summary">Choose a terrain type.</p>
+        <div id="area-terrain-options" class="area-terrain-options"></div>
+        <div class="area-delete-dialog-actions">
+          <button type="button" class="area-delete-cancel" data-area-terrain-cancel>Cancel</button>
+        </div>
+      </section>
 
       <div
         class="horizontal-resizer ribbon-resizer"
@@ -74,30 +116,36 @@
               Select
               <kbd>V</kbd>
             </button>
-            <button class="toolbox-item" type="button">
+            <button id="pan-tool" class="toolbox-item" type="button">
               <span class="toolbox-icon" aria-hidden="true">✥</span>
               Pan
               <kbd>H</kbd>
-            </button>
-            <button class="toolbox-item" type="button">
-              <span class="toolbox-icon" aria-hidden="true">▦</span>
-              Grid
-              <kbd>G</kbd>
             </button>
           </div>
           <section class="quick-tools" aria-label="Quick tools">
             <span class="section-label">Quick tools</span>
             <div class="quick-tool-actions">
-              <button class="terrain-button" type="button" data-road-tool="true" title="Paint roads (P)">Road brush <kbd>P</kbd></button>
-              <button class="terrain-button" type="button" data-bulldozer="true" title="Bulldozer: delete buildings and roads (B)">⚒ Bulldozer <kbd>B</kbd></button>
+              <button class="terrain-button" type="button" data-road-tool="true" title="Paint roads (P)"><span class="quick-tool-icon" aria-hidden="true">↔</span> Road brush <kbd>P</kbd></button>
+              <button class="terrain-button" type="button" data-area-delete="true" title="Delete everything inside a dragged area"><span class="quick-tool-icon" aria-hidden="true">⌗</span> Area delete</button>
+              <button class="terrain-button" type="button" data-bulldozer="true" title="Bulldozer: delete buildings and roads (B)"><span class="quick-tool-icon" aria-hidden="true">⚒</span> Bulldozer <kbd>B</kbd></button>
+              <button class="terrain-button" type="button" data-area-terrain="true" title="Fill a dragged area with terrain"><span class="quick-tool-icon" aria-hidden="true">▧</span> Area terrain</button>
             </div>
           </section>
           <div class="building-category-icons" aria-label="Building categories">
-            <button type="button" data-building-category="recreation" title="Recreation buildings">★</button>
+            <button type="button" data-building-category="zone" title="Zones">▦</button>
+            <button type="button" data-building-category="road" title="Roads">↔</button>
+            <button type="button" data-building-category="nature" title="Nature">▧</button>
+            <button type="button" data-building-category="water-sewage" title="Water and sewage">≈</button>
+            <button type="button" data-building-category="power" title="Power">⚡</button>
             <button type="button" data-building-category="service" title="Service buildings">✚</button>
-            <button type="button" data-building-category="transport" title="Transport buildings">⇄</button>
-            <button type="button" data-building-category="terrain" title="Terrain tools">▧</button>
-            <button type="button" data-building-category="roads" title="Road types">↔</button>
+            <button type="button" data-building-category="transportation" title="Transportation">⇄</button>
+            <button type="button" data-building-category="recreation" title="Recreation buildings">★</button>
+            <button type="button" data-building-category="education" title="Education">▤</button>
+            <button type="button" data-building-category="resource" title="Resources">⌂</button>
+            <button type="button" data-building-category="financial" title="Financial">$</button>
+            <button type="button" data-building-category="landmark" title="Landmarks">◆</button>
+            <button type="button" data-building-category="unique" title="Unique buildings">✦</button>
+            <button type="button" data-building-category="mega-project" title="Mega projects">⬢</button>
           </div>
           <section class="building-browser" aria-labelledby="building-browser-title">
             <div class="building-browser-header">
@@ -119,7 +167,10 @@
             <div id="building-results" class="building-results" role="list" aria-live="polite"></div>
           </section>
           <div class="toolbox-section">
-            <span class="section-label">Layers</span>
+            <span class="section-label">Settings</span>
+            <label class="settings-option"><input id="show-shortcuts" type="checkbox" checked /> Show keyboard shortcuts</label>
+            <label class="settings-option" for="effect-type">Area of effect</label>
+            <select id="effect-type" class="settings-select" title="Choose the service effect to preview"></select>
             <button class="layer-item is-visible" type="button" data-layer="grid">
               <span aria-hidden="true">◉</span> Grid
             </button>
@@ -129,8 +180,9 @@
             <button class="layer-item is-visible" type="button" data-layer="buildings">
               <span aria-hidden="true">◉</span> Buildings
             </button>
-            <button class="layer-item is-visible" type="button" data-layer="roads"><span aria-hidden="true">â—‰</span> Roads</button>
-            <button class="layer-item is-visible" type="button" data-layer="warnings"><span aria-hidden="true">â—‰</span> Warnings</button>
+            <button class="layer-item is-visible" type="button" data-layer="roads"><span aria-hidden="true">◉</span> Roads</button>
+            <button class="layer-item is-visible" type="button" data-layer="warnings"><span aria-hidden="true">◉</span> Warnings</button>
+            <button class="layer-item" type="button" data-layer="effects" aria-pressed="false"><span aria-hidden="true">◉</span> Area of effect</button>
           </div>
         </aside>
 

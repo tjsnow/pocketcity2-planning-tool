@@ -6,6 +6,7 @@ import { DistrictStore } from "./Districts.js";
 import { NoteStore } from "./PlanningTools.js";
 import { analyzePlan } from "./Optimization.js";
 import { LayerState } from "./Layers.js";
+import { serviceDefinition } from "./ServiceEffects.js";
 
 /** Application state and commands for the first finite-grid editor workflow. */
 export class PlanEditor {
@@ -36,6 +37,10 @@ export class PlanEditor {
     this.terrainStrokeHistoryRecorded = false;
     this.roadStrokeActive = false;
     this.roadStrokeHistoryRecorded = false;
+    this.bulldozerStrokeActive = false;
+    this.bulldozerStrokeHistoryRecorded = false;
+    this.placementMoveStrokeActive = false;
+    this.placementMoveHistoryRecorded = false;
   }
 
   selectBuilding(buildingId) {
@@ -108,16 +113,42 @@ export class PlanEditor {
     this.assertInBounds(x, y);
     const placement = this.findPlacementAt(x, y);
     if (placement) {
-      this.recordHistory();
+      if (!this.bulldozerStrokeActive || !this.bulldozerStrokeHistoryRecorded) {
+        this.recordHistory();
+        this.bulldozerStrokeHistoryRecorded = true;
+      }
       this.placements = this.placements.without(placement.id);
       this.selectedPlacementId = null;
       return true;
     }
     const matches = this.roads.getAll().filter((road) => this.roadSegmentCells(road).some((cell) => cell.x === x && cell.y === y));
     if (matches.length === 0) return false;
-    this.recordHistory();
+    if (!this.bulldozerStrokeActive || !this.bulldozerStrokeHistoryRecorded) {
+      this.recordHistory();
+      this.bulldozerStrokeHistoryRecorded = true;
+    }
     for (const road of matches) this.roads = this.roads.withoutSegment(road);
     return true;
+  }
+
+  beginBulldozerStroke() {
+    this.bulldozerStrokeActive = true;
+    this.bulldozerStrokeHistoryRecorded = false;
+  }
+
+  endBulldozerStroke() {
+    this.bulldozerStrokeActive = false;
+    this.bulldozerStrokeHistoryRecorded = false;
+  }
+
+  beginPlacementMoveStroke() {
+    this.placementMoveStrokeActive = true;
+    this.placementMoveHistoryRecorded = false;
+  }
+
+  endPlacementMoveStroke() {
+    this.placementMoveStrokeActive = false;
+    this.placementMoveHistoryRecorded = false;
   }
 
   paintRoadPathTo(x, y) {
@@ -237,6 +268,7 @@ export class PlanEditor {
       x,
       y,
       rotation: 0,
+      level: 1,
       layer: "structures",
     };
     this.recordHistory();
@@ -251,6 +283,111 @@ export class PlanEditor {
     this.placements = this.placements.without(this.selectedPlacementId);
     this.selectedPlacementId = null;
     return true;
+  }
+
+  setSelectedLevel(level) {
+    const placement = this.selectedPlacement;
+    if (!placement) return false;
+    const definition = serviceDefinition(placement.catalogItemId);
+    const maxLevel = definition?.maxLevel ?? 1;
+    if (!Number.isInteger(level) || level < 1 || level > maxLevel) throw new RangeError(`Level must be between 1 and ${maxLevel}.`);
+    if ((placement.level ?? 1) === level) return false;
+    this.recordHistory();
+    this.placements = this.placements.withReplaced(placement.id, { ...placement, level });
+    return true;
+  }
+
+  setSelectedCoverageRadius(radius) {
+    const placement = this.selectedPlacement;
+    if (!placement) return false;
+    if (radius !== null && (!Number.isFinite(radius) || radius < 0)) throw new RangeError("Coverage radius must be blank or a non-negative number.");
+    const normalized = radius === null ? undefined : radius;
+    if (normalized === placement.coverageRadius) return false;
+    this.recordHistory();
+    const next = { ...placement };
+    if (normalized === undefined) delete next.coverageRadius;
+    else next.coverageRadius = normalized;
+    this.placements = this.placements.withReplaced(placement.id, next);
+    return true;
+  }
+
+  getAreaContents(bounds) {
+    const area = normalizeAreaBounds(bounds, this.width, this.height);
+    const placements = this.placements.getAll().filter((placement) => {
+      const building = this.database.getById(placement.catalogItemId);
+      const rotated = placement.rotation === 90 || placement.rotation === 270;
+      const width = rotated ? building.size.height : building.size.width;
+      const height = rotated ? building.size.width : building.size.height;
+      return rectanglesOverlap(area, { x: placement.x, y: placement.y, width, height });
+    });
+    const roads = this.roads.getAll().filter((road) => this.roadSegmentCells(road).some((cell) => cell.x >= area.x && cell.x < area.x + area.width && cell.y >= area.y && cell.y < area.y + area.height));
+    return { area, placements, roads };
+  }
+
+  deleteArea(bounds) {
+    const contents = this.getAreaContents(bounds);
+    if (contents.placements.length === 0 && contents.roads.length === 0) return contents;
+    this.recordHistory();
+    for (const placement of contents.placements) this.placements = this.placements.without(placement.id);
+    for (const road of contents.roads) this.roads = this.roads.withoutSegment(road);
+    this.selectedPlacementId = null;
+    return contents;
+  }
+
+  clearPlan() {
+    const hasContent = this.placements.getAll().length > 0 || this.terrain.toCells().length > 0 || this.roads.getAll().length > 0 || this.districts.getAll().length > 0 || this.notes.getAll().length > 0;
+    if (!hasContent) return false;
+    this.recordHistory();
+    this.placements = new PlacementStore(this.database, []);
+    this.terrain = Terrain.fromCells([]);
+    this.roads = new RoadNetwork([]);
+    this.districts = new DistrictStore([]);
+    this.notes = new NoteStore([]);
+    this.selectedPlacementId = null;
+    this.nextPlacementNumber = 1;
+    return true;
+  }
+
+  paintTerrainArea(bounds, terrainId) {
+    if (typeof terrainId !== "string" || terrainId.trim().length === 0) throw new TypeError("Terrain ID must be a non-empty string.");
+    const area = normalizeAreaBounds(bounds, this.width, this.height);
+    const removeBuildings = terrainId === "water" || terrainId === "mountains";
+    const placements = removeBuildings ? this.getAreaContents(area).placements : [];
+    const cells = new Map(this.terrain.toCells().map((cell) => [`${cell.x},${cell.y}`, cell.terrainId]));
+    let changed = placements.length > 0;
+    for (let y = area.y; y < area.y + area.height; y += 1) {
+      for (let x = area.x; x < area.x + area.width; x += 1) {
+        const key = `${x},${y}`;
+        if (terrainId === "unassigned") { if (cells.delete(key)) changed = true; }
+        else if (cells.get(key) !== terrainId) { cells.set(key, terrainId); changed = true; }
+      }
+    }
+    if (!changed) return { area, terrainId, removedBuildings: [] };
+    this.recordHistory();
+    this.terrain = Terrain.fromCells([...cells.entries()].map(([key, id]) => { const [x, y] = key.split(",").map(Number); return { x, y, terrainId: id }; }));
+    for (const placement of placements) this.placements = this.placements.without(placement.id);
+    this.selectedPlacementId = null;
+    return { area, terrainId, removedBuildings: placements };
+  }
+
+  paintZoneArea(bounds, catalogItemId) {
+    const zone = this.database.getById(catalogItemId);
+    if (!zone || zone.category !== "zone") throw new Error("A zone catalog item is required.");
+    const area = normalizeAreaBounds(bounds, this.width, this.height);
+    const placements = [];
+    let skippedCount = 0;
+    for (let y = area.y; y < area.y + area.height; y += 1) {
+      for (let x = area.x; x < area.x + area.width; x += 1) {
+        if (this.isRoadCell(x, y) || this.findPlacementAt(x, y)) { skippedCount += 1; continue; }
+        placements.push({ id: `placement-${this.nextPlacementNumber + placements.length}`, catalogItemId, x, y, rotation: 0 });
+      }
+    }
+    if (placements.length === 0) return { area, placements: [], skippedCount };
+    this.recordHistory();
+    for (const placement of placements) this.placements = this.placements.withPlaced(placement);
+    this.nextPlacementNumber += placements.length;
+    this.selectedPlacementId = null;
+    return { area, placements, skippedCount };
   }
 
   rotateSelected() {
@@ -276,6 +413,7 @@ export class PlanEditor {
     const placement = this.selectedPlacement;
     if (!placement) return false;
     if (!Number.isInteger(deltaX) || !Number.isInteger(deltaY)) throw new TypeError("Move distance must use whole cells.");
+    if (deltaX === 0 && deltaY === 0) return false;
     const candidate = { ...placement, x: placement.x + deltaX, y: placement.y + deltaY };
     const building = this.database.getById(candidate.catalogItemId);
     const rotated = candidate.rotation === 90 || candidate.rotation === 270;
@@ -290,9 +428,19 @@ export class PlanEditor {
         if (this.isRoadCell(x, y)) throw new Error("Move would overlap a road.");
       }
     }
-    this.recordHistory();
+    if (!this.placementMoveStrokeActive || !this.placementMoveHistoryRecorded) {
+      this.recordHistory();
+      this.placementMoveHistoryRecorded = true;
+    }
     this.placements = this.placements.withReplaced(placement.id, candidate);
     return true;
+  }
+
+  moveSelectedTo(x, y) {
+    const placement = this.selectedPlacement;
+    if (!placement) return false;
+    if (!Number.isInteger(x) || !Number.isInteger(y)) throw new TypeError("Move target must use whole cells.");
+    return this.moveSelected(x - placement.x, y - placement.y);
   }
 
   setName(name) {
@@ -322,6 +470,57 @@ export class PlanEditor {
     this.width = width;
     this.height = height;
     this.selectedPlacementId = null;
+  }
+
+  generateCity(seed = Date.now()) {
+    if (![40, 64, 72].includes(this.width) || this.width !== this.height) throw new Error("City generation requires a supported square grid.");
+    const random = seededRandom(seed);
+    const terrainCells = [];
+    const waterCells = new Set();
+    const riverX = Math.floor(this.width * (0.25 + random() * 0.5));
+    for (let y = 0; y < this.height; y += 1) {
+      for (let x = 0; x < this.width; x += 1) {
+        const river = Math.abs(x - riverX - Math.sin(y / 7) * 2) <= 1;
+        const terrainId = river ? "water" : (Math.abs(x - riverX - Math.sin(y / 7) * 2) === 2 ? "sand" : (random() < 0.035 ? "soil" : "grass"));
+        terrainCells.push({ x, y, terrainId });
+        if (terrainId === "water") waterCells.add(`${x},${y}`);
+      }
+    }
+    for (let i = 0; i < Math.floor(this.width * 1.4); i += 1) {
+      const x = Math.floor(random() * this.width);
+      const y = Math.floor(random() * this.height);
+      const cell = terrainCells[y * this.width + x];
+      if (!waterCells.has(`${x},${y}`)) cell.terrainId = random() < 0.65 ? "planted-tree" : (random() < 0.5 ? "wild-tree" : "mountains");
+    }
+    const roads = [];
+    const roadKeys = new Set();
+    const addRoad = (segment) => { const key = `${segment.x},${segment.y},${segment.direction}`; if (!roadKeys.has(key)) { roadKeys.add(key); roads.push(segment); } };
+    for (let y = 6; y < this.height - 1; y += 8) for (let x = 0; x < this.width - 1; x += 1) addRoad({ x, y, direction: "horizontal", roadType: "road" });
+    for (let x = 6; x < this.width - 1; x += 8) for (let y = 0; y < this.height - 1; y += 1) addRoad({ x, y, direction: "vertical", roadType: "high-density" });
+    const roadCells = new Set(roads.flatMap((road) => this.roadSegmentCells(road).map((cell) => `${cell.x},${cell.y}`)));
+    const buildingIds = ["cottage", "townhouse", "apartment-building", "corner-shop", "office-building", "shopping-center", "warehouse", "factory", "school", "clinic", "small-park", "museum", "bus-depot", "subway-station"].filter((id) => this.database.getById(id));
+    const placements = [];
+    const occupied = new Set();
+    let attempts = 0;
+    while (placements.length < Math.max(18, Math.floor(this.width * 0.7)) && attempts < 2500 && buildingIds.length > 0) {
+      attempts += 1;
+      const buildingId = buildingIds[Math.floor(random() * buildingIds.length)];
+      const building = this.database.getById(buildingId);
+      const x = Math.floor(random() * Math.max(1, this.width - building.size.width));
+      const y = Math.floor(random() * Math.max(1, this.height - building.size.height));
+      let valid = true;
+      for (let yy = y; yy < y + building.size.height; yy += 1) for (let xx = x; xx < x + building.size.width; xx += 1) if (waterCells.has(`${xx},${yy}`) || roadCells.has(`${xx},${yy}`) || occupied.has(`${xx},${yy}`)) valid = false;
+      if (!valid) continue;
+      for (let yy = y; yy < y + building.size.height; yy += 1) for (let xx = x; xx < x + building.size.width; xx += 1) occupied.add(`${xx},${yy}`);
+      placements.push({ id: `placement-${placements.length + 1}`, catalogItemId: buildingId, x, y, rotation: 0 });
+    }
+    this.recordHistory();
+    this.terrain = Terrain.fromCells(terrainCells);
+    this.roads = new RoadNetwork(roads);
+    this.placements = new PlacementStore(this.database, placements);
+    this.selectedPlacementId = null;
+    this.nextPlacementNumber = placements.length + 1;
+    return { terrainCount: terrainCells.length, roadCount: roads.length, buildingCount: placements.length };
   }
 
   get canUndo() { return this.undoStack.length > 0; }
@@ -456,4 +655,21 @@ export class PlanEditor {
       throw new RangeError("Terrain cell must be within the plan grid.");
     }
   }
+}
+
+function normalizeAreaBounds(bounds, width, height) {
+  const x = Math.max(0, Math.min(width - 1, Math.floor(bounds.x)));
+  const y = Math.max(0, Math.min(height - 1, Math.floor(bounds.y)));
+  const maxX = Math.max(x, Math.min(width - 1, Math.floor(bounds.x + bounds.width - 1)));
+  const maxY = Math.max(y, Math.min(height - 1, Math.floor(bounds.y + bounds.height - 1)));
+  return { x, y, width: maxX - x + 1, height: maxY - y + 1 };
+}
+
+function rectanglesOverlap(left, right) {
+  return left.x < right.x + right.width && left.x + left.width > right.x && left.y < right.y + right.height && left.y + left.height > right.y;
+}
+
+function seededRandom(seed) {
+  let value = (Number(seed) >>> 0) || 1;
+  return () => { value = (value * 1664525 + 1013904223) >>> 0; return value / 4294967296; };
 }

@@ -4,6 +4,29 @@ All notable user-visible and developer-relevant changes are recorded here. The f
 
 ## [Unreleased]
 
+- Service coverage now requires the supplying station or utility source itself to be road-connected. A source that is isolated from the road network no longer satisfies AOE requirements for nearby buildings.
+- Utility diagnostics now require both road access and estimated electricity, water, and sewage coverage. Each missing service produces its own error, so a hospital can show separate power and water errors while sewage is satisfied.
+- Added drag-to-move for selected placements. Click a placed item to open its Inspector, then drag it to a new cell; movement uses the existing footprint, terrain, road, boundary, and collision validation and is grouped into one undo step.
+- Fixed Area of Effect rendering for all configured service types. Local services and planner utility estimates now draw coverage cells without requiring manual radius input, and diagnostics warn when placements fall outside estimated electricity, water, or sewage coverage.
+- Updated Bulldozer to work as a continuous paint brush: dragging removes buildings and road segments across the path while terrain remains protected, with one undo step per drag.
+- Corrected the remaining service and landmark footprint records that were still 1×1: Hospital, Fire Department, Police Station, Landfill, Waste Incinerator, Public Works, Parliament Building, Home Improvement Center, Carbon Capture Plant, Recycling Center, and Monolith are now 2×2.
+- Added a level-aware service effects layer. The Settings panel now selects Health, Fire, Police, Public Works, Home Improvement, Pollution, Traffic, Water, Power, or Sewage views; local coverage renders only when a planning radius is supplied, while network and citywide effects are identified without inventing tile radii.
+- Corrected catalog footprints from the supplied dimensions list, added the provisional Biomass Facility entry, and changed Zone items to variable-area fill tools that skip occupied cells.
+- Replaced the partial building catalog with the complete 161-item catalog across Zone, Road, Nature, Water and sewage, Power, Service, Transportation, Recreation, Education, Resource, Financial, Landmark, Unique, and Mega Project categories. Added special placement-rule metadata and 5×5 Mega Project footprints.
+- Moved Area Terrain into the Quick Tools group alongside Road Brush, Area Delete, and Bulldozer.
+- Added a confirmed Clear command beside Generate. Clearing removes plan content as one undoable action while preserving grid size, plan name, and settings.
+- Added an original road icon atlas at `images/original-road-icon-atlas.png` covering Street, High Density, Dirt, Pedestrian, Boardwalk, Light Rail, Train Rail, High Rail, and Subway. The atlas is prepared for later catalog and Canvas sprite integration.
+- Wired the road atlas into Canvas road cells and road catalog cards, with a fallback to the existing vector-style road rendering while the sprite loads.
+- Wired the city and terrain atlases into newly placed buildings, terrain cells, and catalog cards. Existing glyphs and color fills remain available as fallbacks for unmapped items or while assets load.
+- Restored clickable Select, Pan, and Grid toolbox controls. Pan now supports left-button canvas dragging, while Grid toggles the grid layer; V/H/G keyboard shortcuts remain available.
+- Removed Grid from the primary toolbox navigation; grid visibility remains available in Layers and via the `G` shortcut.
+- Added an Area delete quick tool that previews a red rectangular selection and provides explicit Delete and Cancel actions. It removes buildings and road segments in the area while preserving terrain.
+- Expanded the catalog with additional residential, commercial, industrial, utility, service, recreation, and transport buildings plus ten zone tools. Added the original catalog icon atlas at `images/original-catalog-icon-atlas.png` and wired it into catalog cards and Canvas placements.
+- Added the dedicated original zone icon atlas at `images/original-zone-icon-atlas.png` with distinct visual markers for each zone type.
+- Renamed the Layers section to Settings, added a persisted keyboard-shortcut visibility option, and added icons to Road Brush and Area Delete.
+- Added a Generate command that creates a randomized, undoable city layout with a winding river, varied terrain, connected road corridors, and non-overlapping buildings.
+- Added an Area Terrain tool that previews a dragged rectangle, offers all terrain choices, fills the selected cells, preserves buildings for ground-to-ground changes, and removes buildings only when applying Water or Mountains.
+
 ## [1.0.0] - 2026-07-22
 
 - Released the static Pocket City 2 Planner workspace with grid editing, catalogs, roads, terrain, diagnostics, persistence, minimap, layers, accessibility, testing, and documentation.
@@ -42,6 +65,8 @@ All notable user-visible and developer-relevant changes are recorded here. The f
 - Added keyboard shortcuts for selection, roads, bulldozer, layers, movement, rotation, and escape-to-select.
 - Added versioned source catalogs for road types and terrain types alongside the building catalog.
 - Added a shared IconCatalog skin boundary with local fallback icons in the building menu and Canvas.
+- Added an original isometric city icon atlas at `images/original-city-icon-atlas.png` for the next icon-skin integration pass.
+- Added an original terrain icon atlas at `images/original-terrain-icon-atlas.png`.
 - Added automated core regression tests and an `npm test` command.
 - Added user workflow and keyboard shortcut documentation.
 - Added release candidate checklist and combined automated release check.

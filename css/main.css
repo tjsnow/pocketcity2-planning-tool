@@ -47,9 +47,43 @@ button { font: inherit; }
 .ribbon-divider { width: 1px; margin: 3px 0; background: #363d47; }
 .ribbon-group { display: grid; grid-template-columns: repeat(3, minmax(38px, 54px)); grid-template-rows: 15px 1fr; gap: 2px; }
 .ribbon-group[aria-label="Edit tools"] { grid-template-columns: repeat(2, minmax(38px, 54px)); }
+.ribbon-group[aria-label="File tools"] { grid-template-columns: repeat(5, minmax(38px, 54px)); }
 .ribbon-label { grid-column: 1 / -1; color: #87919e; font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; }
 .tool-button { display: grid; place-items: center; gap: 2px; padding: 2px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: #cbd2db; font-size: 10px; cursor: default; }
 .tool-button > span:first-child { color: #aebdcc; font-size: 18px; line-height: 16px; }
+.tool-button > span:first-child,
+.toolbox-icon,
+.quick-tool-icon,
+.layer-item > span {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  color: transparent;
+  font-size: 0;
+  line-height: 22px;
+  background-image: url("../images/original-ui-icon-atlas.png");
+  background-size: 400% 400%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+}
+.tool-button > span:first-child { width: 24px; height: 24px; }
+#new-plan > span:first-child { background-position: 0 66.667%; }
+#open-plan > span:first-child { background-position: 33.333% 66.667%; }
+#generate-city > span:first-child { background-position: 66.667% 33.333%; }
+#clear-plan > span:first-child { background-position: 100% 33.333%; }
+#save-plan > span:first-child { background-position: 0 66.667%; }
+#undo-action > span:first-child { background-position: 66.667% 66.667%; }
+#redo-action > span:first-child { background-position: 100% 66.667%; }
+#select-tool .toolbox-icon { background-position: 0 0; }
+#pan-tool .toolbox-icon { background-position: 33.333% 0; }
+[data-road-tool] .quick-tool-icon { background-position: 66.667% 0; }
+[data-bulldozer] .quick-tool-icon { background-position: 100% 0; }
+[data-area-delete] .quick-tool-icon { background-position: 0 33.333%; }
+[data-area-terrain] .quick-tool-icon { background-position: 33.333% 33.333%; }
+.workspace-button::before { content: ""; width: 18px; height: 18px; background: url("../images/original-ui-icon-atlas.png") 0 100% / 400% 400% no-repeat; }
+.layer-item > span { width: 18px; height: 18px; background-position: 33.333% 100%; }
+#zoom-in { color: transparent; background: url("../images/original-ui-icon-atlas.png") 66.667% 100% / 400% 400% no-repeat; }
+#zoom-out { color: transparent; background: url("../images/original-ui-icon-atlas.png") 100% 100% / 400% 400% no-repeat; }
 .tool-button:disabled { color: #69717d; }
 .tool-button:disabled > span:first-child { color: #69717d; }
 .ribbon-spacer, .canvas-toolbar-spacer, .status-spacer { flex: 1; }
@@ -65,14 +99,32 @@ button { font: inherit; }
 .panel-heading-detail { color: #788390; font-size: 9px; font-weight: 700; letter-spacing: .8px; }
 .tool-list { padding: 8px; border-bottom: 1px solid #303741; }
 .quick-tools { padding: 8px; border-bottom: 1px solid #303741; }
+.area-delete-dialog { position: fixed; z-index: 20; top: 78px; left: 50%; width: 280px; transform: translateX(-50%); padding: 12px; border: 1px solid #9d4b4d; border-radius: 5px; background: #251c21; box-shadow: 0 10px 28px rgba(0,0,0,.45); color: #f1d9da; }
+.area-delete-dialog[hidden] { display: none; }
+.area-delete-dialog-header { display: flex; align-items: center; justify-content: space-between; color: #ffb2b4; }
+.area-delete-dialog-header button { border: 0; background: transparent; color: #d7a4a6; font-size: 18px; cursor: pointer; }
+.area-delete-dialog p { margin: 10px 0; color: #c9b9bb; font-size: 12px; line-height: 1.4; }
+.area-delete-dialog-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.area-delete-dialog-actions button { padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 11px; }
+.area-delete-confirm { border: 1px solid #a8464b; background: #7e3038; color: #fff; }
+.area-delete-cancel { border: 1px solid #4a535e; background: #2a3038; color: #d2d9e0; }
+.area-terrain-launch { display: block; width: calc(100% - 16px); margin: 7px 8px; }
+.area-terrain-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin: 8px 0 10px; }
+.area-terrain-options button { min-height: 28px; border: 1px solid #3b4551; border-radius: 3px; background: #252b34; color: #cbd5df; cursor: pointer; font-size: 10px; }
+.area-terrain-options button:hover { border-color: #4e94d9; background: #223d5a; }
 .quick-tool-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 6px; }
-.building-category-icons { display: flex; gap: 5px; padding: 8px; border-bottom: 1px solid #303741; }
+.quick-tool-icon { color: transparent; font-size: 0; line-height: 22px; }
+.building-category-icons { display: flex; flex-wrap: wrap; gap: 5px; padding: 8px; border-bottom: 1px solid #303741; }
 .building-category-icons button { flex: 1; height: 30px; border: 1px solid #3b4551; border-radius: 3px; background: #252b34; color: #cbd5df; cursor: pointer; }
-.building-category-icons button:hover { border-color: #4e94d9; color: #fff; }
+.building-category-icons button:hover { border-color: #4e94d9; color: #fff; transform: translateY(-1px); }
+.building-category-icons button:nth-child(4n + 1) { color: #74b9ff; }
+.building-category-icons button:nth-child(4n + 2) { color: #55d6c2; }
+.building-category-icons button:nth-child(4n + 3) { color: #f4c95d; }
+.building-category-icons button:nth-child(4n) { color: #e98bff; }
 .building-category-icons button:focus-visible, .building-browser-close:focus-visible, .building-card:focus-visible { outline: 2px solid #77b7f0; outline-offset: 2px; }
 .toolbox-item, .layer-item { display: flex; align-items: center; width: 100%; min-height: 33px; gap: 9px; padding: 5px 8px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: #aeb7c2; text-align: left; font-size: 12px; }
 .toolbox-item.is-active { border-color: #315d8e; background: #223d5a; color: #e8f1fb; }
-.toolbox-icon { width: 18px; color: #8daac7; font-size: 16px; text-align: center; }
+.toolbox-icon { width: 18px; color: transparent; font-size: 0; text-align: center; }
 kbd { margin-left: auto; color: #7f8995; font-family: inherit; font-size: 10px; }
 .toolbox-section { padding: 13px 8px; }
 .section-label { display: block; margin: 0 6px 7px; color: #7e8996; font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; }
@@ -93,7 +145,18 @@ kbd { margin-left: auto; color: #7f8995; font-family: inherit; font-size: 10px; 
 .building-card.is-selected { border-color: #4e94d9; background: #223d5a; }
 .building-card-name { display: block; color: #d8dee6; font-size: 11px; font-weight: 650; }
 .building-card-icon { float: left; width: 18px; margin-right: 5px; color: #8fc4ef; font-size: 15px; text-align: center; }
+.building-card-road-sprite { width: 24px; height: 24px; margin: -3px 3px 0 -3px; border-radius: 3px; background-image: url("../images/original-road-icon-atlas.png"); background-size: 72px 72px; background-repeat: no-repeat; }
+.road-sprite-road { background-position: 0 0; }
+.road-sprite-high-density { background-position: -24px 0; }
+.road-sprite-dirt { background-position: -48px 0; }
+.road-sprite-pedestrian { background-position: 0 -24px; }
+.road-sprite-boardwalk { background-position: -24px -24px; }
+.road-sprite-light-rail { background-position: -48px -24px; }
+.road-sprite-train-rail { background-position: 0 -48px; }
+.road-sprite-high-rail { background-position: -24px -48px; }
+.road-sprite-subway { background-position: -48px -48px; }
 .building-card-road-icon { float: right; color: #d9a441; font-size: 15px; line-height: 12px; }
+.building-card-sprite { float: left; display: block; width: 24px; height: 24px; margin: -3px 3px 0 -3px; border-radius: 3px; background-repeat: no-repeat; }
 .building-card-detail { display: block; margin-top: 3px; color: #8c97a4; font-size: 10px; }
 .building-card-confidence { display: block; margin-top: 3px; color: #d9a441; font-size: 9px; text-transform: uppercase; letter-spacing: .04em; }
 .inspector-diagnostics { margin-top: 14px; border-top: 1px solid #303741; padding-top: 10px; }
@@ -108,6 +171,10 @@ kbd { margin-left: auto; color: #7f8995; font-family: inherit; font-size: 10px; 
 .terrain-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
 .terrain-button { min-height: 28px; border: 1px solid #3b4551; border-radius: 3px; background: #252b34; color: #b8c2cd; font-size: 10px; }
 .terrain-button.is-active { border-color: #4e94d9; background: #223d5a; color: #e2edf8; }
+.settings-option { display: flex; align-items: center; gap: 7px; margin: 0 6px 9px; color: #aeb8c3; font-size: 11px; }
+.settings-option input { accent-color: #4e94d9; }
+.settings-select { width: calc(100% - 12px); margin: 0 6px 9px; min-height: 27px; border: 1px solid #3b4551; border-radius: 3px; background: #181d23; color: #cbd5df; font-size: 11px; }
+body.hide-shortcuts kbd { display: none; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 .canvas-panel { display: grid; grid-template-rows: 37px minmax(0, 1fr); min-width: 0; min-height: 0; background: #191d23; }
@@ -138,6 +205,9 @@ kbd { margin-left: auto; color: #7f8995; font-family: inherit; font-size: 10px; 
 .inspector-delete { width: 100%; margin-top: 14px; padding: 7px 8px; border: 1px solid #78474a; border-radius: 3px; background: #3a2529; color: #e8b5b7; font-size: 11px; }
 .inspector-move-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 14px; }
 .inspector-move { min-height: 26px; border: 1px solid #3b4551; border-radius: 3px; background: #252b34; color: #cbd3dd; }
+.inspector-control-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; color: #aeb8c3; font-size: 11px; }
+.inspector-level, .inspector-control-label input { width: 112px; min-height: 26px; border: 1px solid #3b4551; border-radius: 3px; background: #181d23; color: #d7dfe8; padding: 4px 6px; font-size: 11px; }
+.inspector-help { margin: 9px 0 0; color: #8997a6; font-size: 10px; line-height: 1.4; }
 .inspector-move:first-child { grid-column: 2; }
 
 .vertical-resizer, .horizontal-resizer { position: relative; z-index: 2; background: #1b2027; outline: none; }
