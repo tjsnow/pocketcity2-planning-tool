@@ -72,21 +72,29 @@ test("nature circular area fill paints only cells inside the selected radius", (
   assert.equal(editor.terrain.getAt(3, 3), "unassigned");
 });
 
-test("zone area fill skips nature, buildings, and roads", () => {
+test("zone area fill replaces grass, soil, and sand but skips protected nature, buildings, and roads", () => {
   const items = new Map([
     ["residential-zone", { id: "residential-zone", name: "Residential Zone", category: "zone", size: { width: 1, height: 1 } }],
     ["park", { id: "park", name: "Park", category: "recreation", size: { width: 1, height: 1 } }],
   ]);
   const zoneDatabase = { getById: (id) => items.get(id) ?? null };
   const editor = new PlanEditor(zoneDatabase, {
-    terrain: [{ x: 0, y: 0, terrainId: "grass" }],
-    placements: [{ id: "park-1", catalogItemId: "park", x: 1, y: 0, rotation: 0 }],
-    roads: [{ x: 2, y: 0, direction: "vertical", roadType: "road" }],
+    terrain: [
+      { x: 0, y: 0, terrainId: "grass" },
+      { x: 1, y: 0, terrainId: "soil" },
+      { x: 2, y: 0, terrainId: "sand" },
+      { x: 3, y: 0, terrainId: "water" },
+    ],
+    placements: [{ id: "park-1", catalogItemId: "park", x: 4, y: 0, rotation: 0 }],
+    roads: [{ x: 5, y: 0, direction: "vertical", roadType: "road" }],
   });
-  const result = editor.paintZoneArea({ x: 0, y: 0, width: 4, height: 1 }, "residential-zone");
-  assert.equal(result.placements.length, 1);
-  assert.equal(result.placements[0].x, 3);
+  const result = editor.paintZoneArea({ x: 0, y: 0, width: 7, height: 1 }, "residential-zone");
+  assert.deepEqual(result.placements.map((placement) => placement.x), [0, 1, 2, 6]);
   assert.equal(result.skippedCount, 3);
+  assert.equal(editor.terrain.getAt(0, 0), "unassigned");
+  assert.equal(editor.terrain.getAt(1, 0), "unassigned");
+  assert.equal(editor.terrain.getAt(2, 0), "unassigned");
+  assert.equal(editor.terrain.getAt(3, 0), "water");
 });
 
 test("nature paint drag groups multiple cells into one undo step", () => {
@@ -239,6 +247,9 @@ test("service effects expose level-aware and user-overridden planning radii", ()
   assert.equal(coverageRadiusFor("hospital", { level: 3 }), 10);
   assert.equal(coverageRadiusFor("hospital", { level: 3, coverageRadius: 14 }), 14);
   assert.equal(coverageRadiusFor("landfill"), 60);
+  assert.equal(coverageRadiusFor("solar-power-plant"), 100);
+  assert.equal(coverageRadiusFor("water-treatment-plant"), 80);
+  assert.equal(coverageRadiusFor("power-plant"), 80);
 });
 
 test("power plants do not require water or sewage coverage", () => {

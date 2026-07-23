@@ -4,6 +4,12 @@ All notable user-visible and developer-relevant changes are recorded here. The f
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-07-22
+
+- Water Treatment Plant and Power Plant now use an 80-block planning coverage radius.
+- Solar Power Plant now uses a 100-block planning coverage radius.
+- Zones can now replace Grass, Soil, and Sand while continuing to preserve water, trees, mountains, canals, buildings, and roads.
+
 ## [2.2.0] - 2026-07-22
 
 - Nature now exposes separate Paint, Area - Square, and Area - Circle buttons. Circular drag previews and fills use the initial cell as the center and skip occupied buildings and roads.

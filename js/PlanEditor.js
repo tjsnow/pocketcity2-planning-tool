@@ -382,16 +382,21 @@ export class PlanEditor {
     if (!zone || zone.category !== "zone") throw new Error("A zone catalog item is required.");
     const area = normalizeAreaBounds(bounds, this.width, this.height);
     const placements = [];
+    const replaceableTerrain = new Set(["grass", "soil", "sand"]);
     let skippedCount = 0;
     for (let y = area.y; y < area.y + area.height; y += 1) {
       for (let x = area.x; x < area.x + area.width; x += 1) {
-        if (this.terrain.getAt(x, y) !== "unassigned" || this.isRoadCell(x, y) || this.findPlacementAt(x, y)) { skippedCount += 1; continue; }
+        const terrainId = this.terrain.getAt(x, y);
+        if ((terrainId !== "unassigned" && !replaceableTerrain.has(terrainId)) || this.isRoadCell(x, y) || this.findPlacementAt(x, y)) { skippedCount += 1; continue; }
         placements.push({ id: `placement-${this.nextPlacementNumber + placements.length}`, catalogItemId, x, y, rotation: 0 });
       }
     }
     if (placements.length === 0) return { area, placements: [], skippedCount };
     this.recordCatalogPaintHistory();
-    for (const placement of placements) this.placements = this.placements.withPlaced(placement);
+    for (const placement of placements) {
+      this.terrain = this.terrain.withTerrainAt(placement.x, placement.y, "unassigned");
+      this.placements = this.placements.withPlaced(placement);
+    }
     this.nextPlacementNumber += placements.length;
     this.selectedPlacementId = null;
     return { area, placements, skippedCount };
