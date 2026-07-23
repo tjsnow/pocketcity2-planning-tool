@@ -36,3 +36,15 @@ Release readiness is tracked in [docs/ReleaseChecklist.md](docs/ReleaseChecklist
 The initial JavaScript modules are included in the TypeScript project without
 rewriting them. New TypeScript modules must comply with the strict settings in
 `tsconfig.json`.
+
+## Copyright
+
+Copyright © 2026 Pocket City Planner contributors. All rights reserved unless
+otherwise stated in a file or asset-specific notice.
+
+This is an independent, community-created planning tool and is not affiliated
+with or endorsed by the creators or publishers of *Pocket City 2*. The *Pocket
+City 2* name, trademarks, terminology, and game content belong to their
+respective owners. Project-created source code and original visual assets remain
+the property of their respective contributors; protected game artwork is not
+included.
