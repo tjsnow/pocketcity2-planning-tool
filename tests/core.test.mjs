@@ -5,7 +5,7 @@ import { analyzePlan } from "../js/Optimization.js";
 import { parsePlan } from "../js/SaveManager.js";
 import { LayerState } from "../js/Layers.js";
 import { PluginRegistry } from "../js/PluginAPI.js";
-import { coverageRadiusFor, getEffectTypes, supportsEffectType } from "../js/ServiceEffects.js";
+import { coverageRadiusFor, getEffectTypes, requiredUtilitiesFor, supportsEffectType } from "../js/ServiceEffects.js";
 
 const database = { getById: (id) => id === "park" ? { id, name: "Park", category: "recreation", size: { width: 1, height: 1 } } : null };
 
@@ -46,10 +46,24 @@ test("layers and plugins validate core extension contracts", () => {
 test("service effects expose level-aware and user-overridden planning radii", () => {
   assert.ok(getEffectTypes().some((effect) => effect.id === "power"));
   assert.equal(supportsEffectType("biomass-facility", "sewage"), true);
+  assert.deepEqual(requiredUtilitiesFor("power-plant"), []);
+  assert.deepEqual(requiredUtilitiesFor("hospital"), ["power", "water", "sewage"]);
   assert.equal(coverageRadiusFor("hospital", { level: 1 }), 6);
   assert.equal(coverageRadiusFor("hospital", { level: 3 }), 10);
   assert.equal(coverageRadiusFor("hospital", { level: 3, coverageRadius: 14 }), 14);
   assert.equal(coverageRadiusFor("landfill"), null);
+});
+
+test("power plants do not require water or sewage coverage", () => {
+  const powerPlant = { id: "power-plant", name: "Power Plant", category: "power", size: { width: 1, height: 1 } };
+  const powerDatabase = { getById: (id) => id === powerPlant.id ? powerPlant : null };
+  const report = analyzePlan({
+    width: 40,
+    height: 40,
+    roads: [{ x: 5, y: 6, direction: "horizontal", roadType: "road" }],
+    placements: [{ id: "plant", catalogItemId: "power-plant", x: 5, y: 5, rotation: 0 }],
+  }, powerDatabase);
+  assert.equal(report.issues.some((issue) => issue.subjectId === "plant" && /^no-(power|water|sewage)-coverage$/.test(issue.code)), false);
 });
 
 test("optimization accepts utilities supplied by a connected multi-utility source", () => {
@@ -68,4 +82,25 @@ test("optimization accepts utilities supplied by a connected multi-utility sourc
     ],
   }, utilityDatabase);
   assert.equal(report.issues.some((issue) => issue.subjectId === "target" && /^no-(power|water|sewage)-coverage$/.test(issue.code)), false);
+});
+
+test("utilities do not cross disconnected road networks", () => {
+  const buildings = new Map([
+    ["hospital", { id: "hospital", name: "Hospital", category: "service", size: { width: 1, height: 1 } }],
+    ["power-plant", { id: "power-plant", name: "Power Plant", category: "power", size: { width: 1, height: 1 } }],
+  ]);
+  const utilityDatabase = { getById: (id) => buildings.get(id) ?? null };
+  const report = analyzePlan({
+    width: 40,
+    height: 40,
+    roads: [
+      { x: 2, y: 3, direction: "horizontal", roadType: "road" },
+      { x: 7, y: 3, direction: "horizontal", roadType: "road" },
+    ],
+    placements: [
+      { id: "plant", catalogItemId: "power-plant", x: 2, y: 2, rotation: 0 },
+      { id: "hospital", catalogItemId: "hospital", x: 7, y: 2, rotation: 0 },
+    ],
+  }, utilityDatabase);
+  assert.ok(report.issues.some((issue) => issue.subjectId === "hospital" && issue.code === "no-power-coverage"));
 });

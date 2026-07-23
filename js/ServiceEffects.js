@@ -15,14 +15,14 @@ const DEFINITIONS = {
   bridge: { effectType: "traffic", mode: "local", maxLevel: 1, defaultRadius: 4, label: "Traffic coverage" },
   "water-tower": { effectType: "water", mode: "network", maxLevel: 1, defaultRadius: 8, label: "Water network capacity" },
   "large-water-tower": { effectType: "water", mode: "network", maxLevel: 1, defaultRadius: 10, label: "Water network capacity" },
-  "power-plant": { effectType: "power", mode: "network", maxLevel: 1, defaultRadius: 8, label: "Power network capacity" },
-  "large-power-plant": { effectType: "power", mode: "network", maxLevel: 1, defaultRadius: 10, label: "Power network capacity" },
-  "hydro-power-plant": { effectType: "power", mode: "network", maxLevel: 1, defaultRadius: 10, label: "Power network capacity" },
-  "fusion-power-plant": { effectType: "power", mode: "network", maxLevel: 1, defaultRadius: 12, label: "Power network capacity" },
-  "wind-power-plant": { effectType: "power", mode: "network", maxLevel: 1, defaultRadius: 10, label: "Power network capacity" },
-  "solar-power-plant": { effectType: "power", mode: "network", maxLevel: 1, defaultRadius: 12, label: "Power network capacity" },
-  "waste-power-plant": { effectType: "power", mode: "network", maxLevel: 1, defaultRadius: 12, label: "Power network capacity" },
-  "biomass-facility": { effectType: "power", provides: ["power", "water", "sewage"], mode: "network", maxLevel: 1, defaultRadius: 8, label: "Power, water, and sewage network capacity" },
+  "power-plant": { effectType: "power", requires: [], mode: "network", maxLevel: 1, defaultRadius: 8, label: "Power network capacity" },
+  "large-power-plant": { effectType: "power", requires: [], mode: "network", maxLevel: 1, defaultRadius: 10, label: "Power network capacity" },
+  "hydro-power-plant": { effectType: "power", requires: [], mode: "network", maxLevel: 1, defaultRadius: 10, label: "Power network capacity" },
+  "fusion-power-plant": { effectType: "power", requires: [], mode: "network", maxLevel: 1, defaultRadius: 12, label: "Power network capacity" },
+  "wind-power-plant": { effectType: "power", requires: [], mode: "network", maxLevel: 1, defaultRadius: 10, label: "Power network capacity" },
+  "solar-power-plant": { effectType: "power", requires: [], mode: "network", maxLevel: 1, defaultRadius: 12, label: "Power network capacity" },
+  "waste-power-plant": { effectType: "power", requires: [], mode: "network", maxLevel: 1, defaultRadius: 12, label: "Power network capacity" },
+  "biomass-facility": { effectType: "power", provides: ["power", "water", "sewage"], requires: [], mode: "network", maxLevel: 1, defaultRadius: 8, label: "Power, water, and sewage network capacity" },
   "sewage-drain": { effectType: "sewage", mode: "citywide", maxLevel: 1, defaultRadius: 8, label: "Sewage capacity" },
   "sewage-lagoon": { effectType: "sewage", mode: "citywide", maxLevel: 1, defaultRadius: 10, label: "Sewage capacity" },
   "water-treatment-plant": { effectType: "sewage", provides: ["water", "sewage"], mode: "citywide", maxLevel: 3, defaultRadius: 12, label: "Sewage capacity" },
@@ -57,6 +57,10 @@ export function isLocalEffect(effectType) { return !["water", "power", "sewage",
 export function supportsEffectType(buildingId, effectType) {
   const definition = serviceDefinition(buildingId);
   return Boolean(definition && (definition.effectType === effectType || definition.provides?.includes(effectType)));
+}
+export function requiredUtilitiesFor(buildingId) {
+  const requirements = serviceDefinition(buildingId)?.requires;
+  return requirements ? [...requirements] : ["power", "water", "sewage"];
 }
 export function coverageRadiusFor(buildingId, placement = {}) {
   const definition = serviceDefinition(buildingId);

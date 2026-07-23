@@ -88,7 +88,22 @@ button { font: inherit; }
 .tool-button:disabled > span:first-child { color: #69717d; }
 .ribbon-spacer, .canvas-toolbar-spacer, .status-spacer { flex: 1; }
 .workspace-button { align-self: center; display: flex; align-items: center; gap: 7px; padding: 7px 9px; border: 1px solid #39424e; border-radius: 4px; background: #272d36; color: #cbd3dc; font-size: 12px; }
+.workspace-button:hover, .workspace-button[aria-expanded="true"] { border-color: #4e94d9; background: #223d5a; color: #fff; }
 .status-indicator, .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #55b783; box-shadow: 0 0 7px #55b78388; }
+.changelog-panel { position: fixed; z-index: 30; top: 68px; right: 14px; width: min(390px, calc(100vw - 28px)); max-height: calc(100vh - 92px); overflow: auto; padding: 14px; border: 1px solid #465362; border-radius: 7px; background: #1c222a; box-shadow: 0 16px 38px #000b; }
+.changelog-panel[hidden] { display: none; }
+.changelog-header, .changelog-version { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.changelog-header { padding-bottom: 11px; border-bottom: 1px solid #343d48; }
+.changelog-header h2 { margin: 2px 0 0; color: #edf3f9; font-size: 17px; }
+.changelog-eyebrow { color: #78aee3; font-size: 9px; font-weight: 750; letter-spacing: .09em; text-transform: uppercase; }
+.changelog-header button { border: 0; background: transparent; color: #9faab6; font-size: 22px; line-height: 1; cursor: pointer; }
+.changelog-header button:hover { color: #fff; }
+.changelog-release { padding: 13px 0 4px; }
+.changelog-release + .changelog-release { border-top: 1px solid #303944; }
+.changelog-version strong { color: #dce7f2; font-size: 12px; }
+.changelog-version time { color: #7f8b98; font-size: 10px; }
+.changelog-release ul { margin: 9px 0 5px; padding-left: 18px; color: #aeb9c5; font-size: 11px; line-height: 1.5; }
+.changelog-release li + li { margin-top: 4px; }
 
 .workspace { display: grid; grid-template-columns: var(--toolbox-width) 6px minmax(300px, 1fr) 6px var(--inspector-width); min-height: 0; overflow: hidden; }
 .toolbox, .inspector { min-width: 0; overflow: auto; }

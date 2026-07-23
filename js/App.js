@@ -18,6 +18,23 @@ const TERRAIN_AREA_OPTIONS = [
  */
 enablePanelResizing(document.querySelector(".app-shell"));
 
+const changelogButton = document.querySelector("#changelog-button");
+const changelogPanel = document.querySelector("#changelog-panel");
+const changelogClose = document.querySelector("#changelog-close");
+function setChangelogOpen(open) {
+  changelogPanel?.toggleAttribute("hidden", !open);
+  changelogButton?.setAttribute("aria-expanded", String(open));
+  if (open) changelogClose?.focus();
+}
+changelogButton?.addEventListener("click", () => setChangelogOpen(changelogPanel?.hasAttribute("hidden")));
+changelogClose?.addEventListener("click", () => { setChangelogOpen(false); changelogButton?.focus(); });
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && changelogPanel && !changelogPanel.hasAttribute("hidden")) {
+    setChangelogOpen(false);
+    changelogButton?.focus();
+  }
+});
+
 const canvas = document.querySelector("#planner-canvas");
 const renderer = canvas ? new Renderer(canvas) : null;
 const minimapCanvas = document.querySelector("#minimap-canvas");

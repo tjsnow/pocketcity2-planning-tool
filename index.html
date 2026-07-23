@@ -19,7 +19,7 @@
       <header class="ribbon panel" aria-label="Main toolbar">
         <div class="brand" aria-label="Pocket City 2 Planner">
           <span class="brand-mark" aria-hidden="true">PC</span>
-          <span class="brand-copy"><span class="brand-title">Pocket City 2 Planner</span><span class="brand-version">v1.0.0</span></span>
+          <span class="brand-copy"><span class="brand-title">Pocket City 2 Planner</span><span class="brand-version">v2.0.0</span></span>
         </div>
         <div class="ribbon-divider" aria-hidden="true"></div>
         <div class="ribbon-group" aria-label="File tools">
@@ -51,11 +51,37 @@
           </button>
         </div>
         <div class="ribbon-spacer"></div>
-        <button class="workspace-button" type="button" aria-label="Workspace settings">
+        <button id="changelog-button" class="workspace-button" type="button" aria-expanded="false" aria-controls="changelog-panel">
           <span class="status-indicator" aria-hidden="true"></span>
-          Workspace
+          Changelog
         </button>
       </header>
+
+      <aside id="changelog-panel" class="changelog-panel" hidden aria-labelledby="changelog-title">
+        <div class="changelog-header">
+          <div><span class="changelog-eyebrow">Release history</span><h2 id="changelog-title">What’s new</h2></div>
+          <button id="changelog-close" type="button" aria-label="Close changelog">×</button>
+        </div>
+        <div class="changelog-release">
+          <div class="changelog-version"><strong>Version 2.0.0</strong><time datetime="2026-07-22">July 22, 2026</time></div>
+          <ul>
+            <li>Complete 161-item planning catalog with category and icon atlases.</li>
+            <li>Service-effect overlays with level and planning-radius controls.</li>
+            <li>Road-network-aware power, water, and sewage diagnostics.</li>
+            <li>Area delete, area terrain, zoning, drag movement, and brush bulldozing.</li>
+            <li>Random city generation, clear-plan confirmation, and improved navigation.</li>
+          </ul>
+        </div>
+        <div class="changelog-release">
+          <div class="changelog-version"><strong>Version 1.0.0</strong><time datetime="2026-07-22">July 22, 2026</time></div>
+          <ul>
+            <li>Initial local-first city planning workspace.</li>
+            <li>Grid, terrain, roads, buildings, layers, minimap, and inspector.</li>
+            <li>Undo and redo, keyboard shortcuts, draft persistence, and JSON import/export.</li>
+            <li>Placement validation and initial planning diagnostics.</li>
+          </ul>
+        </div>
+      </aside>
 
       <section id="area-delete-dialog" class="area-delete-dialog" hidden aria-labelledby="area-delete-title">
         <div class="area-delete-dialog-header">

@@ -4,6 +4,8 @@ All notable user-visible and developer-relevant changes are recorded here. The f
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-07-22
+
 - Service coverage now requires the supplying station or utility source itself to be road-connected. A source that is isolated from the road network no longer satisfies AOE requirements for nearby buildings.
 - Utility diagnostics now require both road access and estimated electricity, water, and sewage coverage. Each missing service produces its own error, so a hospital can show separate power and water errors while sewage is satisfied.
 - Added drag-to-move for selected placements. Click a placed item to open its Inspector, then drag it to a new cell; movement uses the existing footprint, terrain, road, boundary, and collision validation and is grouped into one undo step.
