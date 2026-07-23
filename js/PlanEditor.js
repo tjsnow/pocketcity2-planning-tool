@@ -30,7 +30,7 @@ export class PlanEditor {
     this.activeBulldozer = false;
     this.activeRoadType = "road";
     this.selectedPlacementId = null;
-    this.nextPlacementNumber = placements.length + 1;
+    this.nextPlacementNumber = nextPlacementNumberFor(placements);
     this.undoStack = [];
     this.redoStack = [];
     this.terrainStrokeActive = false;
@@ -41,6 +41,8 @@ export class PlanEditor {
     this.bulldozerStrokeHistoryRecorded = false;
     this.placementMoveStrokeActive = false;
     this.placementMoveHistoryRecorded = false;
+    this.catalogPaintStrokeActive = false;
+    this.catalogPaintStrokeHistoryRecorded = false;
   }
 
   selectBuilding(buildingId) {
@@ -163,7 +165,6 @@ export class PlanEditor {
       const horizontal = Math.abs(x - current.x) >= Math.abs(y - current.y);
       const next = horizontal ? { x: current.x + Math.sign(x - current.x), y: current.y } : { x: current.x, y: current.y + Math.sign(y - current.y) };
       const segment = horizontal ? { x: Math.min(current.x, next.x), y: current.y, direction: "horizontal", roadType: this.activeRoadType } : { x: current.x, y: Math.min(current.y, next.y), direction: "vertical", roadType: this.activeRoadType };
-      if (!this.activeRoadErase && this.isRoadSegmentBlockedByBuilding(segment)) throw new Error("Roads cannot overlap buildings.");
       segments.push(segment);
       current = next;
     }
@@ -178,7 +179,11 @@ export class PlanEditor {
             this.roads = this.roads.withoutSegment(existing);
           }
         }
-      } else if (!this.roads.hasSegment(segment)) this.roads = this.roads.withSegment(segment);
+      } else {
+        this.removePlacementsIntersectingCells(this.roadSegmentCells(segment));
+        this.removeMatchingRoadSegment(segment);
+        this.roads = this.roads.withSegment(segment);
+      }
     }
     this.roadStrokeLastCell = current;
     this.selectedPlacementId = null;
@@ -196,8 +201,9 @@ export class PlanEditor {
     }
     const segment = { x, y, direction: this.activeRoadDirection ?? "horizontal", roadType: this.activeRoadType };
     this.recordHistory();
-    if (!this.roads.hasSegment(segment) && this.isRoadSegmentBlockedByBuilding(segment)) throw new Error("Roads cannot overlap buildings.");
-    this.roads = this.roads.hasSegment(segment) ? this.roads.withoutSegment(segment) : this.roads.withSegment(segment);
+    this.removePlacementsIntersectingCells(this.roadSegmentCells(segment));
+    this.removeMatchingRoadSegment(segment);
+    this.roads = this.roads.withSegment(segment);
     this.selectedPlacementId = null;
     return null;
   }
@@ -205,12 +211,12 @@ export class PlanEditor {
   addRoadAt(x, y) {
     this.assertInBounds(x, y);
     const segment = { x, y, direction: this.activeRoadDirection, roadType: this.activeRoadType };
-    if (this.roads.hasSegment(segment)) return;
-    if (this.isRoadSegmentBlockedByBuilding(segment)) throw new Error("Roads cannot overlap buildings.");
     if (!this.roadStrokeActive || !this.roadStrokeHistoryRecorded) {
       this.recordHistory();
       this.roadStrokeHistoryRecorded = true;
     }
+    this.removePlacementsIntersectingCells(this.roadSegmentCells(segment));
+    this.removeMatchingRoadSegment(segment);
     this.roads = this.roads.withSegment(segment);
     this.selectedPlacementId = null;
   }
@@ -271,7 +277,8 @@ export class PlanEditor {
       level: 1,
       layer: "structures",
     };
-    this.recordHistory();
+    this.recordCatalogPaintHistory();
+    this.removePlacementsIntersectingCells(this.placementCells(placement, building));
     this.placements = this.placements.withPlaced(placement);
     this.selectedPlacementId = placement.id;
     return this.selectedPlacement;
@@ -378,16 +385,60 @@ export class PlanEditor {
     let skippedCount = 0;
     for (let y = area.y; y < area.y + area.height; y += 1) {
       for (let x = area.x; x < area.x + area.width; x += 1) {
-        if (this.isRoadCell(x, y) || this.findPlacementAt(x, y)) { skippedCount += 1; continue; }
+        if (this.terrain.getAt(x, y) !== "unassigned" || this.isRoadCell(x, y) || this.findPlacementAt(x, y)) { skippedCount += 1; continue; }
         placements.push({ id: `placement-${this.nextPlacementNumber + placements.length}`, catalogItemId, x, y, rotation: 0 });
       }
     }
     if (placements.length === 0) return { area, placements: [], skippedCount };
-    this.recordHistory();
+    this.recordCatalogPaintHistory();
     for (const placement of placements) this.placements = this.placements.withPlaced(placement);
     this.nextPlacementNumber += placements.length;
     this.selectedPlacementId = null;
     return { area, placements, skippedCount };
+  }
+
+  paintNatureArea(bounds, catalogItemId, shape = "rectangle") {
+    const nature = this.database.getById(catalogItemId);
+    if (!nature || nature.category !== "nature" || !nature.terrainId) throw new Error("A nature catalog item is required.");
+    if (shape !== "rectangle" && shape !== "circle") throw new RangeError("Nature area shape must be rectangle or circle.");
+    const area = normalizeAreaBounds(bounds, this.width, this.height);
+    const cells = new Map(this.terrain.toCells().map((cell) => [`${cell.x},${cell.y}`, cell.terrainId]));
+    let paintedCount = 0;
+    let skippedCount = 0;
+    for (let y = area.y; y < area.y + area.height; y += 1) {
+      for (let x = area.x; x < area.x + area.width; x += 1) {
+        if (shape === "circle" && !cellIsInsideCircle(x, y, bounds)) continue;
+        if (this.isRoadCell(x, y) || this.findPlacementAt(x, y)) { skippedCount += 1; continue; }
+        const cellKey = `${x},${y}`;
+        if (cells.get(cellKey) === nature.terrainId) continue;
+        cells.set(cellKey, nature.terrainId);
+        paintedCount += 1;
+      }
+    }
+    if (paintedCount === 0) return { area, terrainId: nature.terrainId, paintedCount, skippedCount };
+    this.recordCatalogPaintHistory();
+    this.terrain = Terrain.fromCells([...cells.entries()].map(([cellKey, terrainId]) => {
+      const [x, y] = cellKey.split(",").map(Number);
+      return { x, y, terrainId };
+    }));
+    this.selectedPlacementId = null;
+    return { area, terrainId: nature.terrainId, paintedCount, skippedCount };
+  }
+
+  beginCatalogPaintStroke() {
+    this.catalogPaintStrokeActive = true;
+    this.catalogPaintStrokeHistoryRecorded = false;
+  }
+
+  endCatalogPaintStroke() {
+    this.catalogPaintStrokeActive = false;
+    this.catalogPaintStrokeHistoryRecorded = false;
+  }
+
+  recordCatalogPaintHistory() {
+    if (this.catalogPaintStrokeActive && this.catalogPaintStrokeHistoryRecorded) return;
+    this.recordHistory();
+    if (this.catalogPaintStrokeActive) this.catalogPaintStrokeHistoryRecorded = true;
   }
 
   rotateSelected() {
@@ -622,6 +673,35 @@ export class PlanEditor {
     return this.roadSegmentCells(segment).some((cell) => this.isBuildingCell(cell.x, cell.y));
   }
 
+  placementCells(placement, building = this.database.getById(placement.catalogItemId)) {
+    const rotated = placement.rotation === 90 || placement.rotation === 270;
+    const width = rotated ? building.size.height : building.size.width;
+    const height = rotated ? building.size.width : building.size.height;
+    const cells = [];
+    for (let y = placement.y; y < placement.y + height; y += 1) {
+      for (let x = placement.x; x < placement.x + width; x += 1) cells.push({ x, y });
+    }
+    return cells;
+  }
+
+  removePlacementsIntersectingCells(cells) {
+    const targets = new Set(cells.map((cell) => `${cell.x},${cell.y}`));
+    const intersecting = this.placements.getAll().filter((placement) =>
+      this.placementCells(placement).some((cell) => targets.has(`${cell.x},${cell.y}`)),
+    );
+    for (const placement of intersecting) this.placements = this.placements.without(placement.id);
+    if (intersecting.some((placement) => placement.id === this.selectedPlacementId)) this.selectedPlacementId = null;
+    return intersecting;
+  }
+
+  removeMatchingRoadSegment(segment) {
+    const existing = this.roads.getAll().filter((road) =>
+      road.x === segment.x && road.y === segment.y && road.direction === segment.direction,
+    );
+    for (const road of existing) this.roads = this.roads.withoutSegment(road);
+    return existing;
+  }
+
   roadSegmentCells(segment) {
     return segment.direction === "horizontal"
       ? [{ x: segment.x, y: segment.y }, { x: segment.x + 1, y: segment.y }]
@@ -665,8 +745,22 @@ function normalizeAreaBounds(bounds, width, height) {
   return { x, y, width: maxX - x + 1, height: maxY - y + 1 };
 }
 
+function cellIsInsideCircle(x, y, bounds) {
+  const centerX = Number.isFinite(bounds.centerX) ? bounds.centerX : bounds.x + (bounds.width - 1) / 2;
+  const centerY = Number.isFinite(bounds.centerY) ? bounds.centerY : bounds.y + (bounds.height - 1) / 2;
+  const radius = Number.isFinite(bounds.radius) ? bounds.radius : Math.max(0, Math.min(bounds.width, bounds.height) - 1) / 2;
+  return (x - centerX) ** 2 + (y - centerY) ** 2 <= radius ** 2;
+}
+
 function rectanglesOverlap(left, right) {
   return left.x < right.x + right.width && left.x + left.width > right.x && left.y < right.y + right.height && left.y + left.height > right.y;
+}
+
+function nextPlacementNumberFor(placements) {
+  return placements.reduce((next, placement) => {
+    const match = /^placement-(\d+)$/.exec(placement.id);
+    return match ? Math.max(next, Number(match[1]) + 1) : next;
+  }, 1);
 }
 
 function seededRandom(seed) {

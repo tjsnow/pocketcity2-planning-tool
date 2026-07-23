@@ -57,6 +57,12 @@ async function initializeBuildingBrowser(root, activeInspector) {
     let areaTerrainMode = false;
     let areaZoneMode = false;
     let activeZoneId = null;
+    let catalogPaintMode = false;
+    let activeModeFamily = null;
+    let selectedBuildItem = null;
+    let paintLastCell = null;
+    const applicationModes = { catalog: "paint" };
+    let natureAreaShape = "rectangle";
     let placementMoveMode = false;
     let areaDeleteStart = null;
     let areaDeleteBounds = null;
@@ -70,6 +76,13 @@ async function initializeBuildingBrowser(root, activeInspector) {
     const gridSizeInput = document.querySelector("#grid-size");
     const showShortcutsInput = document.querySelector("#show-shortcuts");
     const effectTypeInput = document.querySelector("#effect-type");
+    root.addEventListener("build-item-browser-close", () => {
+      cancelAreaDelete();
+      editor.selectTool();
+      updateTerrainButtons();
+      updateRoadButtons();
+      setStatus("Build Item Browser closed. Select tool active.");
+    });
     if (effectTypeInput && effectTypeInput.options.length === 0) {
       for (const effect of getEffectTypes()) {
         const option = document.createElement("option");
@@ -97,6 +110,7 @@ async function initializeBuildingBrowser(root, activeInspector) {
       renderer.camera.positionY = editor.height * renderer.grid.cellSize / 2;
       renderer.setScene(editor.scene);
       renderer.setCanvasClickHandler((worldPoint) => {
+        if (catalogPaintMode || areaZoneMode) return;
         try {
           editor.clickCell(Math.floor(worldPoint.x / renderer.grid.cellSize), Math.floor(worldPoint.y / renderer.grid.cellSize));
           syncEditor();
@@ -127,8 +141,19 @@ async function initializeBuildingBrowser(root, activeInspector) {
         onPointerDown: (worldPoint) => {
           if (areaDeleteMode || areaTerrainMode || areaZoneMode) {
             areaDeleteStart = worldToCell(worldPoint);
-            areaDeleteBounds = areaFromCells(areaDeleteStart, areaDeleteStart);
+            areaDeleteBounds = selectedBuildItem?.category === "nature" && natureAreaShape === "circle"
+              ? circleFromCells(areaDeleteStart, areaDeleteStart)
+              : areaFromCells(areaDeleteStart, areaDeleteStart);
             renderer.setAreaDeletePreview(areaDeleteBounds);
+            return;
+          }
+          if (catalogPaintMode) {
+            editor.beginCatalogPaintStroke();
+            if (selectedBuildItem?.roadType) { editor.selectRoadTool(selectedBuildItem.roadType); editor.beginRoadStroke(); }
+            if (selectedBuildItem?.toolId === "bulldozer") editor.beginBulldozerStroke();
+            if (selectedBuildItem?.terrainId && selectedBuildItem.category !== "nature") editor.beginTerrainStroke();
+            paintLastCell = null;
+            paintCatalogAt(worldPoint);
             return;
           }
           if (editor.activeTerrainId) {
@@ -147,10 +172,13 @@ async function initializeBuildingBrowser(root, activeInspector) {
         },
         onDrag: (worldPoint) => {
           if ((areaDeleteMode || areaTerrainMode || areaZoneMode) && areaDeleteStart) {
-            areaDeleteBounds = areaFromCells(areaDeleteStart, worldToCell(worldPoint));
+            areaDeleteBounds = selectedBuildItem?.category === "nature" && natureAreaShape === "circle"
+              ? circleFromCells(areaDeleteStart, worldToCell(worldPoint))
+              : areaFromCells(areaDeleteStart, worldToCell(worldPoint));
             renderer.setAreaDeletePreview(areaDeleteBounds);
             return;
           }
+          if (catalogPaintMode) { paintCatalogAt(worldPoint); return; }
           if (editor.activeTerrainId) paintTerrainAt(worldPoint);
           else if (editor.activeRoadTool) paintRoadAt(worldPoint);
           else if (editor.activeBulldozer) paintBulldozerAt(worldPoint);
@@ -169,6 +197,15 @@ async function initializeBuildingBrowser(root, activeInspector) {
           }
           if (areaZoneMode && areaDeleteBounds) {
             applyAreaZone();
+            return;
+          }
+          if (catalogPaintMode) {
+            editor.endCatalogPaintStroke();
+            if (editor.roadStrokeActive) editor.endRoadStroke();
+            if (editor.bulldozerStrokeActive) editor.endBulldozerStroke();
+            if (editor.terrainStrokeActive) editor.endTerrainStroke();
+            paintLastCell = null;
+            saveDraft();
             return;
           }
           if (editor.terrainStrokeActive) editor.endTerrainStroke();
@@ -205,39 +242,17 @@ async function initializeBuildingBrowser(root, activeInspector) {
 
     new BuildingBrowser(root, database, (building) => {
       cancelAreaDelete();
-      if (building.terrainId) {
-        editor.selectTerrain(building.terrainId);
-        updateTerrainButtons();
-        updateRoadButtons();
-        activeInspector?.showStatistics(editor.statistics, editor.optimizationReport);
-        setStatus(`${building.name} terrain tool active.`);
-        return;
-      }
-      if (building.category === "zone") {
-        activeZoneId = building.id;
-        areaZoneMode = true;
-        areaDeleteMode = false;
-        areaTerrainMode = false;
-        areaDeleteStart = null;
-        areaDeleteBounds = null;
-        renderer?.setAreaDeletePreview(null);
-        updateAreaDeleteButton();
-        setStatus(`${building.name} area tool active. Drag across cells to fill the zone.`);
-        return;
-      }
-      if (building.roadType) {
-        editor.selectRoadTool(building.roadType);
-        updateTerrainButtons();
-        updateRoadButtons();
-        setStatus(`${building.name} active.`);
-        return;
-      }
-      editor.selectBuilding(building.id);
+      selectedBuildItem = building;
+      activeZoneId = building.id;
+      activeModeFamily = "catalog";
+      activateApplicationMode();
       updateTerrainButtons();
       updateRoadButtons();
-      activeInspector?.showBuilding(building);
-      setStatus(`Place ${building.name} on the grid.`);
+      if (!building.toolId) activeInspector?.showBuilding(building);
+      setStatus(`${building.name} ${applicationModes.catalog} mode active.`);
       syncEditor();
+    }, (category) => {
+      applicationModes.catalog = category === "nature" || category === "zone" ? "area" : "paint";
     });
 
     document.querySelector("#select-tool")?.addEventListener("click", () => {
@@ -279,22 +294,37 @@ async function initializeBuildingBrowser(root, activeInspector) {
     document.querySelectorAll("[data-bulldozer]").forEach((button) => {
       button.addEventListener("click", () => {
         cancelAreaDelete();
-        editor.selectBulldozer();
+        activeModeFamily = "bulldozer";
+        activateApplicationMode();
         updateTerrainButtons();
         updateRoadButtons();
-        setStatus("Bulldozer active. Click a building or road to delete it.");
+        setStatus(`Bulldozer ${applicationModes.bulldozer} mode active.`);
       });
     });
+    document.querySelectorAll("[data-application-mode]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!activeModeFamily) return;
+        if (selectedBuildItem?.category === "nature" && button.dataset.areaShape) natureAreaShape = button.dataset.areaShape;
+        applicationModes[activeModeFamily] = button.dataset.applicationMode;
+        activateApplicationMode();
+        const shapeLabel = selectedBuildItem?.category === "nature" && button.dataset.applicationMode === "area" ? `area - ${natureAreaShape}` : button.dataset.applicationMode;
+        setStatus(`${selectedBuildItem?.name} ${shapeLabel} mode active.`);
+      });
+    });
+    updateApplicationModeButtons();
     document.querySelectorAll("[data-area-delete]").forEach((button) => {
       button.addEventListener("click", () => {
         const wasActive = areaDeleteMode;
         cancelAreaDelete();
+        editor.selectTool();
         areaDeleteMode = !wasActive;
+        renderer?.setEdgePanEnabled(areaDeleteMode);
         areaDeleteStart = null;
         areaDeleteBounds = null;
         renderer?.setAreaDeletePreview(null);
         areaDeleteDialog?.setAttribute("hidden", "");
         updateAreaDeleteButton();
+        updateRoadButtons();
         setStatus(areaDeleteMode ? "Area delete active. Drag across the area to select items." : "Area delete canceled.");
       });
     });
@@ -302,23 +332,19 @@ async function initializeBuildingBrowser(root, activeInspector) {
       button.addEventListener("click", () => {
         const wasActive = areaTerrainMode;
         cancelAreaDelete();
+        editor.selectTool();
         areaTerrainMode = !wasActive;
+        renderer?.setEdgePanEnabled(areaTerrainMode);
         areaDeleteStart = null;
         areaDeleteBounds = null;
         renderer?.setAreaDeletePreview(null);
         updateAreaDeleteButton();
+        updateRoadButtons();
         setStatus(areaTerrainMode ? "Area terrain active. Drag across the area to choose terrain." : "Area terrain canceled.");
       });
     });
     document.querySelectorAll("[data-area-delete-cancel]").forEach((button) => button.addEventListener("click", () => {
-      areaDeleteMode = false;
-      areaTerrainMode = false;
-      areaDeleteStart = null;
-      areaDeleteBounds = null;
-      renderer?.setAreaDeletePreview(null);
-      areaDeleteDialog?.setAttribute("hidden", "");
-      areaTerrainDialog?.setAttribute("hidden", "");
-      updateAreaDeleteButton();
+      cancelAreaDelete();
       setStatus("Area delete canceled.");
     }));
     document.querySelectorAll("[data-area-terrain-cancel]").forEach((button) => button.addEventListener("click", () => {
@@ -328,8 +354,10 @@ async function initializeBuildingBrowser(root, activeInspector) {
     document.querySelector("[data-area-delete-confirm]")?.addEventListener("click", () => {
       if (!areaDeleteBounds) return;
       const removed = editor.deleteArea(areaDeleteBounds);
-      areaDeleteMode = false;
+      const keepBulldozerAreaActive = activeModeFamily === "bulldozer" && applicationModes.bulldozer === "area";
+      areaDeleteMode = keepBulldozerAreaActive;
       areaTerrainMode = false;
+      renderer?.setEdgePanEnabled(keepBulldozerAreaActive);
       areaDeleteStart = null;
       areaDeleteBounds = null;
       renderer?.setAreaDeletePreview(null);
@@ -378,13 +406,14 @@ async function initializeBuildingBrowser(root, activeInspector) {
         if (shortcut === "h") {
           activeNavigationTool = "pan"; renderer?.setPanMode(true); updateNavigationButtons(); setStatus("Pan tool active."); return;
         }
-        if (shortcut === "p") {
-          cancelAreaDelete();
-          editor.selectRoadTool(); updateTerrainButtons(); updateRoadButtons(); setStatus("Road brush active."); return;
-        }
         if (shortcut === "b") {
           cancelAreaDelete();
-          editor.selectBulldozer(); updateTerrainButtons(); updateRoadButtons(); setStatus("Bulldozer active."); return;
+          selectedBuildItem = { id: "tool-bulldozer", name: "Bulldozer", category: "tool", toolId: "bulldozer", size: { width: 1, height: 1 } };
+          activeZoneId = selectedBuildItem.id;
+          activeModeFamily = "catalog";
+          applicationModes.catalog = "paint";
+          activateApplicationMode();
+          updateTerrainButtons(); updateRoadButtons(); setStatus("Bulldozer paint mode active."); return;
         }
         if (shortcut === "g" || shortcut === "w") {
           const layer = shortcut === "g" ? "grid" : "warnings";
@@ -630,7 +659,7 @@ async function initializeBuildingBrowser(root, activeInspector) {
         button.classList.toggle("is-active", editor.activeRoadTool && !editor.activeRoadErase);
       });
       document.querySelectorAll("[data-bulldozer]").forEach((button) => {
-        button.classList.toggle("is-active", editor.activeBulldozer);
+        button.classList.toggle("is-active", editor.activeBulldozer || activeModeFamily === "bulldozer");
       });
     }
 
@@ -644,18 +673,96 @@ async function initializeBuildingBrowser(root, activeInspector) {
       document.querySelectorAll("[data-area-terrain]").forEach((button) => button.classList.toggle("is-active", areaTerrainMode));
     }
 
-    function cancelAreaDelete() {
-      if (!areaDeleteMode && !areaTerrainMode && !areaZoneMode && !areaDeleteBounds) return;
+    function updateApplicationModeButtons() {
+      document.querySelector(".application-mode")?.classList.toggle("is-nature", selectedBuildItem?.category === "nature");
+      document.querySelectorAll("[data-application-mode]").forEach((button) => {
+        const isNature = selectedBuildItem?.category === "nature";
+        const isCircleButton = button.dataset.areaShape === "circle";
+        button.hidden = isCircleButton && !isNature;
+        button.disabled = !activeModeFamily;
+        const matchesMode = button.dataset.applicationMode === applicationModes[activeModeFamily];
+        const matchesShape = !isNature || button.dataset.applicationMode !== "area" || button.dataset.areaShape === natureAreaShape;
+        const active = Boolean(activeModeFamily) && matchesMode && matchesShape;
+        if (button.dataset.areaShape === "rectangle") button.textContent = isNature ? "Area - Square" : "Area";
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+    }
+
+    function activateApplicationMode() {
       areaDeleteMode = false;
       areaTerrainMode = false;
       areaZoneMode = false;
-      activeZoneId = null;
+      catalogPaintMode = false;
       areaDeleteStart = null;
       areaDeleteBounds = null;
       renderer?.setAreaDeletePreview(null);
+      const mode = applicationModes[activeModeFamily];
+      if (mode === "area") {
+        areaZoneMode = true;
+        editor.selectTool();
+      } else {
+        catalogPaintMode = true;
+        editor.selectTool();
+      }
+      renderer?.setEdgePanEnabled(mode === "area");
+      updateAreaDeleteButton();
+      updateApplicationModeButtons();
+    }
+
+    function cancelAreaDelete() {
+      if (!areaDeleteMode && !areaTerrainMode && !areaZoneMode && !catalogPaintMode && !activeModeFamily && !areaDeleteBounds) return;
+      areaDeleteMode = false;
+      areaTerrainMode = false;
+      areaZoneMode = false;
+      catalogPaintMode = false;
+      activeModeFamily = null;
+      activeZoneId = null;
+      selectedBuildItem = null;
+      paintLastCell = null;
+      areaDeleteStart = null;
+      areaDeleteBounds = null;
+      renderer?.setAreaDeletePreview(null);
+      renderer?.setEdgePanEnabled(false);
       areaDeleteDialog?.setAttribute("hidden", "");
       areaTerrainDialog?.setAttribute("hidden", "");
       updateAreaDeleteButton();
+      updateApplicationModeButtons();
+    }
+
+    function paintCatalogAt(worldPoint) {
+      const cell = worldToCell(worldPoint);
+      const item = selectedBuildItem;
+      if (!item) return;
+      const bounds = { x: cell.x, y: cell.y, width: 1, height: 1 };
+      let changed = false;
+      try {
+        if (item.toolId === "bulldozer") changed = editor.deleteAtCell(cell.x, cell.y);
+        else if (item.category === "nature") changed = editor.paintNatureArea(bounds, item.id).paintedCount > 0;
+        else if (item.category === "zone") changed = editor.paintZoneArea(bounds, item.id).placements.length > 0;
+        else if (item.terrainId) {
+          editor.selectTerrain(item.terrainId);
+          changed = editor.terrain.getAt(cell.x, cell.y) !== item.terrainId;
+          editor.paintTerrainAt(cell.x, cell.y);
+        } else if (item.roadType) {
+          if (!paintLastCell) {
+            editor.paintRoadPathTo(cell.x, cell.y);
+            editor.activeRoadDirection = cell.x < editor.width - 1 ? "horizontal" : "vertical";
+            editor.addRoadAt(cell.x, cell.y);
+          } else editor.paintRoadPathTo(cell.x, cell.y);
+          changed = true;
+        } else {
+          const existing = editor.findPlacementAt(cell.x, cell.y);
+          if (existing?.catalogItemId === item.id) return;
+          editor.selectBuilding(item.id);
+          editor.placeAt(cell.x, cell.y);
+          changed = true;
+        }
+      } catch (error) {
+        setStatus(error.message);
+      }
+      paintLastCell = cell;
+      if (changed) syncEditor();
     }
 
     function worldToCell(worldPoint) {
@@ -667,6 +774,20 @@ async function initializeBuildingBrowser(root, activeInspector) {
 
     function areaFromCells(start, end) {
       return { x: Math.min(start.x, end.x), y: Math.min(start.y, end.y), width: Math.abs(end.x - start.x) + 1, height: Math.abs(end.y - start.y) + 1 };
+    }
+
+    function circleFromCells(center, edge) {
+      const radius = Math.max(Math.abs(edge.x - center.x), Math.abs(edge.y - center.y));
+      return {
+        x: center.x - radius,
+        y: center.y - radius,
+        width: radius * 2 + 1,
+        height: radius * 2 + 1,
+        shape: "circle",
+        centerX: center.x,
+        centerY: center.y,
+        radius,
+      };
     }
 
     function openAreaDeleteDialog() {
@@ -693,6 +814,7 @@ async function initializeBuildingBrowser(root, activeInspector) {
     function applyAreaTerrain(terrainId) {
       const result = editor.paintTerrainArea(areaDeleteBounds, terrainId);
       areaTerrainMode = false;
+      renderer?.setEdgePanEnabled(false);
       areaDeleteStart = null;
       areaDeleteBounds = null;
       renderer?.setAreaDeletePreview(null);
@@ -704,16 +826,57 @@ async function initializeBuildingBrowser(root, activeInspector) {
     }
 
     function applyAreaZone() {
-      const result = editor.paintZoneArea(areaDeleteBounds, activeZoneId);
-      areaZoneMode = false;
-      activeZoneId = null;
+      const item = selectedBuildItem;
+      let changedCount = 0;
+      let skippedCount = 0;
+      try {
+        if (item?.toolId === "bulldozer") {
+          const result = editor.deleteArea(areaDeleteBounds);
+          changedCount = result.placements.length + result.roads.length;
+        } else if (item?.category === "nature") {
+          const result = editor.paintNatureArea(areaDeleteBounds, item.id, natureAreaShape);
+          changedCount = result.paintedCount;
+          skippedCount = result.skippedCount;
+        } else if (item?.category === "zone") {
+          const result = editor.paintZoneArea(areaDeleteBounds, item.id);
+          changedCount = result.placements.length;
+          skippedCount = result.skippedCount;
+        } else if (item?.terrainId) {
+          const result = editor.paintTerrainArea(areaDeleteBounds, item.terrainId);
+          changedCount = areaDeleteBounds.width * areaDeleteBounds.height;
+          skippedCount = result.removedBuildings.length;
+        } else if (item?.roadType) {
+          editor.selectRoad("horizontal");
+          editor.activeRoadType = item.roadType;
+          editor.beginRoadStroke();
+          for (let y = areaDeleteBounds.y; y < areaDeleteBounds.y + areaDeleteBounds.height; y += 1) {
+            for (let x = areaDeleteBounds.x; x < Math.min(editor.width - 1, areaDeleteBounds.x + areaDeleteBounds.width); x += 1) {
+              editor.addRoadAt(x, y);
+              changedCount += 1;
+            }
+          }
+          editor.endRoadStroke();
+        } else if (item) {
+          editor.beginCatalogPaintStroke();
+          for (let y = areaDeleteBounds.y; y + item.size.height <= areaDeleteBounds.y + areaDeleteBounds.height; y += item.size.height) {
+            for (let x = areaDeleteBounds.x; x + item.size.width <= areaDeleteBounds.x + areaDeleteBounds.width; x += item.size.width) {
+              try { editor.selectBuilding(item.id); editor.placeAt(x, y); changedCount += 1; } catch { skippedCount += 1; }
+            }
+          }
+          editor.endCatalogPaintStroke();
+        }
+      } catch (error) {
+        setStatus(error.message);
+      }
+      editor.selectTool();
       areaDeleteStart = null;
       areaDeleteBounds = null;
       renderer?.setAreaDeletePreview(null);
+      renderer?.setEdgePanEnabled(true);
       updateAreaDeleteButton();
       syncEditor();
       saveDraft();
-      setStatus(result.placements.length ? `Placed ${result.placements.length} zone cell(s).${result.skippedCount ? ` Skipped ${result.skippedCount} occupied cell(s).` : ""}` : "No empty cells available for this zone.");
+      setStatus(changedCount ? `Applied ${item?.name} to ${changedCount} item(s).${skippedCount ? ` Skipped ${skippedCount}.` : ""} Drag another area to continue.` : "Nothing changed in the selected area. Drag another area to continue.");
     }
 
     function saveDraft() {

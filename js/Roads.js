@@ -32,6 +32,34 @@ export class RoadNetwork {
   }
 }
 
+/** Finds one-cell gaps between road endpoints that should render as automatic links. */
+export function adjacentRoadEndConnections(segments = []) {
+  const endpoints = segments.flatMap((road, segmentIndex) => {
+    const start = { x: road.x, y: road.y, roadType: road.roadType ?? "road", segmentIndex };
+    const end = road.direction === "horizontal"
+      ? { x: road.x + 1, y: road.y, roadType: road.roadType ?? "road", segmentIndex }
+      : { x: road.x, y: road.y + 1, roadType: road.roadType ?? "road", segmentIndex };
+    return [start, end];
+  });
+  const endpointUseCount = new Map();
+  for (const endpoint of endpoints) {
+    const endpointKey = `${endpoint.x},${endpoint.y}`;
+    endpointUseCount.set(endpointKey, (endpointUseCount.get(endpointKey) ?? 0) + 1);
+  }
+  const exposedEndpoints = endpoints.filter((endpoint) => endpointUseCount.get(`${endpoint.x},${endpoint.y}`) === 1);
+  const connections = [];
+  for (let left = 0; left < exposedEndpoints.length; left += 1) {
+    for (let right = left + 1; right < exposedEndpoints.length; right += 1) {
+      const from = exposedEndpoints[left];
+      const to = exposedEndpoints[right];
+      if (from.segmentIndex === to.segmentIndex) continue;
+      if (Math.abs(from.x - to.x) + Math.abs(from.y - to.y) !== 1) continue;
+      connections.push({ from, to });
+    }
+  }
+  return connections;
+}
+
 function normalizeSegment(segment) {
   if (!segment || typeof segment !== "object") {
     throw new TypeError("Road segment must be an object.");

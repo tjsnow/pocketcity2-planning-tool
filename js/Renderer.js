@@ -4,6 +4,7 @@ import { OverlayRegistry } from "./Overlays.js";
 import { defaultIconCatalog } from "./IconCatalog.js";
 import { Radius } from "./Radius.js";
 import { coverageRadiusFor, effectColor, serviceDefinition, supportsEffectType } from "./ServiceEffects.js";
+import { adjacentRoadEndConnections } from "./Roads.js";
 
 const BACKGROUND_COLOR = "#171b20";
 
@@ -40,6 +41,9 @@ export class Renderer {
     this.onCanvasPointerUp = null;
     this.activePrimaryPointerId = null;
     this.didDrag = false;
+    this.edgePanEnabled = false;
+    this.edgePanAnimationId = null;
+    this.edgePanScreenPoint = null;
     this.onPointerMove = null;
     this.onViewportChange = null;
     this.areaDeletePreview = null;
@@ -152,6 +156,11 @@ export class Renderer {
     this.onCanvasPointerUp = onPointerUp;
   }
 
+  setEdgePanEnabled(enabled) {
+    this.edgePanEnabled = Boolean(enabled);
+    if (!this.edgePanEnabled) this.stopEdgePan();
+  }
+
   setPointerMoveHandler(handler) {
     this.onPointerMove = handler;
   }
@@ -196,8 +205,17 @@ export class Renderer {
     this.context.fillStyle = "rgba(224, 67, 67, 0.22)";
     this.context.strokeStyle = "#ff5f62";
     this.context.lineWidth = 2;
-    this.context.fillRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
-    this.context.strokeRect(topLeft.x + 1, topLeft.y + 1, bottomRight.x - topLeft.x - 2, bottomRight.y - topLeft.y - 2);
+    if (bounds.shape === "circle") {
+      const width = bottomRight.x - topLeft.x;
+      const height = bottomRight.y - topLeft.y;
+      this.context.beginPath();
+      this.context.ellipse(topLeft.x + width / 2, topLeft.y + height / 2, Math.max(0, width / 2 - 1), Math.max(0, height / 2 - 1), 0, 0, Math.PI * 2);
+      this.context.fill();
+      this.context.stroke();
+    } else {
+      this.context.fillRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+      this.context.strokeRect(topLeft.x + 1, topLeft.y + 1, bottomRight.x - topLeft.x - 2, bottomRight.y - topLeft.y - 2);
+    }
     this.context.restore();
   }
 
@@ -274,18 +292,41 @@ export class Renderer {
   drawOptimizationWarnings() {
     if (!this.scene?.optimization?.issues?.length) return;
     const placementsById = new Map(this.scene.placements.map((placement) => [placement.id, placement]));
-    this.context.save();
-    this.context.fillStyle = "#ed5b5b";
-    this.context.strokeStyle = "#260f12";
-    this.context.lineWidth = 2;
+    const warningsByPlacement = new Map();
     for (const warning of this.scene.optimization.issues) {
-      const placement = placementsById.get(warning.subjectId);
-      if (!placement || warning.severity !== "error") continue;
-      const point = this.camera.worldToScreen({ x: (placement.x + 0.5) * this.grid.cellSize, y: (placement.y + 0.5) * this.grid.cellSize });
-      this.context.beginPath();
-      this.context.arc(point.x, point.y, Math.max(4, this.grid.cellSize * this.camera.zoom * 0.13), 0, Math.PI * 2);
-      this.context.fill();
-      this.context.stroke();
+      if (warning.severity !== "error" || !placementsById.has(warning.subjectId)) continue;
+      const warnings = warningsByPlacement.get(warning.subjectId) ?? [];
+      warnings.push(warning);
+      warningsByPlacement.set(warning.subjectId, warnings);
+    }
+    this.context.save();
+    for (const [placementId, warnings] of warningsByPlacement) {
+      const placement = placementsById.get(placementId);
+      const building = this.scene.database.getById(placement.catalogItemId);
+      const rotated = placement.rotation === 90 || placement.rotation === 270;
+      const footprintWidth = rotated ? building?.size.height : building?.size.width;
+      const footprintHeight = rotated ? building?.size.width : building?.size.height;
+      const width = (footprintWidth ?? 1) * this.grid.cellSize * this.camera.zoom;
+      const height = (footprintHeight ?? 1) * this.grid.cellSize * this.camera.zoom;
+      const topLeft = this.camera.worldToScreen({ x: placement.x * this.grid.cellSize, y: (placement.y + (footprintHeight ?? 1)) * this.grid.cellSize });
+      const utilityTypes = new Set(warnings.map((warning) => utilityWarningType(warning.code)).filter(Boolean));
+      if (utilityTypes.size > 0) {
+        const iconSize = Math.max(2, Math.min(10, Math.min(width, height) * 0.19));
+        const horizontalInset = Math.min(width / 2, Math.max(iconSize + 1, width * 0.28));
+        const verticalInset = Math.min(height / 2, Math.max(iconSize + 1, height * 0.28));
+        if (utilityTypes.has("sewage")) drawSewerWarning(this.context, topLeft.x + width / 2, topLeft.y + verticalInset, iconSize);
+        if (utilityTypes.has("power")) drawPowerWarning(this.context, topLeft.x + horizontalInset, topLeft.y + height - verticalInset, iconSize);
+        if (utilityTypes.has("water")) drawWaterWarning(this.context, topLeft.x + width - horizontalInset, topLeft.y + height - verticalInset, iconSize);
+      } else {
+        const point = { x: topLeft.x + width / 2, y: topLeft.y + height / 2 };
+        this.context.fillStyle = "#ed5b5b";
+        this.context.strokeStyle = "#260f12";
+        this.context.lineWidth = 2;
+        this.context.beginPath();
+        this.context.arc(point.x, point.y, Math.max(4, this.grid.cellSize * this.camera.zoom * 0.13), 0, Math.PI * 2);
+        this.context.fill();
+        this.context.stroke();
+      }
     }
     this.context.restore();
   }
@@ -320,6 +361,21 @@ export class Renderer {
       this.context.lineTo(endScreen.x, endScreen.y);
       this.context.stroke();
     }
+    for (const connection of adjacentRoadEndConnections(this.scene.roads)) {
+      const from = this.camera.worldToScreen({ x: (connection.from.x + 0.5) * this.grid.cellSize, y: (connection.from.y + 0.5) * this.grid.cellSize });
+      const to = this.camera.worldToScreen({ x: (connection.to.x + 0.5) * this.grid.cellSize, y: (connection.to.y + 0.5) * this.grid.cellSize });
+      const middle = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
+      this.context.strokeStyle = roadLineColor(connection.from.roadType);
+      this.context.beginPath();
+      this.context.moveTo(from.x, from.y);
+      this.context.lineTo(middle.x, middle.y);
+      this.context.stroke();
+      this.context.strokeStyle = roadLineColor(connection.to.roadType);
+      this.context.beginPath();
+      this.context.moveTo(middle.x, middle.y);
+      this.context.lineTo(to.x, to.y);
+      this.context.stroke();
+    }
     this.context.fillStyle = "#d5b277";
     for (const node of nodes.values()) {
       if (node.directions.size < 3) continue;
@@ -345,6 +401,7 @@ export class Renderer {
   destroy() {
     this.resizeObserver.disconnect();
     if (this.animationFrameId !== null) cancelAnimationFrame(this.animationFrameId);
+    this.stopEdgePan();
   }
 
   bindNavigationEvents() {
@@ -364,6 +421,7 @@ export class Renderer {
   beginPrimaryPointer(event) {
     if (event.button !== 0 || event.shiftKey || event.pointerType === "touch" || this.panMode) return;
     this.activePrimaryPointerId = event.pointerId;
+    this.canvas.setPointerCapture(event.pointerId);
     this.didDrag = false;
     this.onCanvasPointerDown?.(this.camera.screenToWorld(this.eventToCanvasPoint(event)));
   }
@@ -371,13 +429,44 @@ export class Renderer {
   dragPrimaryPointer(event) {
     if (event.pointerId !== this.activePrimaryPointerId || this.activePan) return;
     this.didDrag = true;
-    this.onCanvasPointerDrag?.(this.camera.screenToWorld(this.eventToCanvasPoint(event)));
+    const screenPoint = this.eventToCanvasPoint(event);
+    this.onCanvasPointerDrag?.(this.camera.screenToWorld(screenPoint));
+    this.updateEdgePan(screenPoint);
   }
 
   endPrimaryPointer(event) {
     if (event.pointerId !== this.activePrimaryPointerId) return;
     this.onCanvasPointerUp?.();
+    this.stopEdgePan();
+    if (this.canvas.hasPointerCapture(event.pointerId)) this.canvas.releasePointerCapture(event.pointerId);
     this.activePrimaryPointerId = null;
+  }
+
+  updateEdgePan(screenPoint) {
+    if (!this.edgePanEnabled) return;
+    this.edgePanScreenPoint = screenPoint;
+    if (this.edgePanAnimationId !== null) return;
+    const step = () => {
+      this.edgePanAnimationId = null;
+      if (!this.edgePanEnabled || this.activePrimaryPointerId === null || !this.edgePanScreenPoint) return;
+      const threshold = Math.min(48, this.cssWidth / 4, this.cssHeight / 4);
+      const speed = 8;
+      const velocityX = this.edgePanScreenPoint.x < threshold ? speed : this.edgePanScreenPoint.x > this.cssWidth - threshold ? -speed : 0;
+      const velocityY = this.edgePanScreenPoint.y < threshold ? speed : this.edgePanScreenPoint.y > this.cssHeight - threshold ? -speed : 0;
+      if (velocityX === 0 && velocityY === 0) return;
+      this.camera.panByScreen(velocityX, velocityY);
+      this.requestRender();
+      this.onCanvasPointerDrag?.(this.camera.screenToWorld(this.edgePanScreenPoint));
+      this.onViewportChange?.(this.camera.zoom);
+      this.edgePanAnimationId = requestAnimationFrame(step);
+    };
+    this.edgePanAnimationId = requestAnimationFrame(step);
+  }
+
+  stopEdgePan() {
+    if (this.edgePanAnimationId !== null) cancelAnimationFrame(this.edgePanAnimationId);
+    this.edgePanAnimationId = null;
+    this.edgePanScreenPoint = null;
   }
 
   beginPan(event) {
@@ -455,6 +544,66 @@ const TERRAIN_ICON_ATLAS_COORDINATES = { "planted-tree": [0, 0], water: [1, 0], 
 const CITY_ICON_ATLAS_COORDINATES = { cottage: [0, 0], townhouse: [0, 0], "apartment-building": [1, 0], "high-rise-apartments": [1, 0], "corner-shop": [2, 0], "office-building": [3, 0], "shopping-center": [2, 0], hotel: [3, 0], warehouse: [0, 1], factory: [0, 1], "community-center": [1, 1], school: [2, 1], hospital: [3, 1], "fire-department": [0, 2], "fire-station": [0, 2], "police-station": [1, 2], "small-park": [2, 2], "sports-stadium": [3, 2], aquarium: [3, 2], "power-plant": [0, 3], "water-pump": [1, 3], airport: [2, 3], "zone-residential": [3, 3], "zone-commercial": [3, 3], "zone-industrial": [3, 3], "zone-office": [3, 3], "zone-mixed-use": [3, 3], "zone-leisure": [3, 3], "zone-waterfront": [3, 3], "zone-rural": [3, 3], "zone-high-density-residential": [3, 3], "zone-high-density-commercial": [3, 3] };
 const EXTENSION_ICON_ATLAS_COORDINATES = { "water-tower": [0, 0], "sewage-lagoon": [1, 0], "solar-power-plant": [2, 0], "wind-power-plant": [3, 0], "fire-department": [0, 1], "police-station": [1, 1], "elementary-school": [2, 1], library: [3, 1], "bus-stop": [0, 2], "light-rail-stop": [1, 2], "commuter-train-station": [2, 2], bridge: [3, 2], "moderate-hotel": [0, 3], museum: [1, 3], lighthouse: [2, 3], "mega-stadium": [3, 3] };
 const ZONE_ICON_ATLAS_COORDINATES = { "zone-residential": [0, 0], "zone-commercial": [1, 0], "zone-industrial": [2, 0], "zone-office": [3, 0], "zone-mixed-use": [0, 1], "zone-leisure": [1, 1], "zone-waterfront": [2, 1], "zone-rural": [3, 1], "zone-high-density-residential": [0, 2], "zone-high-density-commercial": [1, 2] };
+
+export function utilityWarningType(code) {
+  return {
+    "no-power-coverage": "power",
+    "no-water-coverage": "water",
+    "no-sewage-coverage": "sewage",
+  }[code] ?? null;
+}
+
+function prepareUtilityWarning(context, size) {
+  context.fillStyle = "#ff4d55";
+  context.strokeStyle = "#31090c";
+  context.lineWidth = Math.max(1, size * 0.22);
+  context.lineJoin = "round";
+  context.lineCap = "round";
+}
+
+function drawPowerWarning(context, x, y, size) {
+  prepareUtilityWarning(context, size);
+  context.beginPath();
+  context.moveTo(x + size * 0.15, y - size);
+  context.lineTo(x - size * 0.7, y + size * 0.1);
+  context.lineTo(x - size * 0.1, y + size * 0.1);
+  context.lineTo(x - size * 0.25, y + size);
+  context.lineTo(x + size * 0.75, y - size * 0.25);
+  context.lineTo(x + size * 0.15, y - size * 0.25);
+  context.closePath();
+  context.fill();
+  context.stroke();
+}
+
+function drawWaterWarning(context, x, y, size) {
+  prepareUtilityWarning(context, size);
+  context.beginPath();
+  context.moveTo(x, y - size);
+  context.bezierCurveTo(x + size * 0.15, y - size * 0.55, x + size * 0.8, y, x + size * 0.8, y + size * 0.35);
+  context.bezierCurveTo(x + size * 0.8, y + size * 0.9, x + size * 0.4, y + size, x, y + size);
+  context.bezierCurveTo(x - size * 0.4, y + size, x - size * 0.8, y + size * 0.9, x - size * 0.8, y + size * 0.35);
+  context.bezierCurveTo(x - size * 0.8, y, x - size * 0.15, y - size * 0.55, x, y - size);
+  context.closePath();
+  context.fill();
+  context.stroke();
+}
+
+function drawSewerWarning(context, x, y, size) {
+  prepareUtilityWarning(context, size);
+  context.beginPath();
+  context.arc(x, y, size, 0, Math.PI * 2);
+  context.fill();
+  context.stroke();
+  context.strokeStyle = "#31090c";
+  context.lineWidth = Math.max(1, size * 0.18);
+  for (const offset of [-0.4, 0, 0.4]) {
+    const halfWidth = size * Math.sqrt(1 - offset * offset) * 0.68;
+    context.beginPath();
+    context.moveTo(x - halfWidth, y + size * offset);
+    context.lineTo(x + halfWidth, y + size * offset);
+    context.stroke();
+  }
+}
 
 function drawRoadIcon(context, atlas, roadType, x, y, size) {
   if (!atlas.complete || atlas.naturalWidth === 0) return;

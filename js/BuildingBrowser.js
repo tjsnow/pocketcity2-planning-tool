@@ -2,7 +2,7 @@ import { defaultIconCatalog } from "./IconCatalog.js";
 
 /** Renders a searchable, non-selecting browser for a validated building catalog. */
 export class BuildingBrowser {
-  constructor(root, database, onSelect = () => {}) {
+  constructor(root, database, onSelect = () => {}, onCategoryOpen = () => {}) {
     if (!(root instanceof HTMLElement)) {
       throw new TypeError("Building browser requires a root element.");
     }
@@ -18,8 +18,11 @@ export class BuildingBrowser {
     this.roadItems = [
       ["Street", "road", "▬"], ["High Density", "high-density", "═"], ["Dirt", "dirt", "▒"], ["Pedestrian", "pedestrian", "◇"], ["Boardwalk", "boardwalk", "≋"], ["Light Rail", "light-rail", "╫"], ["Train Rail", "train-rail", "║"], ["High Rail", "high-rail", "╬"], ["Subway", "subway", "▾"],
     ].map(([name, roadType, icon]) => ({ id: `road-${roadType}`, name, category: "roads", roadType, roadIcon: icon, size: { width: 1, height: 1 }, confidence: roadType === "road" ? "built-in" : "community-reported" }));
+    this.toolItems = [{ id: "tool-bulldozer", name: "Bulldozer", category: "tool", toolId: "bulldozer", size: { width: 1, height: 1 }, confidence: "built-in" }];
     this.onSelect = onSelect;
+    this.onCategoryOpen = onCategoryOpen;
     this.selectedBuildingId = null;
+    this.lastSelectedByCategory = new Map();
     this.searchInput = root.querySelector("#building-search");
     this.categorySelect = root.querySelector("#building-category");
     this.results = root.querySelector("#building-results");
@@ -32,27 +35,36 @@ export class BuildingBrowser {
         return;
       }
       this.activeOpener = button;
-      this.categorySelect.value = button.dataset.buildingCategory;
-      const openerBounds = button.getBoundingClientRect();
-      root.style.left = `${openerBounds.right + 8}px`;
-      root.style.top = `${openerBounds.top}px`;
+      this.openCategory(button.dataset.buildingCategory);
+      this.positionPopup();
       root.classList.add("is-open");
-      this.render();
       this.searchInput.focus();
     }));
     root.addEventListener("click", (event) => { if (event.target === root) root.classList.remove("is-open"); });
     this.populateCategories();
     this.searchInput.addEventListener("input", () => this.render());
-    this.categorySelect.addEventListener("change", () => this.render());
+    this.categorySelect.addEventListener("change", () => this.openCategory(this.categorySelect.value));
     root.addEventListener("keydown", (event) => { if (event.key === "Escape") { event.preventDefault(); this.close(); } });
+    window.addEventListener("resize", () => { if (this.root.classList.contains("is-open")) this.positionPopup(); });
     this.render();
+  }
+
+  positionPopup() {
+    if (!this.activeOpener) return;
+    const openerBounds = this.activeOpener.getBoundingClientRect();
+    const top = Math.max(12, Math.min(openerBounds.top, window.innerHeight - 120));
+    this.root.style.left = `${Math.min(openerBounds.right + 8, window.innerWidth - 352)}px`;
+    this.root.style.top = `${top}px`;
+    this.root.style.maxHeight = `${Math.max(108, window.innerHeight - top - 12)}px`;
   }
 
   close() {
     this.root.classList.remove("is-open");
     this.root.style.left = "";
     this.root.style.top = "";
+    this.root.style.maxHeight = "";
     this.activeOpener?.focus();
+    this.root.dispatchEvent(new CustomEvent("build-item-browser-close"));
   }
 
   populateCategories() {
@@ -63,6 +75,20 @@ export class BuildingBrowser {
       option.textContent = category;
       this.categorySelect.append(option);
     }
+  }
+
+  openCategory(category) {
+    this.categorySelect.value = category;
+    const categoryItems = this.items().filter((item) => !category || item.category === category);
+    const rememberedId = this.lastSelectedByCategory.get(category);
+    const selectedItem = categoryItems.find((item) => item.id === rememberedId) ?? categoryItems[0] ?? null;
+    this.onCategoryOpen(category);
+    if (selectedItem) {
+      this.selectedBuildingId = selectedItem.id;
+      this.lastSelectedByCategory.set(category, selectedItem.id);
+      this.onSelect(selectedItem);
+    }
+    this.render();
   }
 
   render() {
@@ -83,6 +109,7 @@ export class BuildingBrowser {
     for (const building of buildings) {
       this.results.append(buildingCard(building, this.selectedBuildingId === building.id, () => {
         this.selectedBuildingId = building.id;
+        this.lastSelectedByCategory.set(building.category, building.id);
         this.onSelect(building);
         this.render();
       }));
@@ -93,7 +120,7 @@ export class BuildingBrowser {
     this.results.replaceChildren(message("Building catalog is unavailable. Serve the project from a static web server and try again."));
   }
 
-  items() { return [...this.database.getAll(), ...this.terrainItems.filter((item) => item.terrainId === "unassigned")]; }
+  items() { return [...this.toolItems, ...this.database.getAll(), ...this.terrainItems.filter((item) => item.terrainId === "unassigned")]; }
 }
 
 function buildingCard(building, isSelected, onSelect) {
@@ -103,7 +130,7 @@ function buildingCard(building, isSelected, onSelect) {
   card.setAttribute("aria-pressed", String(isSelected));
   if (isSelected) card.classList.add("is-selected");
   card.addEventListener("click", onSelect);
-  if (!building.terrainId && !building.roadType && building.category !== "zone") {
+  if (!building.toolId && !building.terrainId && !building.roadType && building.category !== "zone") {
     card.draggable = true;
     card.addEventListener("dragstart", (event) => {
       event.dataTransfer.setData("application/x-pocket-city-building", building.id);
@@ -117,7 +144,9 @@ function buildingCard(building, isSelected, onSelect) {
 
   const icon = document.createElement("span");
   icon.className = "building-card-icon";
-  if (building.roadType) {
+  if (building.toolId === "bulldozer") {
+    icon.textContent = "⚒";
+  } else if (building.roadType) {
     icon.classList.add("building-card-road-sprite", `road-sprite-${building.roadType}`);
     icon.setAttribute("title", `${building.name} icon`);
   } else if (building.category === "zone" && zoneSprite(building.id)) {
@@ -135,7 +164,7 @@ function buildingCard(building, isSelected, onSelect) {
 
   const detail = document.createElement("span");
   detail.className = "building-card-detail";
-  detail.textContent = building.category === "zone" ? `${building.category} · variable area` : `${building.category} · ${building.size.width} × ${building.size.height}`;
+  detail.textContent = building.toolId ? "tool · removes buildings and roads" : building.category === "zone" ? `${building.category} · variable area` : `${building.category} · ${building.size.width} × ${building.size.height}`;
 
   const confidence = document.createElement("span");
   confidence.className = "building-card-confidence";

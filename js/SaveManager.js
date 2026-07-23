@@ -42,7 +42,7 @@ export class SaveManager {
     const url = URL.createObjectURL(blob);
     const link = window.document.createElement("a");
     link.href = url;
-    link.download = `${safeFileName(planDocument.name)}.json`;
+    link.download = planDownloadFileName();
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -67,7 +67,9 @@ export function parsePlan(serialized) {
   return document;
 }
 
-function safeFileName(name) {
-  const result = String(name).trim().replace(/[^a-z0-9-_]+/gi, "-").replace(/^-+|-+$/g, "");
-  return result || "pocket-city-plan";
+export function planDownloadFileName(date = new Date()) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) throw new TypeError("A valid date is required for the plan filename.");
+  const pad = (value) => String(value).padStart(2, "0");
+  const timestamp = `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}${pad(date.getHours())}${pad(date.getMinutes())}`;
+  return `PC2Planner_${timestamp}.json`;
 }

@@ -4,6 +4,27 @@ All notable user-visible and developer-relevant changes are recorded here. The f
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-07-22
+
+- Nature now exposes separate Paint, Area - Square, and Area - Circle buttons. Circular drag previews and fills use the initial cell as the center and skip occupied buildings and roads.
+- Zone fills now preserve existing Nature terrain as well as buildings and roads, placing zones only on empty cells.
+- Missing utility warnings now render as separate compact red badges inside each building: sewer at top-center, electricity at bottom-left, and water at bottom-right. A building can display all three at once.
+- Saved plan downloads now default to `PC2Planner_YYYYMMDDHHMM.json` using the local save timestamp.
+- Build categories now remember their last selected item and automatically reactivate it when reopened. Zones and Nature open in Area mode by default; all other categories open in Paint mode.
+- Added Bulldozer as its own full-width Build Item Browser category above a two-column category grid with visible icons and names.
+- Removed the Quick Tools section. Paint and Area modes now live inside the Build Item Browser and work with every catalog item; Bulldozer is always the first item in its results.
+- Paint places one item on click and multiple items while dragging. Area fills a selected rectangle with the chosen building, road, zone, Nature item, terrain eraser, or Bulldozer action.
+- Renamed Building Browser to Build Item Browser. Selected zone and Nature area items now remain active across repeated drag operations until another tool is selected or the browser is closed.
+- Area-selection tools now auto-pan the canvas while dragging near an edge, allowing selections to extend beyond the initially visible portion of the grid.
+- Nature catalog items now use the same drag-to-fill area workflow as zones. Nature fills skip occupied building and road cells instead of replacing them.
+- Fixed placement ID allocation after deletions so restored plans can continue placing all buildings, including the Large Power Plant.
+- The Build Item Browser is now constrained to the visible viewport, with a dedicated scrolling results area when the catalog is taller than the available space.
+- Exposed road-chain endpoints in orthogonally adjacent squares now render an automatic connecting link, including between different road types. Internal segment joints are excluded so parallel roads do not connect repeatedly along their lengths.
+- Configured area-of-effect buildings with an unknown radius now use a 60-block planning default. Explicit estimates and user-entered radius overrides continue to take priority.
+- Water Tower and Large Water Tower no longer report missing electricity or sewage; they only need road access to supply their water network.
+- Placing a building or road over an existing building now replaces the intersecting building. The removal and new placement are recorded as one undoable action.
+- Placing a road over another road with the same position and direction now replaces its type. Perpendicular roads can coexist at intersections, allowing mixed road types to cross and closed loops to connect correctly.
+
 ## [2.0.0] - 2026-07-22
 
 - Service coverage now requires the supplying station or utility source itself to be road-connected. A source that is isolated from the road network no longer satisfies AOE requirements for nearby buildings.

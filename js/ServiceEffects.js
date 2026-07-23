@@ -13,8 +13,8 @@ const DEFINITIONS = {
   "high-rail-station": { effectType: "traffic", mode: "local", maxLevel: 1, defaultRadius: 4, label: "Traffic coverage" },
   "subway-station": { effectType: "traffic", mode: "local", maxLevel: 1, defaultRadius: 4, label: "Traffic coverage" },
   bridge: { effectType: "traffic", mode: "local", maxLevel: 1, defaultRadius: 4, label: "Traffic coverage" },
-  "water-tower": { effectType: "water", mode: "network", maxLevel: 1, defaultRadius: 8, label: "Water network capacity" },
-  "large-water-tower": { effectType: "water", mode: "network", maxLevel: 1, defaultRadius: 10, label: "Water network capacity" },
+  "water-tower": { effectType: "water", requires: [], mode: "network", maxLevel: 1, defaultRadius: 8, label: "Water network capacity" },
+  "large-water-tower": { effectType: "water", requires: [], mode: "network", maxLevel: 1, defaultRadius: 10, label: "Water network capacity" },
   "power-plant": { effectType: "power", requires: [], mode: "network", maxLevel: 1, defaultRadius: 8, label: "Power network capacity" },
   "large-power-plant": { effectType: "power", requires: [], mode: "network", maxLevel: 1, defaultRadius: 10, label: "Power network capacity" },
   "hydro-power-plant": { effectType: "power", requires: [], mode: "network", maxLevel: 1, defaultRadius: 10, label: "Power network capacity" },
@@ -50,6 +50,7 @@ const EFFECT_TYPES = [
   ["public-works", "Public Works"], ["home-improvement", "Home Improvement"], ["pollution", "Pollution control"],
   ["traffic", "Traffic coverage"], ["water", "Water network"], ["power", "Power network"], ["sewage", "Sewage capacity"], ["waste", "Waste capacity"], ["education", "Education capacity"], ["community", "Community capacity"],
 ];
+const UNKNOWN_AOE_RADIUS = 60;
 
 export function serviceDefinition(buildingId) { return DEFINITIONS[buildingId] ?? null; }
 export function getEffectTypes() { return EFFECT_TYPES.map(([id, label]) => ({ id, label })); }
@@ -66,7 +67,7 @@ export function coverageRadiusFor(buildingId, placement = {}) {
   const definition = serviceDefinition(buildingId);
   if (!definition) return null;
   if (Number.isFinite(placement.coverageRadius)) return placement.coverageRadius;
-  if (!Number.isFinite(definition.defaultRadius)) return null;
+  if (!Number.isFinite(definition.defaultRadius)) return UNKNOWN_AOE_RADIUS;
   const level = Math.max(1, Number(placement.level) || 1);
   return definition.defaultRadius + (level - 1) * 2;
 }

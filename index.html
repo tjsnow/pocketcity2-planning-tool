@@ -19,7 +19,7 @@
       <header class="ribbon panel" aria-label="Main toolbar">
         <div class="brand" aria-label="Pocket City 2 Planner">
           <span class="brand-mark" aria-hidden="true">PC</span>
-          <span class="brand-copy"><span class="brand-title">Pocket City 2 Planner</span><span class="brand-version">v2.0.0</span></span>
+          <span class="brand-copy"><span class="brand-title">Pocket City 2 Planner</span><span class="brand-version">v2.2.0</span></span>
         </div>
         <div class="ribbon-divider" aria-hidden="true"></div>
         <div class="ribbon-group" aria-label="File tools">
@@ -61,6 +61,16 @@
         <div class="changelog-header">
           <div><span class="changelog-eyebrow">Release history</span><h2 id="changelog-title">What’s new</h2></div>
           <button id="changelog-close" type="button" aria-label="Close changelog">×</button>
+        </div>
+        <div class="changelog-release">
+          <div class="changelog-version"><strong>Version 2.2.0</strong><time datetime="2026-07-22">July 22, 2026</time></div>
+          <ul>
+            <li>Unified Build Item Browser with remembered category selections and Paint or Area placement for every item.</li>
+            <li>Dedicated Nature Paint, Area - Square, and Area - Circle workflows that preserve roads and buildings.</li>
+            <li>Improved road replacement, intersections, loop closure, and endpoint connections.</li>
+            <li>Independent electricity, water, and sewage warning badges with road-network-aware utility delivery.</li>
+            <li>Timestamped plan exports, safer Zone fills, and improved catalog layout and scrolling.</li>
+          </ul>
         </div>
         <div class="changelog-release">
           <div class="changelog-version"><strong>Version 2.0.0</strong><time datetime="2026-07-22">July 22, 2026</time></div>
@@ -148,35 +158,32 @@
               <kbd>H</kbd>
             </button>
           </div>
-          <section class="quick-tools" aria-label="Quick tools">
-            <span class="section-label">Quick tools</span>
-            <div class="quick-tool-actions">
-              <button class="terrain-button" type="button" data-road-tool="true" title="Paint roads (P)"><span class="quick-tool-icon" aria-hidden="true">↔</span> Road brush <kbd>P</kbd></button>
-              <button class="terrain-button" type="button" data-area-delete="true" title="Delete everything inside a dragged area"><span class="quick-tool-icon" aria-hidden="true">⌗</span> Area delete</button>
-              <button class="terrain-button" type="button" data-bulldozer="true" title="Bulldozer: delete buildings and roads (B)"><span class="quick-tool-icon" aria-hidden="true">⚒</span> Bulldozer <kbd>B</kbd></button>
-              <button class="terrain-button" type="button" data-area-terrain="true" title="Fill a dragged area with terrain"><span class="quick-tool-icon" aria-hidden="true">▧</span> Area terrain</button>
-            </div>
-          </section>
           <div class="building-category-icons" aria-label="Building categories">
-            <button type="button" data-building-category="zone" title="Zones">▦</button>
-            <button type="button" data-building-category="road" title="Roads">↔</button>
-            <button type="button" data-building-category="nature" title="Nature">▧</button>
-            <button type="button" data-building-category="water-sewage" title="Water and sewage">≈</button>
-            <button type="button" data-building-category="power" title="Power">⚡</button>
-            <button type="button" data-building-category="service" title="Service buildings">✚</button>
-            <button type="button" data-building-category="transportation" title="Transportation">⇄</button>
-            <button type="button" data-building-category="recreation" title="Recreation buildings">★</button>
-            <button type="button" data-building-category="education" title="Education">▤</button>
-            <button type="button" data-building-category="resource" title="Resources">⌂</button>
-            <button type="button" data-building-category="financial" title="Financial">$</button>
-            <button type="button" data-building-category="landmark" title="Landmarks">◆</button>
-            <button type="button" data-building-category="unique" title="Unique buildings">✦</button>
-            <button type="button" data-building-category="mega-project" title="Mega projects">⬢</button>
+            <button type="button" data-building-category="tool"><span class="category-icon" aria-hidden="true">⚒</span><span class="category-name">Bulldozer</span></button>
+            <button type="button" data-building-category="zone"><span class="category-icon" aria-hidden="true">▦</span><span class="category-name">Zones</span></button>
+            <button type="button" data-building-category="nature"><span class="category-icon" aria-hidden="true">▧</span><span class="category-name">Nature</span></button>
+            <button type="button" data-building-category="road"><span class="category-icon" aria-hidden="true">↔</span><span class="category-name">Roads</span></button>
+            <button type="button" data-building-category="water-sewage"><span class="category-icon" aria-hidden="true">≈</span><span class="category-name">Water &amp; Sewage</span></button>
+            <button type="button" data-building-category="power"><span class="category-icon" aria-hidden="true">⚡</span><span class="category-name">Power</span></button>
+            <button type="button" data-building-category="service"><span class="category-icon" aria-hidden="true">✚</span><span class="category-name">Services</span></button>
+            <button type="button" data-building-category="transportation"><span class="category-icon" aria-hidden="true">⇄</span><span class="category-name">Transportation</span></button>
+            <button type="button" data-building-category="recreation"><span class="category-icon" aria-hidden="true">★</span><span class="category-name">Recreation</span></button>
+            <button type="button" data-building-category="education"><span class="category-icon" aria-hidden="true">▤</span><span class="category-name">Education</span></button>
+            <button type="button" data-building-category="resource"><span class="category-icon" aria-hidden="true">⌂</span><span class="category-name">Resources</span></button>
+            <button type="button" data-building-category="financial"><span class="category-icon" aria-hidden="true">$</span><span class="category-name">Financial</span></button>
+            <button type="button" data-building-category="landmark"><span class="category-icon" aria-hidden="true">◆</span><span class="category-name">Landmarks</span></button>
+            <button type="button" data-building-category="unique"><span class="category-icon" aria-hidden="true">✦</span><span class="category-name">Unique</span></button>
+            <button type="button" data-building-category="mega-project"><span class="category-icon" aria-hidden="true">⬢</span><span class="category-name">Mega Projects</span></button>
           </div>
           <section class="building-browser" aria-labelledby="building-browser-title">
             <div class="building-browser-header">
-              <span id="building-browser-title" class="section-label">Building browser</span>
-              <button type="button" class="building-browser-close" data-building-browser-close aria-label="Close building browser" title="Close">×</button>
+              <span id="building-browser-title" class="section-label">Build Item Browser</span>
+              <button type="button" class="building-browser-close" data-building-browser-close aria-label="Close Build Item Browser" title="Close">×</button>
+            </div>
+            <div class="application-mode" role="group" aria-label="Build item application mode">
+              <button type="button" data-application-mode="paint">Paint</button>
+              <button type="button" data-application-mode="area" data-area-shape="rectangle">Area</button>
+              <button type="button" data-application-mode="area" data-area-shape="circle" hidden>Area - Circle</button>
             </div>
             <label class="visually-hidden" for="building-search">Search buildings</label>
             <input

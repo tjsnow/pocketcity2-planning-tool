@@ -6,7 +6,7 @@ Serve the repository from a static web server and open `index.html`. The default
 
 ## Place buildings
 
-Choose a colored category icon in the Toolbox, select an item, then click cells on the grid. The popup stays open while placing. Building cards can also be dragged onto the grid. Hover placed buildings to see their names and footprints. The catalog contains 161 items across zones, roads, nature, utilities, services, transport, recreation, education, resources, finance, landmarks, unique buildings, and mega projects.
+Choose a colored category icon in the Toolbox and select an item in the Build Item Browser. Choose Paint to place one item on click or multiple items while dragging. Choose Area to drag a rectangle and fill it with the selected item. Bulldozer is the first browser item and supports both modes. The popup stays open while placing. Building cards can also be dragged onto the grid. Hover placed buildings to see their names and footprints.
 
 To move a placed item, click it once to select it and open the Inspector, then drag from the selected item to a new cell. Invalid destinations are rejected using the same rules as keyboard and Inspector movement.
 
@@ -28,7 +28,7 @@ The Inspector shows planning warnings. Red markers identify buildings without ut
 
 ## Service effects
 
-Select a placed service building to edit its level in the Inspector when upgrades are supported. Enable Settings → Area of effect and choose a service type to preview its coverage; the planner displays its clearly labeled estimate immediately. For local services, enter a planning radius in tiles to override the estimate. A building must have both a valid road connection and electricity, water, and sewage coverage. The Inspector warning list reports each missing service separately. Exact game radii are not publicly documented.
+Select a placed service building to edit its level in the Inspector when upgrades are supported. Enable Settings → Area of effect and choose a service type to preview its coverage; the planner displays its clearly labeled estimate immediately. Services without a known radius use a 60-block planning default. Enter a planning radius in the Inspector to override any estimate. A building must have both a valid road connection and its required utility coverage. The Inspector warning list reports each missing service separately. Exact game radii are not publicly documented.
 
 ## Save and import
 

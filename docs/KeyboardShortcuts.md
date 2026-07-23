@@ -3,7 +3,6 @@
 | Key | Action |
 | --- | --- |
 | V | Select tool |
-| P | Road brush |
 | B | Bulldozer |
 | G | Toggle grid layer |
 | W | Toggle warning layer |
